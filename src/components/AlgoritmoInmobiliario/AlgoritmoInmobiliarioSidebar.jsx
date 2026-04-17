@@ -14,7 +14,7 @@ const AccordionSection = ({ title, tag, isOpen, onClick, children }) => {
       letterSpacing: '0.3px', transition: 'color 0.3s'
     },
     arrow: {
-      color: COLORS.ui.accent, 
+      color: '#ff5a60',
       fontSize: '10px',
       transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
       transition: 'transform 0.3s'
@@ -36,8 +36,10 @@ const AccordionSection = ({ title, tag, isOpen, onClick, children }) => {
   );
 };
 
-export default function Sidebar() {
+export default function Sidebar({ t }) {
   const [sectionsState, setSectionsState] = useState({ proposito: true, metodologia: false, insights: false, stack: false });
+
+  if (!t) return null;
 
   const toggle = (section) => {
     setSectionsState(prevState => ({ ...prevState, [section]: !prevState[section] }));
@@ -72,58 +74,58 @@ export default function Sidebar() {
       `}</style>
 
       <div style={s.headerBox}>
-        <h2 style={s.subHeader}>INTELIGENCIA DE MERCADO</h2>
-        <h1 style={s.mainTitle}>ALGORITMO INMOBILIARIO</h1>
+        <h2 style={s.subHeader}>{t.subtitle}</h2>
+        <h1 style={s.mainTitle}>{t.title}</h1>
         <div style={s.authorBox}>
           <p style={s.authorName}></p>
-          <p style={s.authorRole}>Análisis cuantitativo de la dinámica de plataforma de hospedaje en entornos de hiperdensidad.</p>
+          <p style={s.authorRole}>{t.role}</p>
         </div>
       </div>
 
       <div style={s.contentBody} className="custom-scrollbar">
         
-        <AccordionSection title="01. El Propósito" tag="#BigDataAnalysis" isOpen={sectionsState.proposito} onClick={() => toggle('proposito')}>
+        <AccordionSection title={t.proposito.title} tag={t.proposito.tag} isOpen={sectionsState.proposito} onClick={() => toggle('proposito')}>
           <p style={s.bodyText}>
-            El proyecto analiza la operación de la plataforma airbnb en su apartado de renta a corto plazo en Hong Kong, territorio definido por su hiperdensidad y su rol central en las finanzas globales. El objetivo es tangibilizar cómo la dinámica de la plataforma contribuye a la financiarización de la vivienda, reconfigurando las reglas de acceso urbano y transformando el stock habitacional en activos financieros líquidos mediante el análisis de datos masivos.
+            {t.proposito.content}
           </p>
         </AccordionSection>
 
-        <AccordionSection title="02. Estructura y metodología" tag="#DataEngineering" isOpen={sectionsState.metodologia} onClick={() => toggle('metodologia')}>
-          <p style={s.bodyText}>Se implementa un flujo de trabajo de ingeniería de datos para procesar y modelar información unificada proveniente de Inside Airbnb:</p>
+        <AccordionSection title={t.metodologia.title} tag={t.metodologia.tag} isOpen={sectionsState.metodologia} onClick={() => toggle('metodologia')}>
+          <p style={s.bodyText}>{t.metodologia.intro}</p>
           <div style={s.listItem}>
             <p style={s.bodyText}>
-              <span style={s.listKey}>Limpieza y Gestión de Datos (SQL):</span> Se utiliza PostgreSQL para la ingesta y depuración de los datasets unificados. Se ejecutan consultas para el filtrado de outliers, normalización de tipos de datos y eliminación de registros inconsistentes.
+              <span style={s.listKey}>{t.metodologia.item1Key}</span> {t.metodologia.item1Text}
             </p>
           </div>
           <div style={s.listItem}>
             <p style={s.bodyText}>
-              <span style={s.listKey}>Procesamiento Geoespacial (Python):</span> Mediante el empleo de Python (GeoPandas) y la librería SQLAlchemy, se extraen los datos limpios para ejecutar agregaciones espaciales por distrito y calcular métricas críticas de rotación.
+              <span style={s.listKey}>{t.metodologia.item2Key}</span> {t.metodologia.item2Text}
             </p>
           </div>
           <div style={s.listItem}>
             <p style={s.bodyText}>
-              <span style={s.listKey}>Normalización de Métricas:</span> Desarrollo de algoritmos para estandarizar indicadores de presión habitacional, permitiendo una comparativa consistente.
+              <span style={s.listKey}>{t.metodologia.item3Key}</span> {t.metodologia.item3Text}
             </p>
           </div>
         </AccordionSection>
 
-        <AccordionSection title="03. Insights y Visualización" tag="#MarketInsights" isOpen={sectionsState.insights} onClick={() => toggle('insights')}>
-          <p style={s.bodyText}>El análisis permite identificar una fractura estructural en el mercado de vivienda mediante métricas de alta precisión:</p>
+        <AccordionSection title={t.insights.title} tag={t.insights.tag} isOpen={sectionsState.insights} onClick={() => toggle('insights')}>
+          <p style={s.bodyText}>{t.insights.intro}</p>
           <div style={{ marginBottom: '8px', borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>Stock Mercantilizado:</span> Cuantificación de unidades extraídas del mercado tradicional que superan la capacidad local.</p>
+            <p style={s.bodyText}><span style={s.listKey}>{t.insights.item1Key}</span> {t.insights.item1Text}</p>
           </div>
           <div style={{ marginBottom: '8px', borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>Clústeres de Especulación:</span> Revelación de zonas de alta intensidad en Yau Tsim Mong y Central & Western.</p>
+            <p style={s.bodyText}><span style={s.listKey}>{t.insights.item2Key}</span> {t.insights.item2Text}</p>
           </div>
           <div style={{ borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>Visualización de Datos:</span> Cartografía temática que correlaciona precio con disponibilidad.</p>
+            <p style={s.bodyText}><span style={s.listKey}>{t.insights.item3Key}</span> {t.insights.item3Text}</p>
           </div>
         </AccordionSection>
 
-        <AccordionSection title="Stack Tecnológico" tag="#TechSpecs" isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
-          <p style={s.bodyText}>Python (GeoPandas, SQLAlchemy), SQL (PostgreSQL), QGIS, Figma.</p>
+        <AccordionSection title={t.stack.title} tag={t.stack.tag} isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
+          <p style={s.bodyText}>{t.stack.content}</p>
         </AccordionSection>
-      </div> {/* <-- AQUÍ FALTABA ESTE CIERRE PARA CONTENTBODY */}
+      </div> 
 
       {/* <div style={s.btnContainer}>
         <a href="#" style={s.btnGithub}>

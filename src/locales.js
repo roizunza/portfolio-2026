@@ -132,8 +132,66 @@ export const locales = {
       fileName: "03_algoritmo_inmobiliario", 
       ejecutar: "EJECUTAR ANÁLISIS", 
       title: "ALGORITMO INMOBILIARIO",
+      subtitle: "INTELIGENCIA DE MERCADO",
+      role: "Análisis cuantitativo de la dinámica de plataforma de hospedaje en entornos de hiperdensidad.",
       cardDescription1: "Intelligence de Mercado: Análisis cuantitativo de la dinámica de la plataforma de hospedaje en Hong Kong para tangibilizar la financiarización de la vivienda en entornos de hiperdensidad.",
-      cardDescription2: "A través de SQL (PostgreSQL) y Python, se modelan datos masivos para identificar clústeres de especulación y el volumen de stock habitacional transformado en activos financieros."
+      cardDescription2: "A través de SQL (PostgreSQL) y Python, se modelan datos masivos para identificar clústeres de especulación y el volumen de stock habitacional transformado en activos financieros.",
+      proposito: {
+        title: "01. El Propósito", tag: "#BigDataAnalysis",
+        content: "El proyecto analiza la operación de la plataforma airbnb en su apartado de renta a corto plazo en Hong Kong, territorio definido por su hiperdensidad y su rol central en las finanzas globales. El objetivo es tangibilizar cómo la dinámica de la plataforma contribuye a la financiarización de la vivienda, reconfigurando las reglas de acceso urbano y transformando el stock habitacional en activos financieros líquidos mediante el análisis de datos masivos."
+      },
+      metodologia: {
+        title: "02. Estructura y metodología", tag: "#DataEngineering",
+        intro: "Se implementa un flujo de trabajo de ingeniería de datos para procesar y modelar información unificada proveniente de Inside Airbnb:",
+        item1Key: "Limpieza y Gestión de Datos (SQL):",
+        item1Text: "Se utiliza PostgreSQL para la ingesta y depuración de los datasets unificados. Se ejecutan consultas para el filtrado de outliers, normalización de tipos de datos y eliminación de registros inconsistentes.",
+        item2Key: "Procesamiento Geoespacial (Python):",
+        item2Text: "Mediante el empleo de Python (GeoPandas) y la librería SQLAlchemy, se extraen los datos limpios para ejecutar agregaciones espaciales por distrito y calcular métricas críticas de rotación.",
+        item3Key: "Normalización de Métricas:",
+        item3Text: "Desarrollo de algoritmos para estandarizar indicadores de presión habitacional, permitiendo una comparativa consistente."
+      },
+      insights: {
+        title: "03. Insights y Visualización", tag: "#MarketInsights",
+        intro: "El análisis permite identificar una fractura estructural en el mercado de vivienda mediante métricas de alta precisión:",
+        item1Key: "Stock Mercantilizado:",
+        item1Text: "Cuantificación de unidades extraídas del mercado tradicional que superan la capacidad local.",
+        item2Key: "Clústeres de Especulación:",
+        item2Text: "Revelación de zonas de alta intensidad en Yau Tsim Mong y Central & Western.",
+        item3Key: "Visualización de Datos:",
+        item3Text: "Cartografía temática que correlaciona precio con disponibilidad."
+      },
+      stack: { title: "Stack Tecnológico", tag: "#TechSpecs", content: "Python (GeoPandas, SQLAlchemy), SQL (PostgreSQL), QGIS, Figma." },
+      scorecards: {
+        stock: "STOCK MERCANTILIZADO",
+        stock_sub: "Viviendas extraídas del mercado",
+        barrera: "BARRERA DE ACCESO",
+        barrera_sub: "Costo promedio por noche",
+        subutilizacion: "SUBUTILIZACIÓN",
+        subutilizacion_sub: "Días/Año de suelo vacío",
+        rotacion: "PRESIÓN DE ROTACIÓN",
+        rotacion_sub: "Intensidad de recambio"
+      },
+      graphs: {
+        scatterTitle: "Especulación: Precio vs. Rotación",
+        altaPresion: "Alta Presión",
+        estandar: "Estándar",
+        precio: "Precio",
+        rotacion: "Rotación",
+        stockTooltip: "Stock",
+        unidades: "u.",
+        barTitle: "Absorción por Distrito",
+        unidadesAirbnb: "Unidades Airbnb",
+        unidadesTooltip: "Unidades:"
+      },
+      map: {
+        simbologia: "SIMBOLOGÍA",
+        subPrecioDistrito: "Precio Promedio/Distrito(HK$)",
+        subPrecioUnidad: "Precio Unidad (HK$)",
+        popupUnidad: "UNIDAD AIRBNB",
+        popupDistrito: "DISTRITO: ",
+        popupPrecioHKD: "Precio HKD:",
+        popupPrecioUSD: "Precio USD:"
+      }
     },
     factorEsfuerzo: { 
       fileName: "04_factor_esfuerzo_turistico", 
@@ -293,8 +351,66 @@ export const locales = {
       fileName: "03_real_estate_algorithm", 
       ejecutar: "RUN ANALYSIS", 
       title: "REAL ESTATE ALGORITHM",
+      subtitle: "MARKET INTELLIGENCE",
+      role: "Quantitative analysis of short-term rental dynamics in hyper-dense environments.",
       cardDescription1: "Market Intelligence: Quantitative analysis of short-term rental dynamics in Hong Kong to visualize housing financialization within hyper-dense environments.",
-      cardDescription2: "Using SQL (PostgreSQL) and Python to model massive datasets, identifying speculation clusters and housing stock transformed into liquid financial assets."
+      cardDescription2: "Using SQL (PostgreSQL) and Python to model massive datasets, identifying speculation clusters and housing stock transformed into liquid financial assets.",
+      proposito: {
+        title: "01. Purpose", tag: "#BigDataAnalysis",
+        content: "The project analyzes the short-term rental operations of the Airbnb platform in Hong Kong, a territory defined by its hyper-density and its central role in global finance. The goal is to make tangible how the platform's dynamics contribute to housing financialization, reconfiguring urban access rules and transforming the housing stock into liquid financial assets through big data analysis."
+      },
+      metodologia: {
+        title: "02. Structure & Methodology", tag: "#DataEngineering",
+        intro: "A data engineering workflow is implemented to process and model unified information from Inside Airbnb:",
+        item1Key: "Data Cleaning & Management (SQL):",
+        item1Text: "PostgreSQL is used for the ingestion and debugging of unified datasets. Queries are executed to filter outliers, normalize data types, and eliminate inconsistent records.",
+        item2Key: "Geospatial Processing (Python):",
+        item2Text: "Using Python (GeoPandas) and the SQLAlchemy library, clean data is extracted to execute spatial aggregations by district and calculate critical turnover metrics.",
+        item3Key: "Metric Normalization:",
+        item3Text: "Development of algorithms to standardize housing pressure indicators, allowing for consistent comparison."
+      },
+      insights: {
+        title: "03. Insights & Visualization", tag: "#MarketInsights",
+        intro: "The analysis identifies a structural fracture in the housing market through high-precision metrics:",
+        item1Key: "Commodified Stock:",
+        item1Text: "Quantification of units extracted from the traditional market that exceed local capacity.",
+        item2Key: "Speculation Clusters:",
+        item2Text: "Revelation of high-intensity zones in Yau Tsim Mong and Central & Western.",
+        item3Key: "Data Visualization:",
+        item3Text: "Thematic cartography correlating price with availability."
+      },
+      stack: { title: "Tech Stack", tag: "#TechSpecs", content: "Python (GeoPandas, SQLAlchemy), SQL (PostgreSQL), QGIS, Figma." },
+      scorecards: {
+        stock: "COMMODIFIED STOCK",
+        stock_sub: "Housing extracted from the market",
+        barrera: "ACCESS BARRIER",
+        barrera_sub: "Average cost per night",
+        subutilizacion: "UNDERUTILIZATION",
+        subutilizacion_sub: "Days/Year of vacant property",
+        rotacion: "TURNOVER PRESSURE",
+        rotacion_sub: "Turnover intensity"
+      },
+      graphs: {
+        scatterTitle: "Speculation: Price vs. Turnover",
+        altaPresion: "High Pressure",
+        estandar: "Standard",
+        precio: "Price",
+        rotacion: "Turnover",
+        stockTooltip: "Stock",
+        unidades: "u.",
+        barTitle: "Absorption by District",
+        unidadesAirbnb: "Airbnb Units",
+        unidadesTooltip: "Units:"
+      },
+      map: {
+        simbologia: "SYMBOLOGY",
+        subPrecioDistrito: "Avg. Price/District(HK$)",
+        subPrecioUnidad: "Unit Price (HK$)",
+        popupUnidad: "AIRBNB UNIT",
+        popupDistrito: "DISTRICT: ",
+        popupPrecioHKD: "Price HKD:",
+        popupPrecioUSD: "Price USD:"
+      }
     },
     factorEsfuerzo: { 
       fileName: "04_effort_factor_analysis", 

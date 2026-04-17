@@ -46,7 +46,7 @@ export const PROJECTS = {
   algoritmo: {
     id: 'algoritmo',
     color: '#ff5a60',
-    ramp: { step1: '#31014d', step2: '#23057b', step3: '#6ab515', step4: '#a44113', step5: '#f30a41' }
+    ramp: { step1: '#23057b', step2: '#664daf', step3: '#6ab515', step4: '#a44113', step5: '#f30a41' }
   },
   factorEsfuerzo: {
     id: 'factorEsfuerzo',

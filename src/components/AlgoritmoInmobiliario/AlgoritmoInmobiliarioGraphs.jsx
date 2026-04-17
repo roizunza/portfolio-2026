@@ -6,10 +6,12 @@ import {
 import { FONTS, COLORS, PROJECTS } from '../../config/theme';
 import distritosData from '../../data/distritos-data-airbnb-hk.json';
 
-export default function GraphsPanel() {
+export default function GraphsPanel({ t }) {
   const THEME = PROJECTS.algoritmo;
   const RAMP = THEME.ramp;
   const features = distritosData.features || [];
+
+  if (!t || !t.graphs) return null;
 
   // 1. DATOS PARA SCATTER PLOT (Precios vs. Rotación)
   const scatterData = useMemo(() => {
@@ -23,7 +25,7 @@ export default function GraphsPanel() {
             ? RAMP.step3 // Rojo/Rosa Alto
             : RAMP.step4 // Coral base
     }));
-  }, [features]);
+  }, [features, RAMP]);
 
 
   // 2. DATOS PARA ABSORCIÓN (Top 7 Distritos)
@@ -36,7 +38,7 @@ export default function GraphsPanel() {
         Unidades: f.properties.price_count,
         fill: THEME.color
       }));
-  }, [features]);
+  }, [features, THEME]);
 
   // COMPONENTES DE DISEÑO 
   const CustomTooltipScatter = ({ active, payload }) => {
@@ -45,9 +47,9 @@ export default function GraphsPanel() {
       return (
         <div style={{ backgroundColor: COLORS.background.panel, border: `1px solid ${COLORS.ui.border}`, padding: '8px', fontFamily: FONTS.body, fontSize: '10px' }}>
           <p style={{color: 'white', fontWeight: 'bold', marginBottom:'4px', margin: 0}}>{data.name}</p>
-          <div style={{ color: COLORS.text.secondary }}>Precio: <span style={{color:'#fff'}}>${Math.round(data.x)} HKD</span></div>
-          <div style={{ color: COLORS.text.secondary }}>Rotación: <span style={{color:'#fff'}}>{data.y.toFixed(1)}%</span></div>
-          <div style={{ color: COLORS.text.secondary }}>Stock: <span style={{color:'#fff'}}>{data.z} u.</span></div>
+          <div style={{ color: COLORS.text.secondary }}>{t.graphs.precio}: <span style={{color:'#fff'}}>${Math.round(data.x)} HKD</span></div>
+          <div style={{ color: COLORS.text.secondary }}>{t.graphs.rotacion}: <span style={{color:'#fff'}}>{data.y.toFixed(1)}%</span></div>
+          <div style={{ color: COLORS.text.secondary }}>{t.graphs.stockTooltip}: <span style={{color:'#fff'}}>{data.z} {t.graphs.unidades}</span></div>
         </div>
       );
     }
@@ -61,7 +63,7 @@ export default function GraphsPanel() {
           <p style={{color: 'white', fontWeight: 'bold', marginBottom:'3px', margin: 0}}>{label}</p>
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: payload[0].fill }}></span>
-            <span style={{ color: COLORS.text.secondary }}>Unidades: <span style={{ color: '#fff', fontWeight: 'bold' }}>{payload[0].value}</span></span>
+            <span style={{ color: COLORS.text.secondary }}>{t.graphs.unidadesTooltip} <span style={{ color: '#fff', fontWeight: 'bold' }}>{payload[0].value}</span></span>
           </div>
         </div>
       );
@@ -86,10 +88,10 @@ export default function GraphsPanel() {
       {/* IZQUIERDA: SCATTER PLOT (Precios vs Rotación) */}
       <div style={styles.leftSection}>
         <div style={styles.header}>
-          <div style={styles.title}>Especulación: Precio vs. Rotación</div>
+          <div style={styles.title}>{t.graphs.scatterTitle}</div>
           <div style={styles.legend}>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.step4)}></span> Alta Presión</div>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.step3)}></span> Estándar</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.step4)}></span> {t.graphs.altaPresion}</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.step3)}></span> {t.graphs.estandar}</div>
           </div>
         </div>
         
@@ -99,7 +101,7 @@ export default function GraphsPanel() {
               <XAxis 
                 type="number" 
                 dataKey="x" 
-                name="Precio" 
+                name={t.graphs.precio} 
                 unit="HKD" 
                 tick={{fontSize: 10, fill: COLORS.text.secondary}} 
                 tickLine={false} 
@@ -108,7 +110,7 @@ export default function GraphsPanel() {
               <YAxis 
                 type="number" 
                 dataKey="y" 
-                name="Rotación" 
+                name={t.graphs.rotacion} 
                 unit="%" 
                 tick={{fontSize: 10, fill: COLORS.text.secondary}} 
                 tickLine={false} 
@@ -125,9 +127,9 @@ export default function GraphsPanel() {
       {/* DERECHA: ABSORCIÓN (Barras top) */}
       <div style={styles.rightSection}>
         <div style={styles.header}>
-          <div style={styles.title}>Absorción por Distrito</div>
+          <div style={styles.title}>{t.graphs.barTitle}</div>
           <div style={styles.legend}>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(THEME.color)}></span> Unidades Airbnb</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(THEME.color)}></span> {t.graphs.unidadesAirbnb}</div>
           </div>
         </div>
         

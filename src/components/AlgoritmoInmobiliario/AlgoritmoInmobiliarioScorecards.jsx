@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { FONTS, COLORS, PROJECTS } from '../../config/theme';
 import distritosData from '../../data/distritos-data-airbnb-hk.json';
 
-const Scorecards = () => {
+const Scorecards = ({ t }) => {
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => setIsMounted(true), []);
 
@@ -55,36 +55,36 @@ const Scorecards = () => {
       }
     };
 
-    if (!isMounted) return null;
+    if (!isMounted || !t || !t.scorecards) return null;
 
     return (
       <React.Fragment>
           {/* KPI 1 - TÍTULO BLANCO */}
           <div style={s.card}>
               <div style={s.number}>{kpis.stock}</div>
-              <div style={{...s.title, color: '#FFFFFF'}}>STOCK MERCANTILIZADO</div>
-              <div style={s.subtitle}>Viviendas extraídas del mercado</div>
+              <div style={{...s.title, color: '#FFFFFF'}}>{t.scorecards.stock}</div>
+              <div style={s.subtitle}>{t.scorecards.stock_sub}</div>
           </div>
           
           {/* KPI 2-step4 */}
           <div style={s.card}>
               <div style={s.number}>{kpis.ticket}</div>
-              <div style={{...s.title, color: RAMP.step4}}>BARRERA DE ACCESO</div>
-              <div style={s.subtitle}>Costo promedio por noche</div>
+              <div style={{...s.title, color: RAMP.step4}}>{t.scorecards.barrera}</div>
+              <div style={s.subtitle}>{t.scorecards.barrera_sub}</div>
           </div>
           
           {/* KPI 3-step3 */}
           <div style={s.card}>
               <div style={s.number}>{kpis.vacancy}</div>
-              <div style={{...s.title, color: RAMP.step3}}>SUBUTILIZACIÓN</div>
-              <div style={s.subtitle}>Días/Año de suelo vacío</div>
+              <div style={{...s.title, color: RAMP.step3}}>{t.scorecards.subutilizacion}</div>
+              <div style={s.subtitle}>{t.scorecards.subutilizacion_sub}</div>
           </div>
           
           {/* KPI 4-step2 */}
           <div style={s.card}>
               <div style={s.number}>{kpis.rotation}</div>
-              <div style={{...s.title, color: RAMP.step2}}>PRESIÓN DE ROTACIÓN</div>
-              <div style={s.subtitle}>Intensidad de recambio</div>
+              <div style={{...s.title, color: RAMP.step2}}>{t.scorecards.rotacion}</div>
+              <div style={s.subtitle}>{t.scorecards.rotacion_sub}</div>
           </div>
       </React.Fragment>
     );

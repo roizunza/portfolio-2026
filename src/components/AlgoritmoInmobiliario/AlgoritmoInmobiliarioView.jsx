@@ -24,7 +24,8 @@ const AlgoritmoInmobiliarioView = ({ t, idioma }) => {
 
       {/* 3. MAP */}
       <div className="panel area-top" style={{ position: 'relative' }}>
-         <MapComponent />
+         {/* AQUÍ FALTABA PASAR LA PROP t */}
+         <MapComponent t={t} /> 
       </div>
 
       {/* 4. GRÁFICOS*/}
