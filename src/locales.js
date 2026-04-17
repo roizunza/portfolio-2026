@@ -193,12 +193,37 @@ export const locales = {
         popupPrecioUSD: "Precio USD:"
       }
     },
-    factorEsfuerzo: { 
+   factorEsfuerzo: { 
       fileName: "04_factor_esfuerzo_turistico", 
       ejecutar: "EJECUTAR ANÁLISIS", 
       title: "FACTOR DE ESFUERZO",
+      subtitle: "ACCESIBILIDAD EN LA RED FERROVIARIA",
+      role: "Modelado de proximidad y fragmentación territorial mediante minería de datos",
       cardDescription1: "Data Analysis: Modelado de proximidad y fragmentación territorial en la red ferroviaria japonesa para cuantificar el 'Costo Oculto' de la eficiencia del Shinkansen.",
-      cardDescription2: "Este proyecto mide la desigualdad de acceso mediante la minería de datos espaciales, evaluando el esfuerzo físico necesario para conectar con el patrimonio regional desconectado de la red principal."
+      cardDescription2: "Este proyecto mide la desigualdad de acceso mediante la minería de datos espaciales, evaluando el esfuerzo físico necesario para conectar con el patrimonio regional desconectado de la red principal.",
+      proposito: {
+        title: "01. El Propósito", tag: "#GeospatialAnalysis",
+        content: "El proyecto evalúa la relación espacial entre la red ferroviaria japonesa y los activos culturales regionales. El objetivo es cuantificar la desigualdad de acceso que experimentan los puntos de interés (POI) no integrados a los nodos principales, determinando el Factor de Esfuerzo: la distancia física que un usuario debe invertir desde la estación más cercana hasta el destino cultural."
+      },
+      metodologia: {
+        title: "02. Estructura y metodología", tag: "#DataMining",
+        item1Key: "Minería de Datos (POIs):",
+        item1Text: "Desarrollo de scripts en Python (BeautifulSoup) para el web scraping de sitios especializados, normalizando coordenadas y atributos de activos estratégicos en un dataset estructurado.",
+        item2Key: "Extracción de Infraestructura:",
+        item2Text: "Captura y filtrado automatizado de la red ferroviaria completa de Japón mediante plugins geoespaciales para su integración en el modelo de accesibilidad.",
+        item3Key: "Near Analysis:",
+        item3Text: "Ejecución de un análisis de proximidad en GIS para categorizar el nivel de dificultad de acceso y el aislamiento relativo de los activos periféricos."
+      },
+      insights: {
+        title: "03. Insights y visualización", tag: "#IsolationMetrics",
+        item1Key: "Centralización:",
+        item1Text: "Se identifica que la infraestructura prioriza nodos comerciales densos, aumentando críticamente el esfuerzo para acceder al patrimonio histórico.",
+        item2Key: "Métricas de Última Milla:",
+        item2Text: "Detección de clústeres donde el esfuerzo de traslado excede los radios de caminabilidad estándar (1km), evidenciando brechas de conectividad.",
+        item3Key: "Cartografía:",
+        item3Text: "Visualización temática que correlaciona la densidad de estaciones con la ubicación de POIs para la toma de decisiones territoriales."
+      },
+      stack: { title: "Stack Tecnológico", tag: "#TechSpecs", content: "Python (BeautifulSoup, Pandas), QGIS (QuickOSM), Figma." }
     },
     contacto: {
       rolDestinatario: "Rocío Izunza - Urbanista|Analista de Datos Geoespaciales",
@@ -412,12 +437,37 @@ export const locales = {
         popupPrecioUSD: "Price USD:"
       }
     },
-    factorEsfuerzo: { 
+  factorEsfuerzo: { 
       fileName: "04_effort_factor_analysis", 
       ejecutar: "RUN ANALYSIS", 
       title: "EFFORT FACTOR",
+      subtitle: "RAILWAY NETWORK ACCESSIBILITY",
+      role: "Proximity and territorial fragmentation modeling through data mining",
       cardDescription1: "Data Analysis: Proximity and territorial fragmentation modeling within the Japanese rail network to quantify the 'Hidden Cost' of Shinkansen efficiency.",
-      cardDescription2: "This project measures access inequality through spatial data mining, evaluating the physical effort required to reach regional heritage sites disconnected from the main network."
+      cardDescription2: "This project measures access inequality through spatial data mining, evaluating the physical effort required to reach regional heritage sites disconnected from the main network.",
+      proposito: {
+        title: "01. Purpose", tag: "#GeospatialAnalysis",
+        content: "The project evaluates the spatial relationship between the Japanese railway network and regional cultural assets. The goal is to quantify the access inequality experienced by points of interest (POIs) not integrated into main nodes, determining the Effort Factor: the physical distance a user must invest from the nearest station to the cultural destination."
+      },
+      metodologia: {
+        title: "02. Structure & Methodology", tag: "#DataMining",
+        item1Key: "Data Mining (POIs):",
+        item1Text: "Development of Python scripts (BeautifulSoup) for web scraping specialized sites, normalizing coordinates and attributes of strategic assets into a structured dataset.",
+        item2Key: "Infrastructure Extraction:",
+        item2Text: "Automated capture and filtering of the entire Japanese railway network using geospatial plugins for integration into the accessibility model.",
+        item3Key: "Near Analysis:",
+        item3Text: "Execution of a proximity analysis in GIS to categorize the difficulty level of access and the relative isolation of peripheral assets."
+      },
+      insights: {
+        title: "03. Insights & Visualization", tag: "#IsolationMetrics",
+        item1Key: "Centralization:",
+        item1Text: "It is identified that the infrastructure prioritizes dense commercial nodes, critically increasing the effort to access historical heritage.",
+        item2Key: "Last-Mile Metrics:",
+        item2Text: "Detection of clusters where travel effort exceeds standard walkability radii (1km), highlighting connectivity gaps.",
+        item3Key: "Cartography:",
+        item3Text: "Thematic visualization correlating station density with POI locations for territorial decision-making."
+      },
+      stack: { title: "Tech Stack", tag: "#TechSpecs", content: "Python (BeautifulSoup, Pandas), QGIS (QuickOSM), Figma." }
     },
     contacto: {
       rolDestinatario: "Rocío Izunza - Urban Planner|Geospatial Data Analyst",

@@ -36,8 +36,10 @@ const AccordionSection = ({ title, tag, isOpen, onClick, children }) => {
   );
 };
 
-export default function Sidebar() {
+export default function Sidebar({ t }) {
   const [sectionsState, setSectionsState] = useState({ proposito: true, metodologia: false, insights: false, stack: false });
+
+  if (!t) return null;
 
   const toggle = (section) => {
     setSectionsState(prevState => ({ ...prevState, [section]: !prevState[section] }));
@@ -68,52 +70,52 @@ export default function Sidebar() {
       `}</style>
 
       <div style={s.headerBox}>
-        <h2 style={s.subHeader}>ACCESIBILIDAD EN LA RED FERROVIARIA</h2>
-        <h1 style={s.mainTitle}>FACTOR DE ESFUERZO</h1>
+        <h2 style={s.subHeader}>{t.subtitle}</h2>
+        <h1 style={s.mainTitle}>{t.title}</h1>
         <div style={s.authorBox}>
           <p style={s.authorName}></p>
-          <p style={s.authorRole}>Modelado de proximidad y fragmentación territorial mediante minería de datos</p>
+          <p style={s.authorRole}>{t.role}</p>
         </div>
       </div>
 
       <div style={s.contentBody} className="custom-scrollbar">
         
-        <AccordionSection title="01. El Propósito" tag="#GeospatialAnalysis" isOpen={sectionsState.proposito} onClick={() => toggle('proposito')}>
-          <p style={s.bodyText}>El proyecto evalúa la relación espacial entre la red ferroviaria japonesa y los activos culturales regionales. El objetivo es cuantificar la desigualdad de acceso que experimentan los puntos de interés (POI) no integrados a los nodos principales, determinando el Factor de Esfuerzo: la distancia física que un usuario debe invertir desde la estación más cercana hasta el destino cultural.</p>
+        <AccordionSection title={t.proposito.title} tag={t.proposito.tag} isOpen={sectionsState.proposito} onClick={() => toggle('proposito')}>
+          <p style={s.bodyText}>{t.proposito.content}</p>
         </AccordionSection>
 
-        <AccordionSection title="02. Estructura y metodología" tag="#DataMining" isOpen={sectionsState.metodologia} onClick={() => toggle('metodologia')}>
+        <AccordionSection title={t.metodologia.title} tag={t.metodologia.tag} isOpen={sectionsState.metodologia} onClick={() => toggle('metodologia')}>
           <div style={s.listItem}>
             <p style={s.bodyText}>
-              <span style={s.listKey}>Minería de Datos (POIs):</span> Desarrollo de scripts en Python (BeautifulSoup) para el web scraping de sitios especializados, normalizando coordenadas y atributos de activos estratégicos en un dataset estructurado.
+              <span style={s.listKey}>{t.metodologia.item1Key}</span> {t.metodologia.item1Text}
             </p>
           </div>
           <div style={s.listItem}>
             <p style={s.bodyText}>
-              <span style={s.listKey}>Extracción de Infraestructura:</span> Captura y filtrado automatizado de la red ferroviaria completa de Japón mediante plugins geoespaciales para su integración en el modelo de accesibilidad.
+              <span style={s.listKey}>{t.metodologia.item2Key}</span> {t.metodologia.item2Text}
             </p>
           </div>
           <div style={s.listItem}>
             <p style={s.bodyText}>
-              <span style={s.listKey}>Near Analysis:</span> Ejecución de un análisis de proximidad en GIS para categorizar el nivel de dificultad de acceso y el aislamiento relativo de los activos periféricos.
+              <span style={s.listKey}>{t.metodologia.item3Key}</span> {t.metodologia.item3Text}
             </p>
           </div>
         </AccordionSection>
 
-        <AccordionSection title="03. Insights y visualización" tag="#IsolationMetrics" isOpen={sectionsState.insights} onClick={() => toggle('insights')}>
+        <AccordionSection title={t.insights.title} tag={t.insights.tag} isOpen={sectionsState.insights} onClick={() => toggle('insights')}>
           <div style={{ marginBottom: '8px', borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>Centralización:</span> Se identifica que la infraestructura prioriza nodos comerciales densos, aumentando críticamente el esfuerzo para acceder al patrimonio histórico.</p>
+            <p style={s.bodyText}><span style={s.listKey}>{t.insights.item1Key}</span> {t.insights.item1Text}</p>
           </div>
           <div style={{ marginBottom: '8px', borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>Métricas de Última Milla:</span> Detección de clústeres donde el esfuerzo de traslado excede los radios de caminabilidad estándar (1km), evidenciando brechas de conectividad.</p>
+            <p style={s.bodyText}><span style={s.listKey}>{t.insights.item2Key}</span> {t.insights.item2Text}</p>
           </div>
           <div style={{ borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>Cartografía:</span> Visualización temática que correlaciona la densidad de estaciones con la ubicación de POIs para la toma de decisiones territoriales.</p>
+            <p style={s.bodyText}><span style={s.listKey}>{t.insights.item3Key}</span> {t.insights.item3Text}</p>
           </div>
         </AccordionSection>
 
-        <AccordionSection title="Stack Tecnológico" tag="#TechSpecs" isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
-          <p style={s.bodyText}>Python (BeautifulSoup, Pandas), QGIS (QuickOSM), Figma.</p>
+        <AccordionSection title={t.stack.title} tag={t.stack.tag} isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
+          <p style={s.bodyText}>{t.stack.content}</p>
         </AccordionSection>
       </div>
 
