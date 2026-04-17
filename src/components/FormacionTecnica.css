@@ -1,0 +1,136 @@
+.formacion-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+
+.formacion-header {
+  margin-bottom: 80px;
+  text-align: center;
+}
+
+.formacion-title {
+  font-family: 'Roboto Mono', monospace; 
+  font-size: 3rem;
+  color: #FFFFFF;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.formacion-title span {
+  color: #FFFFFF; 
+  margin-right: 10px;
+}
+
+.formacion-layout {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 30px;
+  align-items: stretch;
+}
+
+.formacion-insights {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.insight-box {
+  background: rgba(30, 30, 30, 0.6);
+  border: 1px solid #3e3e42;
+  padding: 22px;
+  border-radius: 4px;
+  height: 95px; /* Ajustado levemente para el nuevo texto del meta */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.insight-label {
+  color: #888;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-family: 'Roboto Mono', monospace;
+  margin-bottom: 5px;
+}
+
+.insight-value {
+  color: #fff;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.formacion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.especialidad-card {
+  background: #1e1e1e;
+  border-left: 4px solid var(--accent-color);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  min-height: 95px;
+}
+
+.especialidad-header {
+  padding: 0 25px;
+  height: 95px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.especialidad-info h3 {
+  margin: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.especialidad-meta {
+  font-size: 0.9rem;
+  color: #aaa; /* Un poco más claro para distinguir de la institución */
+  margin-top: 4px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.plus-minus {
+  color: var(--accent-color);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.8rem;
+}
+
+.especialidad-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.especialidad-card.open .especialidad-content {
+  max-height: 1200px;
+}
+
+.formacion-item {
+  padding: 25px 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.formacion-item h4 {
+  color: var(--accent-color);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.curso-line {
+  color: #ccc;
+  font-size: 0.95rem;
+  font-family: 'Roboto Mono', monospace;
+  margin-bottom: 6px;
+}
