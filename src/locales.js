@@ -101,7 +101,13 @@ export const locales = {
         item3Key: "Dashboard de Auditoría:",
         item3Text: "Visualización interactiva que permite contrastar el modelo de segmentación con los índices de presión ambiental."
       },
-      stack: { title: "Stack Tecnológico", tag: "#TechSpecs", content: "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma." }
+      stack: { title: "Stack Tecnológico", tag: "#TechSpecs", content: "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma." },
+      raster: {
+        ndviTitle: "Índice de vegetación de diferencia normalizada",
+        ndviTop: "Alta Vegetación",
+        ndwiTitle: "Índice de humedad de diferencia normalizada",
+        ndwiTop: "Alta Humedad"
+      }
     },
     algoritmo: { 
       fileName: "03_algoritmo_inmobiliario", 
@@ -236,6 +242,12 @@ export const locales = {
         item2Text: "The combination of architectural and natural barriers may be nullifying public access to beaches guaranteed by law.",
         item3Key: "Audit Dashboard:",
         item3Text: "Interactive visualization that allows contrasting the segmentation model with environmental pressure indices."
+      },
+      raster: {
+        ndviTitle: "Normalized Difference Vegetation Index",
+        ndviTop: "High Vegetation",
+        ndwiTitle: "Normalized Difference Water Index",
+        ndwiTop: "High Moisture"
       },
       stack: { title: "Tech Stack", tag: "#TechSpecs", content: "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma." }
     },

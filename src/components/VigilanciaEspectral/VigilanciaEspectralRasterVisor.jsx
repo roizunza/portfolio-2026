@@ -3,7 +3,7 @@ import { FONTS, COLORS } from '../../config/theme';
 import ndviImg from '../../assets/ndvi_visual.png'; 
 import ndwiImg from '../../assets/ndwi_visual.png'; 
 
-export default function RasterVisor() {
+export default function RasterVisor({ t }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
   useEffect(() => {
@@ -11,6 +11,8 @@ export default function RasterVisor() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  if (!t || !t.raster) return null;
 
   const RenderLegend = ({ gradient, labels, topLabel }) => (
     <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
@@ -64,7 +66,6 @@ export default function RasterVisor() {
             display: 'flex', flexDirection: 'column', 
             position: 'relative'
         }}>
-            {/* TÍTULO (Ajustado para ocupar 2 renglones) */}
             <div style={{ 
                 position: 'absolute', 
                 top: '15px', 
@@ -84,11 +85,9 @@ export default function RasterVisor() {
                 }}>{title}</h2>
             </div>
             
-            {/* IMAGEN DE FONDO */}
             <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                 <img src={img} alt={acronym} style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: 0.95 }} />
                 
-                {/* LEYENDA Y ETIQUETA (Derecha Abajo) */}
                 <div style={{
                     position: 'absolute',
                     bottom: '15px',
@@ -129,24 +128,22 @@ export default function RasterVisor() {
         overflow: 'hidden' 
     }}>
       
-      {/* TARJETA 1: NDVI */}
       <RasterCard 
-          title="Índice de vegetación de diferencia normalizada" 
+          title={t.raster.ndviTitle} 
           acronym="NDVI" 
           img={ndviImg}
           gradient="linear-gradient(to top, #f30a41 0%, #f4976c 30%, #86d978 60%, #0f8e64 100%)"
           labels={['0.95', '0.0', '-0.73']}
-          topLabel="Alta Vegetación" 
+          topLabel={t.raster.ndviTop} 
       />
 
-      {/* TARJETA 2: NDWI */}
       <RasterCard 
-          title="Índice de humedad de diferencia normalizada" 
+          title={t.raster.ndwiTitle} 
           acronym="NDWI" 
           img={ndwiImg}
           gradient="linear-gradient(to top, #f30a41 0%, #f4976c 30%, #77c4df 60%, #0106f7 100%)"
           labels={['0.70', '0.0', '-0.73']}
-          topLabel="Alta Humedad" 
+          topLabel={t.raster.ndwiTop} 
       />
     </div>
   );
