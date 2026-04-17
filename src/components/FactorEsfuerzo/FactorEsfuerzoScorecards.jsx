@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { FONTS, COLORS, PROJECTS } from '../../config/theme';
 import factorData from '../../data/factor-esfuerzo-turistico.json'; 
 
-const Scorecards = () => {
+const Scorecards = ({ t }) => {
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => setIsMounted(true), []);
 
@@ -57,36 +57,36 @@ const Scorecards = () => {
       }
     };
 
-    if (!isMounted) return null;
+    if (!isMounted || !t || !t.scorecards) return null;
 
     return (
       <React.Fragment>
           {/* 1. ACTIVOS MAPEADOS - Título Blanco */}
           <div style={s.card}>
               <div style={s.number}>{kpis.total}</div>
-              <div style={{...s.title, color: '#FFFFFF'}}>ACTIVOS MAPEADOS</div>
-              <div style={s.subtitle}>Puntos de interés cultural</div>
+              <div style={{...s.title, color: '#FFFFFF'}}>{t.scorecards.activos}</div>
+              <div style={s.subtitle}>{t.scorecards.activos_sub}</div>
           </div>
           
           {/* 2. FACTOR ESFUERZO - Título Amarillo */}
           <div style={s.card}>
-              <div style={s.number}>{kpis.distanciaProm} km</div>
-              <div style={{...s.title, color: RAMP.distancia}}>FACTOR ESFUERZO</div>
-              <div style={s.subtitle}>Distancia promedio a red</div>
+              <div style={s.number}>{kpis.distanciaProm}{t.scorecards.km}</div>
+              <div style={{...s.title, color: RAMP.distancia}}>{t.scorecards.esfuerzo}</div>
+              <div style={s.subtitle}>{t.scorecards.esfuerzo_sub}</div>
           </div>
           
           {/* 3. AISLAMIENTO - Título Rosa */}
           <div style={s.card}>
               <div style={s.number}>{kpis.aislamiento}%</div>
-              <div style={{...s.title, color: RAMP.aislamiento}}>ÍNDICE DE AISLAMIENTO</div>
-              <div style={s.subtitle}>Activos fuera de radio peatonal</div>
+              <div style={{...s.title, color: RAMP.aislamiento}}>{t.scorecards.aislamiento}</div>
+              <div style={s.subtitle}>{t.scorecards.aislamiento_sub}</div>
           </div>
           
           {/* 4. CONEXIÓN - Título Gris Azulado (#546E7A) */}
           <div style={s.card}>
               <div style={s.number}>{kpis.conectados}</div>
-              <div style={{...s.title, color: '#546E7A'}}>NODOS CONECTADOS</div>
-              <div style={s.subtitle}>Acceso directo (&lt;500m)</div>
+              <div style={{...s.title, color: '#546E7A'}}>{t.scorecards.conexion}</div>
+              <div style={s.subtitle}>{t.scorecards.conexion_sub}</div>
           </div>
       </React.Fragment>
     );

@@ -23,7 +23,7 @@ const FactorEsfuerzoView = ({ t, idioma }) => {
 
       {/* 3. MAPA PRINCIPAL (Derecha Arriba - Geoespacial) */}
       <div className="panel area-top" style={{ position: 'relative' }}>
-         <MapComponent />
+         <MapComponent t={t} />
       </div>
 
       {/* 4. GRÁFICOS (Derecha Abajo - Análisis) */}

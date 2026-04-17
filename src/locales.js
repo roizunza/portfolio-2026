@@ -193,7 +193,7 @@ export const locales = {
         popupPrecioUSD: "Precio USD:"
       }
     },
-   factorEsfuerzo: { 
+    factorEsfuerzo: { 
       fileName: "04_factor_esfuerzo_turistico", 
       ejecutar: "EJECUTAR ANÁLISIS", 
       title: "FACTOR DE ESFUERZO",
@@ -223,7 +223,46 @@ export const locales = {
         item3Key: "Cartografía:",
         item3Text: "Visualización temática que correlaciona la densidad de estaciones con la ubicación de POIs para la toma de decisiones territoriales."
       },
-      stack: { title: "Stack Tecnológico", tag: "#TechSpecs", content: "Python (BeautifulSoup, Pandas), QGIS (QuickOSM), Figma." }
+      stack: { title: "Stack Tecnológico", tag: "#TechSpecs", content: "Python (BeautifulSoup, Pandas), QGIS (QuickOSM), Figma." },
+      scorecards: {
+        activos: "ACTIVOS MAPEADOS",
+        activos_sub: "Puntos de interés cultural",
+        esfuerzo: "FACTOR ESFUERZO",
+        esfuerzo_sub: "Distancia promedio a red",
+        aislamiento: "ÍNDICE DE AISLAMIENTO",
+        aislamiento_sub: "Activos fuera de radio peatonal",
+        conexion: "NODOS CONECTADOS",
+        conexion_sub: "Acceso directo (<500m)",
+        km: " km"
+      },
+      graphs: {
+        distribucion: "Distribución de Accesibilidad",
+        aislados: "Top 5 Activos Aislados (km)",
+        distLabel: "Distancia",
+        countLabel: "Cantidad",
+        sinNombre: "Sin Nombre",
+        buckets: {
+          bajo: "< 500m",
+          medio: "500m-1km",
+          alto: "1km-3km",
+          critico: "> 3km"
+        }
+      },
+      map: {
+        simbologia: "SIMBOLOGÍA",
+        turismo: "Turismo",
+        activo: "Activo Turístico (Punto)",
+        buffer: "Buffer de Influencia",
+        esfuerzo: "Factor Esfuerzo",
+        distancia: "Distancia a Estación",
+        red: "Red Ferroviaria",
+        estacion: "Estación Tren",
+        vias: "Vías",
+        popupActivo: "ACTIVO TURÍSTICO",
+        popupEstacion: "ESTACIÓN",
+        popupRed: "DISTANCIA A RED",
+        metros: "metros"
+      }
     },
     contacto: {
       rolDestinatario: "Rocío Izunza - Urbanista|Analista de Datos Geoespaciales",
@@ -437,14 +476,14 @@ export const locales = {
         popupPrecioUSD: "Price USD:"
       }
     },
-  factorEsfuerzo: { 
+    factorEsfuerzo: { 
       fileName: "04_effort_factor_analysis", 
       ejecutar: "RUN ANALYSIS", 
       title: "EFFORT FACTOR",
       subtitle: "RAILWAY NETWORK ACCESSIBILITY",
       role: "Proximity and territorial fragmentation modeling through data mining",
       cardDescription1: "Data Analysis: Proximity and territorial fragmentation modeling within the Japanese rail network to quantify the 'Hidden Cost' of Shinkansen efficiency.",
-      cardDescription2: "This project measures access inequality through spatial data mining, evaluating the physical effort required to reach regional heritage sites disconnected from the main network.",
+      cardDescription2: "This project delivers a spatial data mining model to identify accessibility gaps in historical heritage sites disconnected from primary railway hubs.",
       proposito: {
         title: "01. Purpose", tag: "#GeospatialAnalysis",
         content: "The project evaluates the spatial relationship between the Japanese railway network and regional cultural assets. The goal is to quantify the access inequality experienced by points of interest (POIs) not integrated into main nodes, determining the Effort Factor: the physical distance a user must invest from the nearest station to the cultural destination."
@@ -467,7 +506,46 @@ export const locales = {
         item3Key: "Cartography:",
         item3Text: "Thematic visualization correlating station density with POI locations for territorial decision-making."
       },
-      stack: { title: "Tech Stack", tag: "#TechSpecs", content: "Python (BeautifulSoup, Pandas), QGIS (QuickOSM), Figma." }
+      stack: { title: "Tech Stack", tag: "#TechSpecs", content: "Python (BeautifulSoup, Pandas), QGIS (QuickOSM), Figma." },
+      scorecards: {
+        activos: "MAPPED ASSETS",
+        activos_sub: "Cultural points of interest",
+        esfuerzo: "EFFORT FACTOR",
+        esfuerzo_sub: "Average distance to network",
+        aislamiento: "ISOLATION INDEX",
+        aislamiento_sub: "Assets outside pedestrian radius",
+        conexion: "CONNECTED NODES",
+        conexion_sub: "Direct access (<500m)",
+        km: " km"
+      },
+      graphs: {
+        distribucion: "Accessibility Distribution",
+        aislados: "Top 5 Isolated Assets (km)",
+        distLabel: "Distance",
+        countLabel: "Count",
+        sinNombre: "Unnamed",
+        buckets: {
+          bajo: "< 500m",
+          medio: "500m-1km",
+          alto: "1km-3km",
+          critico: "> 3km"
+        }
+      },
+      map: {
+        simbologia: "SYMBOLOGY",
+        turismo: "Tourism",
+        activo: "Tourist Asset (Point)",
+        buffer: "Influence Buffer",
+        esfuerzo: "Effort Factor",
+        distancia: "Distance to Station",
+        red: "Railway Network",
+        estacion: "Train Station",
+        vias: "Tracks",
+        popupActivo: "TOURIST ASSET",
+        popupEstacion: "STATION",
+        popupRed: "DISTANCE TO NETWORK",
+        metros: "meters"
+      }
     },
     contacto: {
       rolDestinatario: "Rocío Izunza - Urban Planner|Geospatial Data Analyst",
