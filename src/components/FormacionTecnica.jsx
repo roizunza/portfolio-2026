@@ -1,29 +1,35 @@
 import React, { useState, useMemo } from 'react';
 import './FormacionTecnica.css';
-import certificacionesData from '../data/certificaciones.json';
 
-const FormacionTecnica = ({ t }) => {
+// Ya NO importamos el JSON aquí arriba de forma fija
+const FormacionTecnica = ({ t, data }) => {
   const [activeTab, setActiveTab] = useState(null);
+
+  const cleanHours = (h) => {
+    if (typeof h === 'number') return h;
+    return parseInt(h?.replace('h', '') || 0);
+  };
 
   const globalInsights = useMemo(() => {
     let formUniqueNames = new Set();
     let cursoCount = 0;
     let totalH = 0;
 
-    certificacionesData.forEach(esp => {
+    // Usamos "data" que viene por props
+    data.forEach(esp => {
       esp.formaciones.forEach(f => {
         formUniqueNames.add(f.nombre);
         if (esp.id === 'geo') {
-          cursoCount += f.modulos.length;
-          totalH += f.horas;
+          cursoCount += f.modulos?.length || 0;
+          totalH += cleanHours(f.horas);
         } else {
-          cursoCount += f.cursos.length;
-          f.cursos.forEach(c => totalH += parseInt(c.h) || 0);
+          cursoCount += f.cursos?.length || 0;
+          f.cursos?.forEach(c => totalH += cleanHours(c.h));
         }
       });
     });
-    return { especialidades: 4, formaciones: formUniqueNames.size, cursos: cursoCount, horas: totalH };
-  }, []);
+    return { especialidades: data.length, formaciones: formUniqueNames.size, cursos: cursoCount, horas: totalH };
+  }, [data]); // Se recalcula si cambia el idioma de la data
 
   const openPdf = (file) => {
     if (!file) return;
@@ -41,14 +47,14 @@ const FormacionTecnica = ({ t }) => {
           <div className="insight-box"><span className="insight-label">{t.especialidades}</span><span className="insight-value">{globalInsights.especialidades}</span></div>
           <div className="insight-box"><span className="insight-label">{t.formaciones}</span><span className="insight-value">{globalInsights.formaciones}</span></div>
           <div className="insight-box"><span className="insight-label">{t.cursos}</span><span className="insight-value">{globalInsights.cursos}</span></div>
-          <div className="insight-box"><span className="insight-label">{t.horas.split(' ')[0]}</span><span className="insight-value">{globalInsights.horas}h</span></div>
+          <div className="insight-box"><span className="insight-label">{t.horas}</span><span className="insight-value">{globalInsights.horas}h</span></div>
         </aside>
 
         <main className="formacion-list">
-          {certificacionesData.map((esp) => {
+          {data.map((esp) => {
             const horasCaja = esp.formaciones.reduce((acc, f) => {
-              if (esp.id === 'geo') return acc + f.horas;
-              return acc + f.cursos.reduce((ac, c) => ac + (parseInt(c.h) || 0), 0);
+               if (esp.id === 'geo') return acc + cleanHours(f.horas);
+               return acc + (f.cursos?.reduce((ac, c) => ac + cleanHours(c.h), 0) || 0);
             }, 0);
 
             return (
@@ -67,9 +73,9 @@ const FormacionTecnica = ({ t }) => {
                       <h4 onClick={() => openPdf(form.pdf)} className="link-cert">// {form.nombre} ↗</h4>
                       <div className="cursos-list">
                         {esp.id === 'geo' ? (
-                          form.modulos.map((mod, mIdx) => (<div key={mIdx} className="curso-line">• {mod}</div>))
+                          form.modulos?.map((mod, mIdx) => (<div key={mIdx} className="curso-line">• {mod}</div>))
                         ) : (
-                          form.cursos.map((curso, cIdx) => (
+                          form.cursos?.map((curso, cIdx) => (
                             <div key={cIdx} className="curso-line link-cert" onClick={() => openPdf(curso.pdf)}>
                               • {curso.nombre} <span>[{curso.h}]</span>
                             </div>

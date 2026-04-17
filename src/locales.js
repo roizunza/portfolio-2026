@@ -280,10 +280,20 @@ export const locales = {
       error: "error al enviar. intenta de nuevo.",
       btnEnviar: ">enviar_mensaje",
       btnEnviando: "enviando..."
+    }, 
+    outro: {
+      log_completed: ">PROCESO_COMPLETADO: 100%",
+      log_analyzing: "> ANALIZANDO_SIGUIENTE_PASO...",
+      titulo: "LISTA PARA CODIFICAR LA SIGUIENTE CIUDAD",
+      tab: "info_extra",
+      perfil: "Urbanista & Analista de Datos Geoespaciales",
+      status: "Online & Lista",
+      layers: "'Infraestructura', 'Data', 'Género', 'Ambiente'",
+      btn: "CONTACTO"
     }
   },
   en: {
-    nav: { proyectos: "Projects", formacion: "Specialization", Sobre_Mi: "About_Me", contacto: "Contact" },
+    nav: { proyectos: "Projects", formacion: "Training", Sobre_Mi: "About_Me", contacto: "Contact" },
     hero: {
       archivoPy: "professional_profile.py",
       clase: "Urban_Planner", 
@@ -397,8 +407,8 @@ export const locales = {
       scorecards: {
         presion: "PRESSURED ECOSYSTEM",
         presion_sub: "Direct conflict",
-        amenaza: "THREAT INDEX",
-        amenaza_sub: "% of ecosystem under pressure",
+        threat: "THREAT INDEX",
+        threat_sub: "% of ecosystem under pressure",
         inversion: "REAL ESTATE INVESTMENT",
         inversion_sub: "Projected developments",
         manglar: "MANGROVE SURFACE",
@@ -451,25 +461,25 @@ export const locales = {
         barrera_sub: "Average cost per night",
         subutilizacion: "UNDERUTILIZATION",
         subutilizacion_sub: "Days/Year of vacant property",
-        rotacion: "TURNOVER PRESSURE",
-        rotacion_sub: "Turnover intensity"
+        rotation: "TURNOVER PRESSURE",
+        rotation_sub: "Turnover intensity"
       },
       graphs: {
         scatterTitle: "Speculation: Price vs. Turnover",
-        altaPresion: "High Pressure",
-        estandar: "Standard",
-        precio: "Price",
-        rotacion: "Turnover",
+        highPressure: "High Pressure",
+        standard: "Standard",
+        price: "Price",
+        rotation: "Turnover",
         stockTooltip: "Stock",
-        unidades: "u.",
+        units: "u.",
         barTitle: "Absorption by District",
-        unidadesAirbnb: "Airbnb Units",
-        unidadesTooltip: "Units:"
+        unitsAirbnb: "Airbnb Units",
+        unitsTooltip: "Units:"
       },
       map: {
         simbologia: "SYMBOLOGY",
-        subPrecioDistrito: "Avg. Price/District(HK$)",
-        subPrecioUnidad: "Unit Price (HK$)",
+        subPriceDistrito: "Avg. Price/District(HK$)",
+        subPriceUnidad: "Unit Price (HK$)",
         popupUnidad: "AIRBNB UNIT",
         popupDistrito: "DISTRICT: ",
         popupPrecioHKD: "Price HKD:",
@@ -508,43 +518,43 @@ export const locales = {
       },
       stack: { title: "Tech Stack", tag: "#TechSpecs", content: "Python (BeautifulSoup, Pandas), QGIS (QuickOSM), Figma." },
       scorecards: {
-        activos: "MAPPED ASSETS",
-        activos_sub: "Cultural points of interest",
-        esfuerzo: "EFFORT FACTOR",
-        esfuerzo_sub: "Average distance to network",
-        aislamiento: "ISOLATION INDEX",
-        aislamiento_sub: "Assets outside pedestrian radius",
-        conexion: "CONNECTED NODES",
-        conexion_sub: "Direct access (<500m)",
+        assets: "MAPPED ASSETS",
+        assets_sub: "Cultural points of interest",
+        effort: "EFFORT FACTOR",
+        effort_sub: "Average distance to network",
+        isolation: "ISOLATION INDEX",
+        isolation_sub: "Assets outside pedestrian radius",
+        connection: "CONNECTED NODES",
+        connection_sub: "Direct access (<500m)",
         km: " km"
       },
       graphs: {
-        distribucion: "Accessibility Distribution",
-        aislados: "Top 5 Isolated Assets (km)",
+        distribution: "Accessibility Distribution",
+        isolated: "Top 5 Isolated Assets (km)",
         distLabel: "Distance",
         countLabel: "Count",
-        sinNombre: "Unnamed",
+        noName: "Unnamed",
         buckets: {
-          bajo: "< 500m",
-          medio: "500m-1km",
-          alto: "1km-3km",
-          critico: "> 3km"
+          low: "< 500m",
+          med: "500m-1km",
+          high: "1km-3km",
+          crit: "> 3km"
         }
       },
       map: {
         simbologia: "SYMBOLOGY",
-        turismo: "Tourism",
-        activo: "Tourist Asset (Point)",
+        tourism: "Tourism",
+        asset: "Tourist Asset (Point)",
         buffer: "Influence Buffer",
-        esfuerzo: "Effort Factor",
-        distancia: "Distance to Station",
-        red: "Railway Network",
-        estacion: "Train Station",
-        vias: "Tracks",
-        popupActivo: "TOURIST ASSET",
-        popupEstacion: "STATION",
-        popupRed: "DISTANCE TO NETWORK",
-        metros: "meters"
+        effort: "Effort Factor",
+        distance: "Distance to Station",
+        network: "Railway Network",
+        station: "Train Station",
+        tracks: "Tracks",
+        popupAsset: "TOURIST ASSET",
+        popupStation: "STATION",
+        popupNetwork: "DISTANCE TO NETWORK",
+        meters: "meters"
       }
     },
     contacto: {
@@ -563,6 +573,16 @@ export const locales = {
       error: "error sending. please try again.",
       btnEnviar: ">send_message",
       btnEnviando: "sending..."
+    },
+    outro: {
+      log_completed: ">PROCESS_COMPLETED: 100%",
+      log_analyzing: "> ANALYZING_NEXT_STEP...",
+      titulo: "READY TO CODE THE NEXT CITY",
+      tab: "extra_info",
+      perfil: "Urban Planner & Geospatial Data Analyst",
+      status: "Online & Ready",
+      layers: "'Infrastructure', 'Data', 'Gender', 'Environment'",
+      btn: "CONTACT"
     }
   }
 };

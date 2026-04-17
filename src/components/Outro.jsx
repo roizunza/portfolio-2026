@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { FaPlug } from 'react-icons/fa'; 
 import './Outro.css'; 
 
-const Outro = ({ onContactClick }) => {
+const Outro = ({ onContactClick, t }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
   
@@ -22,14 +22,14 @@ const Outro = ({ onContactClick }) => {
       <div className="process-messages">
         {isVisible && (
           <>
-            <div className="process-line" style={{animationDelay: '0s'}}>>PROCESS_COMPLETED: 100%</div>
-            <div className="process-line cursor-blink">> ANALYZING_NEXT_STEP... </div>
+            <div className="process-line" style={{animationDelay: '0s'}}>{t.log_completed}</div>
+            <div className="process-line cursor-blink">{t.log_analyzing}</div>
           </>
         )}
       </div>
 
       {/* 2. TÍTULO */}
-      <h2 className="outro-title">LISTA PARA CODIFICAR LA SIGUIENTE CIUDAD</h2>
+      <h2 className="outro-title">{t.titulo}</h2>
 
       {/* 3. PANEL */}
       <div className="hero-style-window">
@@ -37,7 +37,7 @@ const Outro = ({ onContactClick }) => {
         {/* Header */}
         <div className="profile-window-bar">
           <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ opacity: 0.5 }}>📂</span> extra_info
+            <span style={{ opacity: 0.5 }}>📂</span> {t.tab}
           </span>
           <span className="window-controls">
             <span>[ _ ]</span>
@@ -58,14 +58,14 @@ const Outro = ({ onContactClick }) => {
             {/* perfil: ... */}
             <div className="indent-1">
                 <span className="ck-key">perfil:</span>{' '}
-                <span className="ck-str">"Urbanista & Analista de Datos Geoespaciales"</span>
+                <span className="ck-str">"{t.perfil}"</span>
                 <span className="ck-punc">,</span>
             </div>
 
             {/* system_status: ... */}
             <div className="indent-1">
                 <span className="ck-key">system_status:</span>{' '}
-                <span className="ck-str">"Online & Ready"</span>
+                <span className="ck-str">"{t.status}"</span>
                 <span className="ck-punc">,</span>
             </div>
 
@@ -88,7 +88,7 @@ const Outro = ({ onContactClick }) => {
             <div className="indent-1">
                 <span className="ck-key">layers:</span>{' '}
                 <span className="ck-punc">[</span>
-                <span className="ck-str">'Infraestructura', 'Data', 'Género', 'Ambiente'</span>
+                <span className="ck-str">{t.layers}</span>
                 <span className="ck-punc">]</span>
             </div>
 
@@ -103,7 +103,7 @@ const Outro = ({ onContactClick }) => {
       {/* 4. BOTÓN */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <button className="hero-btn" onClick={onContactClick}>
-          <FaPlug style={{ transform: 'rotate(90deg)' }}/> INICIAR_CONEXIÓN
+          <FaPlug style={{ transform: 'rotate(90deg)' }}/> {t.btn}
         </button>
       </div>
 

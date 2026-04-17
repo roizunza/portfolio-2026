@@ -4,6 +4,8 @@ import Footer from './components/Footer';
 import Hero from './components/Hero';
 import Indice from './components/Indice.jsx';
 import { smoothScrollTo } from './utils/scroll'; 
+import certificacionesES from './data/certificaciones.json';
+import certificacionesEN from './data/certificaciones_en.json';
 import './App.css'; 
 
 import Outro from './components/Outro.jsx'; 
@@ -19,6 +21,8 @@ import FactorEsfuerzoView from './components/FactorEsfuerzo/FactorEsfuerzoView.j
 function App() {
   const [idioma, setIdioma] = useState('es');
   const t = locales[idioma];
+  
+  const dataActual = idioma === 'es' ? certificacionesES : certificacionesEN;
 
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const abrirFormulario = () => setMostrarFormulario(true);
@@ -49,7 +53,6 @@ function App() {
       <main style={{ flex: 1, paddingTop: '70px' }}>
         <Hero alAbrirTerminal={irAContacto} t={t.hero} idioma={idioma} />
         
-        {/* Pasamos idioma y t para que el índice sea bilingüe */}
         <Indice onActivarDashboard={irAProyecto} idioma={idioma} t={t} />
 
         <section id="seccion-viaja-segura" style={{ paddingBottom: '40px' }}>
@@ -68,8 +71,10 @@ function App() {
             <FactorEsfuerzoView t={t.factorEsfuerzo} idioma={idioma} />
         </section> 
 
-        <FormacionTecnica t={t.formacion} />
-        <Outro onContactClick={irAContacto} />
+        <FormacionTecnica t={t.formacion} data={dataActual} />
+        
+        {/* MODIFICACIÓN: Pasamos t.outro */}
+        <Outro onContactClick={irAContacto} t={t.outro} />
       </main>
 
       <Footer /> 
