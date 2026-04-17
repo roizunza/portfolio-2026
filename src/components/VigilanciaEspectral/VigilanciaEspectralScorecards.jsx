@@ -6,7 +6,7 @@ import manglaresData from '../../data/manglares.json';
 import inversionData from '../../data/inversion.json';
 import presionData from '../../data/manglarespresionados.json'; 
 
-export default function Scorecards() {
+export default function Scorecards({ t }) {
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => setIsMounted(true), []);
 
@@ -54,36 +54,32 @@ export default function Scorecards() {
       }
     };
 
-    if (!isMounted) return null;
+    if (!isMounted || !t || !t.scorecards) return null;
     
     return (
       <React.Fragment>
-          {/* 1. ECOSISTEMA PRESIONADO (ROJO) */}
           <div style={s.card}>
               <div style={s.number}>{kpis.presion} Ha</div>
-              <div style={{...s.title, color: RAMP.presion}}>ECOSISTEMA PRESIONADO</div>
-              <div style={s.subtitle}>Conflicto directo</div>
+              <div style={{...s.title, color: RAMP.presion}}>{t.scorecards.presion}</div>
+              <div style={s.subtitle}>{t.scorecards.presion_sub}</div>
           </div>
 
-          {/* 2. ÍNDICE DE AMENAZA (NARANJA)*/}
           <div style={s.card}>
               <div style={s.number}>{kpis.riesgo}%</div>
-              <div style={{...s.title, color: RAMP.riesgo}}>ÍNDICE DE AMENAZA</div>
-              <div style={s.subtitle}>% del ecosistema bajo presión</div>
+              <div style={{...s.title, color: RAMP.riesgo}}>{t.scorecards.amenaza}</div>
+              <div style={s.subtitle}>{t.scorecards.amenaza_sub}</div>
           </div>
 
-          {/* 3. INVERSIÓN INMOBILIARIA (AMARILLO) */}
           <div style={s.card}>
               <div style={s.number}>{kpis.inversion} Ha</div>
-              <div style={{...s.title, color: RAMP.inversion}}>INVERSIÓN INMOBILIARIA</div>
-              <div style={s.subtitle}>Desarrollos proyectados</div>
+              <div style={{...s.title, color: RAMP.inversion}}>{t.scorecards.inversion}</div>
+              <div style={s.subtitle}>{t.scorecards.inversion_sub}</div>
           </div>
           
-          {/* 4. SUPERFICIE MANGLAR (BLANCO) */}
           <div style={s.card}>
               <div style={s.number}>{kpis.manglares} Ha</div>
-              <div style={{...s.title, color: '#FFFFFF'}}>SUPERFICIE MANGLAR</div>
-              <div style={s.subtitle}>Cobertura vegetal base</div>
+              <div style={{...s.title, color: '#FFFFFF'}}>{t.scorecards.manglar}</div>
+              <div style={s.subtitle}>{t.scorecards.manglar_sub}</div>
           </div>
       </React.Fragment>
     );

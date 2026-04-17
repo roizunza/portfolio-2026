@@ -11,7 +11,7 @@ const AccordionSection = ({ title, tag, isOpen, onClick, children }) => {
       letterSpacing: '0.3px', transition: 'color 0.3s'
     },
     arrow: {
-      color: '#4CAF50',
+      color: '#15be80',
       fontSize: '10px',
       transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
       transition: 'transform 0.3s'
@@ -55,8 +55,8 @@ export default function VigilanciaEspectralSidebar({ t }) {
     container: { display: 'flex', flexDirection: 'column', height: '100%', color: '#E0E0E0' },
     headerBox: { backgroundColor: '#181d35', padding: '15px 15px', borderBottom: '1px solid rgba(255,255,255,0.05)', flexShrink: 0 },
     subHeader: { fontFamily: FONTS.title, fontSize: '11px', fontWeight: '700', color: '#B0B3B8', margin: '0 0 4px 0', letterSpacing: '1px', textTransform: 'uppercase' },
-    mainTitle: { fontFamily: FONTS.title, fontSize: '24px', fontWeight: '700', color: '#4CAF50', margin: '0 0 15px 0', lineHeight: '1.1' },
-    authorBox: { borderLeft: '2px solid #4CAF50', paddingLeft: '10px', marginTop: '5px' },
+    mainTitle: { fontFamily: FONTS.title, fontSize: '24px', fontWeight: '700', color: '#15be80', margin: '0 0 15px 0', lineHeight: '1.1' },
+    authorBox: { borderLeft: '2px solid #15be80', paddingLeft: '10px', marginTop: '5px' },
     authorName: { fontFamily: FONTS.body, fontSize: '14px', fontWeight: '700', color: '#FFFFFF', margin: 0 },
     authorRole: { fontFamily: FONTS.body, fontSize: '11px', color: '#B0B3B8', margin: '2px 0 0 0' },
     contentBody: { flex: 1, padding: '15px 15px', overflowY: 'auto', paddingRight: '5px', scrollbarWidth: 'thin', scrollbarColor: '#424242 transparent' },
@@ -79,7 +79,6 @@ export default function VigilanciaEspectralSidebar({ t }) {
         <h2 style={s.subHeader}>{t.subtitle}</h2>
         <h1 style={s.mainTitle}>{t.title}</h1>
         <div style={s.authorBox}>
-          <p style={s.authorName}>Rocío Izunza</p>
           <p style={s.authorRole}>{t.role}</p>
         </div>
       </div>

@@ -101,12 +101,28 @@ export const locales = {
         item3Key: "Dashboard de Auditoría:",
         item3Text: "Visualización interactiva que permite contrastar el modelo de segmentación con los índices de presión ambiental."
       },
-      stack: { title: "Stack Tecnológico", tag: "#TechSpecs", content: "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma." },
+      stack: { title: "Stack Tecnológico", tag: "#TechSpecs", content: "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma." }, // <- ¡AQUÍ FALTABA LA COMA!
       raster: {
         ndviTitle: "Índice de vegetación de diferencia normalizada",
         ndviTop: "Alta Vegetación",
         ndwiTitle: "Índice de humedad de diferencia normalizada",
         ndwiTop: "Alta Humedad"
+      },
+      scorecards: {
+        presion: "ECOSISTEMA PRESIONADO",
+        presion_sub: "Conflicto directo",
+        amenaza: "ÍNDICE DE AMENAZA",
+        amenaza_sub: "% del ecosistema bajo presión",
+        inversion: "INVERSIÓN INMOBILIARIA",
+        inversion_sub: "Desarrollos proyectados",
+        manglar: "SUPERFICIE MANGLAR",
+        manglar_sub: "Cobertura vegetal base"
+      },
+      map: {
+        simbologia: "SIMBOLOGÍA",
+        manglar: "Manglar",
+        inversion: "Inversión Inmobiliaria",
+        presion: "Zona del manglar en presión"
       }
     },
     algoritmo: { 
@@ -243,13 +259,29 @@ export const locales = {
         item3Key: "Audit Dashboard:",
         item3Text: "Interactive visualization that allows contrasting the segmentation model with environmental pressure indices."
       },
+      stack: { title: "Tech Stack", tag: "#TechSpecs", content: "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma." }, // <- ¡AQUÍ FALTABA LA COMA!
       raster: {
         ndviTitle: "Normalized Difference Vegetation Index",
         ndviTop: "High Vegetation",
         ndwiTitle: "Normalized Difference Water Index",
         ndwiTop: "High Moisture"
       },
-      stack: { title: "Tech Stack", tag: "#TechSpecs", content: "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma." }
+      scorecards: {
+        presion: "PRESSURED ECOSYSTEM",
+        presion_sub: "Direct conflict",
+        amenaza: "THREAT INDEX",
+        amenaza_sub: "% of ecosystem under pressure",
+        inversion: "REAL ESTATE INVESTMENT",
+        inversion_sub: "Projected developments",
+        manglar: "MANGROVE SURFACE",
+        manglar_sub: "Baseline vegetation cover"
+      },
+      map: {
+        simbologia: "SYMBOLOGY",
+        manglar: "Mangrove",
+        inversion: "Real Estate Investment",
+        presion: "Pressured mangrove zone"
+      }
     },
     algoritmo: { 
       fileName: "03_real_estate_algorithm", 
