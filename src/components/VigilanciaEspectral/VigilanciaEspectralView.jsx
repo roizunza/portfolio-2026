@@ -1,29 +1,20 @@
 import React from 'react';
-import '../Shared/ProjectDashboardLayout.css';
-
+import ProjectDashboardLayout from '../Shared/ProjectDashboardLayout';
 import Sidebar from './VigilanciaEspectralSidebar';
-import Scorecards from './VigilanciaEspectralScorecards';
 import MapComponent from './VigilanciaEspectralMap';
+import Scorecards from './VigilanciaEspectralScorecards';
 import RasterVisor from './VigilanciaEspectralRasterVisor';
 
-const VigilanciaEspectralView = ({ t, idioma }) => {
+const VigilanciaEspectralView = ({ t }) => {
   if (!t) return null;
 
   return (
-    <div className="dashboard-grid">
-      <div className="panel area-sidebar">
-        <Sidebar t={t} />
-      </div>
-      <div className="area-scorecards">
-        <Scorecards t={t} />
-      </div>
-      <div className="panel area-top">
-        <MapComponent />
-      </div>
-      <div className="panel area-bottom">
-        <RasterVisor t={t} />
-      </div>
-    </div>
+    <ProjectDashboardLayout
+      sidebarContent={<Sidebar t={t} />}
+      mapContent={<MapComponent t={t} />}
+      scorecardsContent={<Scorecards t={t} />}
+      chartsContent={<RasterVisor t={t} />}
+    />
   );
 };
 
