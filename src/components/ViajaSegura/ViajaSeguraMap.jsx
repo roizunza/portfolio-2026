@@ -1,32 +1,26 @@
 import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { COLORS, FONTS, PROJECTS, STYLES } from '../../config/theme';
+import { FONTS, PROJECTS } from '../../config/theme';
 
 import rutasData from '../../data/recorridos.json';
 import paradasData from '../../data/paradas_r66.json'; 
 import isocronasData from '../../data/isocronas.json';
 import equipData from '../../data/equipamiento.json';
 
-const TOKEN = 'pk.eyJ1Ijoicm9jb2VsbGFyIiwiYSI6ImNtaXFqdG1tajBneXMzY29ra3ZpNHhuaTAifQ.8rc4UaH2YExVO5ceCB9MXA';
-
 export default function MapComponent({ t }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const RAMP = PROJECTS.viajaSegura.ramp;
 
-  // SOLUCIÓN AL CRACK DE TRADUCCIONES:
-  // Usamos un Ref para que los listeners del mapa (que se crean una sola vez) 
-  // siempre tengan acceso a la versión más reciente del objeto 't'.
   const tRef = useRef(t);
-  useEffect(() => {
-    tRef.current = t;
-  }, [t]);
+  useEffect(() => { tRef.current = t; }, [t]);
 
   useEffect(() => {
     if (map.current) return;
 
-    mapboxgl.accessToken = TOKEN;
+    // Conexión segura con la variable de entorno de Vite
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -47,7 +41,7 @@ export default function MapComponent({ t }) {
 
       map.current.addLayer({
         'id': 'isocronas-fill', 'type': 'fill', 'source': 'isocronas',
-        'paint': { 'fill-color': RAMP.isochrone, 'fill-opacity': 0.15 }
+        'paint': { 'fill-color': RAMP.isochrone, 'fill-opacity': 0.05 } 
       });
 
       map.current.addLayer({
@@ -101,11 +95,9 @@ export default function MapComponent({ t }) {
         map.current.getCanvas().style.cursor = 'pointer';
         const props = e.features[0].properties;
         const coordinates = e.lngLat;
-        
-        // USAMOS EL REF ACTUALIZADO AQUÍ
         const currentT = tRef.current; 
 
-        const containerStyle = `font-family:${FONTS.body}; font-size:11px; color:#e0e0e0; min-width:160px;`;
+        const containerStyle = `font-family: var(--fuente-ui); font-size:11px; color:#e0e0e0; min-width:160px;`;
         const titleStyle = `font-weight:bold; text-transform:uppercase; font-size:12px; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px; letter-spacing:0.5px;`;
         const rowStyle = `display:flex; justify-content:space-between; margin-bottom:3px;`;
         const labelStyle = `color:#aaa; margin-right:8px;`;
@@ -136,9 +128,7 @@ export default function MapComponent({ t }) {
           if (props.equipamiento === 'SALUD') { titleColor = RAMP.equipamiento.salud; labelTrad = currentT.map.popups.salud; }
           if (props.equipamiento === 'ABASTO') { titleColor = RAMP.equipamiento.abasto; labelTrad = currentT.map.popups.abasto; }
           
-          // Fix para el texto de "Sin Número"
           const defaultLabel = currentT.nav.proyectos === 'Proyectos' ? 'S/N' : 'N/A';
-
           html += `<div style="${titleStyle} color:${titleColor}">${labelTrad}</div>
                    <div style="margin-bottom:4px; font-weight:bold; font-size:12px;">${props.nombre_escuela || props.nombre || defaultLabel}</div>`;
         }
@@ -146,12 +136,7 @@ export default function MapComponent({ t }) {
         popup.setLngLat(coordinates).setHTML(html).addTo(map.current);
       };
 
-      const hidePopup = () => {
-        if (map.current) {
-          map.current.getCanvas().style.cursor = '';
-          popup.remove();
-        }
-      };
+      const hidePopup = () => { if (map.current) { map.current.getCanvas().style.cursor = ''; popup.remove(); } };
 
       ['rutas-line', 'equip-circle', 'paradas-circle'].forEach(layer => {
         let lType = 'equip';
@@ -162,31 +147,58 @@ export default function MapComponent({ t }) {
       });
     });
 
-    return () => {
-      if (map.current) {
-        map.current.remove();
-        map.current = null;
-      }
-    };
+    return () => { if (map.current) { map.current.remove(); map.current = null; } };
   }, []);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
-      <div style={STYLES.legendBox}>
-        <h4 style={STYLES.legendTitle}>{t.map.simbologia}</h4>
-        <div style={{...STYLES.legendSubtitle, margin: '6px 0 2px 0', fontSize: '9px', fontWeight: '500', color: '#B4A7AF' }}>{t.map.recorridos}</div>
-        <div style={STYLES.legendItem}><span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.oyamel}}></span> Oyamel</div>
-        <div style={STYLES.legendItem}><span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.ocotal}}></span> Ocotal</div>
-        <div style={STYLES.legendItem}><span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.antigua}}></span> Antigua</div>
-        <div style={{...STYLES.legendItem, marginTop:'4px', marginLeft: '0'}}>
-            <span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.isochrone, opacity: 0.5, width: '8px', height: '8px', borderRadius: '2px'}}></span> 
+      
+      <div style={{
+        position: 'absolute', 
+        top: '10px', 
+        left: '10px', 
+        padding: '8px', 
+        width: '140px',
+        backgroundColor: 'rgba(37, 41, 62, 0.5)', 
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: '6px', 
+        color: '#FFFFFF', 
+        fontFamily: 'var(--fuente-datos)', 
+        fontSize: '9px',
+        zIndex: 10, 
+        backdropFilter: 'blur(8px)'
+      }}>
+        <h4 style={{ margin: '0 0 4px 0', fontSize: '11px', fontWeight: 'bold', color: '#B0B3B8', letterSpacing: '0.5px' }}>
+          {t.map.simbologia}
+        </h4>
+        
+        <div style={{ margin: '6px 0 2px 0', fontSize: '9px', fontWeight: '500', color: '#B4A7AF' }}>{t.map.recorridos}</div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
+          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.oyamel}}></span> Oyamel
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
+          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.ocotal}}></span> Ocotal
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
+          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.antigua}}></span> Antigua
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginTop:'4px', marginLeft: '0', fontSize: '9px', color: '#FFFFFF' }}>
+            <span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.isochrone, opacity: 0.5}}></span> 
             <span style={{ fontWeight: '500', fontSize: '9px' }}>{t.map.isocronas}</span>
         </div>
-        <div style={{...STYLES.legendSubtitle, margin: '6px 0 2px 0', fontSize: '9px', fontWeight: '500', color: '#B4A7AF' }}>{t.map.equip}</div>
-        <div style={STYLES.legendItem}><span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.equipamiento.educativo}}></span> {t.map.popups.educativo}</div>
-        <div style={STYLES.legendItem}><span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.equipamiento.salud}}></span> {t.map.popups.salud}</div>
-        <div style={STYLES.legendItem}><span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.equipamiento.abasto}}></span> {t.map.popups.abasto}</div>
+        
+        <div style={{ margin: '6px 0 2px 0', fontSize: '9px', fontWeight: '500', color: '#B4A7AF' }}>{t.map.equip}</div>
+        
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
+          <span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.equipamiento.educativo}}></span> {t.map.popups.educativo}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
+          <span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.equipamiento.salud}}></span> {t.map.popups.salud}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
+          <span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.equipamiento.abasto}}></span> {t.map.popups.abasto}
+        </div>
       </div>
     </div>
   );

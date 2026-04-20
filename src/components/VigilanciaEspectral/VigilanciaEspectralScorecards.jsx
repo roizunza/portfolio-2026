@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react'; 
-import { FONTS, COLORS, PROJECTS } from '../../config/theme';
+import { PROJECTS } from '../../config/theme.js';
 import * as turf from '@turf/turf';
 
 import manglaresData from '../../data/manglares.json';
@@ -37,20 +37,20 @@ export default function Scorecards({ t }) {
       card: {
         display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center',
         width: '100%', height: '100%', minHeight: '80px', boxSizing: 'border-box',
-        backgroundColor: COLORS.background.panel, 
+        backgroundColor: 'var(--fondo-panel)', 
         borderRadius: '8px', padding: '5px',
-        border: `1px solid ${COLORS.ui.border}`,
+        border: '1px solid var(--borde-sutil)',
         backdropFilter: 'blur(10px)'
       },
       number: {
         color: THEME.color, 
-        fontFamily: FONTS.main, fontSize: '22px', fontWeight: '700', marginBottom: '4px', lineHeight: '1'
+        fontFamily: 'var(--fuente-datos)', fontSize: '22px', fontWeight: '700', marginBottom: '4px', lineHeight: '1'
       },
       title: {
-        fontFamily: FONTS.body, fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px',
+        fontFamily: 'var(--fuente-ui)', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px',
       },
       subtitle: {
-        color: COLORS.text.secondary, fontFamily: FONTS.body, fontSize: '8px', fontWeight: '500', lineHeight: '1.2', opacity: 0.8
+        color: 'var(--texto-secundario)', fontFamily: 'var(--fuente-ui)', fontSize: '8px', fontWeight: '500', lineHeight: '1.2', opacity: 0.8
       }
     };
 
@@ -78,7 +78,7 @@ export default function Scorecards({ t }) {
           
           <div style={s.card}>
               <div style={s.number}>{kpis.manglares} Ha</div>
-              <div style={{...s.title, color: '#FFFFFF'}}>{t.scorecards.manglar}</div>
+              <div style={{...s.title, color: 'var(--texto-principal)'}}>{t.scorecards.manglar}</div>
               <div style={s.subtitle}>{t.scorecards.manglar_sub}</div>
           </div>
       </React.Fragment>

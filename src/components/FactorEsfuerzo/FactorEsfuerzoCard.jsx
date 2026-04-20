@@ -1,9 +1,13 @@
 import React from 'react';
-import ProjectCard from '../Shared/ProjectCard';
+import ProjectCard from '../Shared/ProjectCard.jsx';
 import imgFactor from '../../assets/factoresfuerzo.png'; 
-import { PROJECTS, COLORS } from '../../config/theme';
+import { PROJECTS } from '../../config/theme';
+import { useLanguage } from '../../context/LanguageContext.jsx';
 
-const FactorEsfuerzoCard = ({ onEjecutar, onClose, idioma, t }) => {
+const FactorEsfuerzoCard = ({ onEjecutar, onClose }) => {
+  const { idioma, t: fullT } = useLanguage();
+  const t = fullT.factorEsfuerzo;
+
   return (
     <ProjectCard
       title={t.fileName}
@@ -12,15 +16,15 @@ const FactorEsfuerzoCard = ({ onEjecutar, onClose, idioma, t }) => {
       image={imgFactor}
       onEjecutar={onEjecutar}
       onClose={onClose}
-      customBgColor={COLORS.background.panel}
-      customBtnColor={COLORS.ui.actionButton}
+      customBgColor="var(--fondo-panel)"
+      customBtnColor="var(--azul-electrico)"
       btnText={t.ejecutar}
     >
-      <p className="project-text" style={{ color: COLORS.text.secondary }}>
+      <p className="project-text" style={{ color: 'var(--texto-secundario)' }}>
         {t.cardDescription1}
       </p>
       
-      <p className="project-text" style={{ color: COLORS.text.secondary }}>
+      <p className="project-text" style={{ color: 'var(--texto-secundario)' }}>
         {t.cardDescription2}
       </p>
     </ProjectCard>

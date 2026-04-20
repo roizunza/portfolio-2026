@@ -1,9 +1,13 @@
 import React from 'react';
-import ProjectCard from '../Shared/ProjectCard';
+import ProjectCard from '../Shared/ProjectCard.jsx';
 import imagenPortada from '../../assets/viajasegura.png'; 
-import { PROJECTS, COLORS } from '../../config/theme';
+import { PROJECTS } from '../../config/theme.js';
+import { useLanguage } from '../../context/LanguageContext.jsx';
 
-const ViajaSeguraCard = ({ onEjecutar, onClose, idioma, t }) => {
+const ViajaSeguraCard = ({ onEjecutar, onClose }) => {
+  const { idioma, t: fullT } = useLanguage();
+  const t = fullT.viajaSegura;
+
   return (
     <ProjectCard
       title={t.fileName}
@@ -12,9 +16,9 @@ const ViajaSeguraCard = ({ onEjecutar, onClose, idioma, t }) => {
       image={imagenPortada}
       onEjecutar={onEjecutar}
       onClose={onClose}
-      customBgColor={COLORS.background.panel}  
-      customBtnColor={COLORS.background.header}
-      btnText={t.ejecutar} // Pasamos la traducción del botón
+      customBgColor="var(--fondo-panel)"
+      customBtnColor="var(--azul-electrico)"
+      btnText={t.ejecutar}
     >
        <p className="project-text">{t.cardDescription1}</p>
        <p className="project-text">{t.cardDescription2}</p>

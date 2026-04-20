@@ -1,6 +1,5 @@
 import React from 'react';
 import './ProjectCard.css'; 
-import { FONTS, COLORS } from '../../config/theme'; 
 
 const ProjectCard = ({ 
   title, defColor, comment, image, onEjecutar, onClose, children,
@@ -8,38 +7,38 @@ const ProjectCard = ({
 }) => {
   
   const cardStyle = {
-    backgroundColor: customBgColor || COLORS.background.panel,
-    borderColor: COLORS.ui.border
+    backgroundColor: customBgColor || 'var(--fondo-panel)',
+    borderColor: 'var(--borde-sutil)'
   };
 
   const btnStyle = {
-    backgroundColor: customBtnColor || COLORS.background.header,
-    fontFamily: FONTS.main,
-    color: '#FFFFFF'
+    backgroundColor: customBtnColor || 'var(--azul-electrico)',
+    fontFamily: 'var(--fuente-codigo)',
+    color: 'var(--texto-principal)'
   };
 
   return (
     <div className="project-detail-container" style={cardStyle}>
-      <div className="card-window-bar" style={{ backgroundColor: COLORS.background.sidebarHeader, borderBottomColor: COLORS.ui.border }}>
-        <div className="window-title" style={{ fontFamily: FONTS.data, color: COLORS.text.secondary }}>
+      <div className="card-window-bar" style={{ backgroundColor: 'var(--fondo-app)', borderBottomColor: 'var(--borde-sutil)' }}>
+        <div className="window-title" style={{ fontFamily: 'var(--fuente-datos)', color: 'var(--texto-secundario)' }}>
           <span>📂</span> {title}
         </div>
-        <div className="window-close-btn" onClick={onClose} style={{ color: COLORS.text.primary }}>[ X ]</div>
+        <div className="window-close-btn" onClick={onClose} style={{ color: 'var(--texto-principal)' }}>[ X ]</div>
       </div>
       
-      <img src={image} alt={title} className="project-hero-image" style={{ borderBottomColor: COLORS.ui.border }} />
+      <img src={image} alt={title} className="project-hero-image" style={{ borderBottomColor: 'var(--borde-sutil)' }} />
 
       <div className="project-content">
-        <div className="code-header" style={{ fontFamily: FONTS.main }}>
+        <div className="code-header" style={{ fontFamily: 'var(--fuente-codigo)' }}>
           <span style={{ color: defColor, fontWeight: 'bold' }}>def():</span>
-          <span style={{ color: COLORS.text.primary, marginLeft: '10px' }}>{title}</span>
+          <span style={{ color: 'var(--texto-principal)', marginLeft: '10px' }}>{title}</span>
         </div>
 
-        <div className="project-location-comment" style={{ fontFamily: FONTS.main, color: COLORS.text.codeComment }}>
+        <div className="project-location-comment" style={{ fontFamily: 'var(--fuente-codigo)', color: 'var(--color-comment)' }}>
           {comment}
         </div>
 
-        <div className="project-description" style={{ fontFamily: FONTS.body, color: COLORS.text.secondary }}>
+        <div className="project-description" style={{ fontFamily: 'var(--fuente-ui)', color: 'var(--texto-secundario)' }}>
           {children}
         </div>
 

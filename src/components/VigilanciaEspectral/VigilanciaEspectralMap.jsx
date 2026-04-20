@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { PROJECTS, STYLES } from '../../config/theme';
+import { PROJECTS, STYLES } from '../../config/theme.js';
 
 import manglaresData from '../../data/manglares.json';
 import inversionData from '../../data/inversion.json';
@@ -49,9 +49,8 @@ export default function MapComponent({ t }) {
 
   if (!t || !t.map) return null;
 
-  // Estilos
   const titleStyle = STYLES.legendTitle;
-  const itemStyle = { display: 'flex', alignItems: 'center', marginBottom: '5px', fontWeight: '300', fontSize: '9px' };
+  const itemStyle = { display: 'flex', alignItems: 'center', marginBottom: '5px', fontWeight: '300', fontSize: '9px', color: 'var(--texto-principal)' };
   const dot = { width: '8px', height: '8px', borderRadius: '50%', marginRight: '8px' };
 
   return (
@@ -61,14 +60,9 @@ export default function MapComponent({ t }) {
       <div style={STYLES.legendBox}>
         <h4 style={titleStyle}>{t.map.simbologia}</h4>
         
-        {/* ORDEN: Manglar>Inversion>Presion */}
-        
         <div style={itemStyle}><div style={{...dot, background: RAMP.manglar}}></div> {t.map.manglar}</div>
-        
         <div style={itemStyle}><div style={{...dot, background: RAMP.inversion}}></div> {t.map.inversion}</div>
-        
         <div style={itemStyle}><div style={{...dot, background: RAMP.presion}}></div> {t.map.presion}</div>
-        
       </div>
     </div>
   );

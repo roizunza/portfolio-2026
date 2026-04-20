@@ -11,7 +11,8 @@ import './App.css';
 import Outro from './components/Outro.jsx'; 
 import ContactForm from './components/ContactForm.jsx';
 import FormacionTecnica from './components/FormacionTecnica.jsx';
-import { locales } from './locales'; 
+
+import { useLanguage } from './context/LanguageContext.jsx';
 
 import ViajaSeguraView from './components/ViajaSegura/ViajaSeguraView.jsx';
 import VigilanciaEspectralView from './components/VigilanciaEspectral/VigilanciaEspectralView.jsx';
@@ -19,16 +20,17 @@ import AlgoritmoView from './components/AlgoritmoInmobiliario/AlgoritmoInmobilia
 import FactorEsfuerzoView from './components/FactorEsfuerzo/FactorEsfuerzoView.jsx';
 
 function App() {
-  const [idioma, setIdioma] = useState('es');
-  const t = locales[idioma];
-  
+  const { idioma, setIdioma, t } = useLanguage();
   const dataActual = idioma === 'es' ? certificacionesES : certificacionesEN;
 
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const abrirFormulario = () => setMostrarFormulario(true);
-  const cerrarFormulario = () => setMostrarFormulario(false);
 
-  const irAContacto = () => abrirFormulario();
+  const irAContacto = () => {
+    console.log("⚡ APP.JSX RECIBIÓ LA SEÑAL: Abriendo modal de contacto...");
+    setMostrarFormulario(true);
+  };
+
+  const cerrarFormulario = () => setMostrarFormulario(false);
 
   const irAProyecto = (idScroll) => {
     let targetId = '';
@@ -73,11 +75,11 @@ function App() {
 
         <FormacionTecnica t={t.formacion} data={dataActual} />
         
-        {/* MODIFICACIÓN: Pasamos t.outro */}
         <Outro onContactClick={irAContacto} t={t.outro} />
       </main>
 
       <Footer /> 
+      
       <ContactForm isOpen={mostrarFormulario} onClose={cerrarFormulario} t={t.contacto} />
     </div>
   );

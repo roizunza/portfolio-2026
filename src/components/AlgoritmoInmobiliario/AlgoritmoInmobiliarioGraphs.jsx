@@ -3,32 +3,34 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, 
   ScatterChart, Scatter, ZAxis, Cell 
 } from 'recharts';
-import { FONTS, COLORS, PROJECTS } from '../../config/theme';
+import { PROJECTS } from '../../config/theme';
 import distritosData from '../../data/distritos-data-airbnb-hk.json';
+
+const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 export default function GraphsPanel({ t }) {
   const THEME = PROJECTS.algoritmo;
   const RAMP = THEME.ramp;
   const features = distritosData.features || [];
 
+  const borderColor = getCssVar('--borde-sutil') || 'rgba(255,255,255,0.1)';
+  const fontBody = getCssVar('--fuente-ui') || 'Inter, sans-serif';
+  const textSecondary = getCssVar('--texto-secundario') || '#b0b3b8';
+
   if (!t || !t.graphs) return null;
 
-  // 1. DATOS PARA SCATTER PLOT (Precios vs. Rotación)
   const scatterData = useMemo(() => {
     return features.map(f => ({
-      x: f.properties.PRECIO_PROMEDIO_HK,      // Eje X: Precio
-      y: f.properties.ROTACION_PORCENTAJE,     // Eje Y: Rotación
-      z: f.properties.price_count,             // Tamaño: Cantidad de unidades
+      x: f.properties.PRECIO_PROMEDIO_HK,      
+      y: f.properties.ROTACION_PORCENTAJE,     
+      z: f.properties.price_count,             
       name: f.properties.distrito,
-      // Color dinámico: Si Rotación > 5% y Precio > 2000 -> Rojo (Crítico)
       fill: (f.properties.ROTACION_PORCENTAJE > 5 && f.properties.PRECIO_PROMEDIO_HK > 2000) 
-            ? RAMP.step3 // Rojo/Rosa Alto
-            : RAMP.step4 // Coral base
+            ? RAMP.step3 
+            : RAMP.step4 
     }));
   }, [features, RAMP]);
 
-
-  // 2. DATOS PARA ABSORCIÓN (Top 7 Distritos)
   const barData = useMemo(() => {
     return [...features]
       .sort((a, b) => b.properties.price_count - a.properties.price_count)
@@ -40,16 +42,15 @@ export default function GraphsPanel({ t }) {
       }));
   }, [features, THEME]);
 
-  // COMPONENTES DE DISEÑO 
   const CustomTooltipScatter = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div style={{ backgroundColor: COLORS.background.panel, border: `1px solid ${COLORS.ui.border}`, padding: '8px', fontFamily: FONTS.body, fontSize: '10px' }}>
+        <div style={{ backgroundColor: 'var(--fondo-panel)', border: '1px solid var(--borde-sutil)', padding: '8px', fontFamily: 'var(--fuente-ui)', fontSize: '10px' }}>
           <p style={{color: 'white', fontWeight: 'bold', marginBottom:'4px', margin: 0}}>{data.name}</p>
-          <div style={{ color: COLORS.text.secondary }}>{t.graphs.precio}: <span style={{color:'#fff'}}>${Math.round(data.x)} HKD</span></div>
-          <div style={{ color: COLORS.text.secondary }}>{t.graphs.rotacion}: <span style={{color:'#fff'}}>{data.y.toFixed(1)}%</span></div>
-          <div style={{ color: COLORS.text.secondary }}>{t.graphs.stockTooltip}: <span style={{color:'#fff'}}>{data.z} {t.graphs.unidades}</span></div>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.graphs.precio}: <span style={{color:'#fff'}}>${Math.round(data.x)} HKD</span></div>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.graphs.rotacion}: <span style={{color:'#fff'}}>{data.y.toFixed(1)}%</span></div>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.graphs.stockTooltip}: <span style={{color:'#fff'}}>{data.z} {t.graphs.unidades}</span></div>
         </div>
       );
     }
@@ -59,11 +60,11 @@ export default function GraphsPanel({ t }) {
   const CustomTooltipBar = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{ backgroundColor: COLORS.background.panel, border: `1px solid ${COLORS.ui.border}`, padding: '6px', fontFamily: FONTS.body, fontSize: '10px' }}>
+        <div style={{ backgroundColor: 'var(--fondo-panel)', border: '1px solid var(--borde-sutil)', padding: '6px', fontFamily: 'var(--fuente-ui)', fontSize: '10px' }}>
           <p style={{color: 'white', fontWeight: 'bold', marginBottom:'3px', margin: 0}}>{label}</p>
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: payload[0].fill }}></span>
-            <span style={{ color: COLORS.text.secondary }}>{t.graphs.unidadesTooltip} <span style={{ color: '#fff', fontWeight: 'bold' }}>{payload[0].value}</span></span>
+            <span style={{ color: 'var(--texto-secundario)' }}>{t.graphs.unidadesTooltip} <span style={{ color: '#fff', fontWeight: 'bold' }}>{payload[0].value}</span></span>
           </div>
         </div>
       );
@@ -71,21 +72,19 @@ export default function GraphsPanel({ t }) {
     return null;
   };
 
-  // ESTILOS RESPONSIVOS 
   const styles = {
     mainContainer: { display: 'flex', flexWrap: 'wrap', width: '100%', height: '100%', padding: '10px 15px', overflow: 'hidden' },
     leftSection: { flex: '2 1 500px', display: 'flex', flexDirection: 'column', paddingRight: '15px', minHeight: '0' },
-    rightSection: { flex: '1 1 250px', display: 'flex', flexDirection: 'column', paddingLeft: '15px', minHeight: '0', borderLeft: `1px solid ${COLORS.ui.border}` },
-    header: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', borderBottom: `1px solid ${COLORS.ui.border}`, marginBottom: '8px', paddingBottom: '5px', gap: '4px' },
-    title: { fontFamily: FONTS.body, fontSize: '14px', fontWeight: '700', color: COLORS.text.primary, margin: 0, letterSpacing: '0.3px', width:'100%' },
-    legend: { display: 'flex', gap: '10px', fontSize: '11px', fontFamily: FONTS.body, color: COLORS.text.primary, flexWrap: 'wrap' },
+    rightSection: { flex: '1 1 250px', display: 'flex', flexDirection: 'column', paddingLeft: '15px', minHeight: '0', borderLeft: '1px solid var(--borde-sutil)' },
+    header: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', borderBottom: '1px solid var(--borde-sutil)', marginBottom: '8px', paddingBottom: '5px', gap: '4px' },
+    title: { fontFamily: 'var(--fuente-ui)', fontSize: '14px', fontWeight: '700', color: 'var(--texto-principal)', margin: 0, letterSpacing: '0.3px', width:'100%' },
+    legend: { display: 'flex', gap: '10px', fontSize: '11px', fontFamily: 'var(--fuente-ui)', color: 'var(--texto-principal)', flexWrap: 'wrap' },
     dot: (color) => ({ width: '6px', height: '6px', backgroundColor: color, borderRadius: '50%', display: 'inline-block', marginRight: '4px' })
   };
 
   return (
     <div style={styles.mainContainer}>
       
-      {/* IZQUIERDA: SCATTER PLOT (Precios vs Rotación) */}
       <div style={styles.leftSection}>
         <div style={styles.header}>
           <div style={styles.title}>{t.graphs.scatterTitle}</div>
@@ -103,20 +102,20 @@ export default function GraphsPanel({ t }) {
                 dataKey="x" 
                 name={t.graphs.precio} 
                 unit="HKD" 
-                tick={{fontSize: 10, fill: COLORS.text.secondary}} 
+                tick={{fontSize: 10, fill: textSecondary}} 
                 tickLine={false} 
-                axisLine={{stroke: COLORS.ui.border}}
+                axisLine={{stroke: borderColor}}
               />
               <YAxis 
                 type="number" 
                 dataKey="y" 
                 name={t.graphs.rotacion} 
                 unit="%" 
-                tick={{fontSize: 10, fill: COLORS.text.secondary}} 
+                tick={{fontSize: 10, fill: textSecondary}} 
                 tickLine={false} 
-                axisLine={{stroke: COLORS.ui.border}} 
+                axisLine={{stroke: borderColor}} 
               />
-              <ZAxis type="number" dataKey="z" range={[20, 200]} /> {/* Tamaño burbuja basado en stock */}
+              <ZAxis type="number" dataKey="z" range={[20, 200]} /> 
               <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltipScatter />} />
               <Scatter name="Distritos" data={scatterData} fill={THEME.color} />
             </ScatterChart>
@@ -124,7 +123,6 @@ export default function GraphsPanel({ t }) {
         </div>
       </div>
 
-      {/* DERECHA: ABSORCIÓN (Barras top) */}
       <div style={styles.rightSection}>
         <div style={styles.header}>
           <div style={styles.title}>{t.graphs.barTitle}</div>
@@ -145,7 +143,7 @@ export default function GraphsPanel({ t }) {
               <YAxis 
                 type="category" 
                 dataKey="name" 
-                tick={{fontSize: 9, fill: '#fff', fontFamily: FONTS.body}} 
+                tick={{fontSize: 9, fill: '#fff', fontFamily: fontBody}} 
                 width={70} 
                 tickLine={false}
                 axisLine={false}

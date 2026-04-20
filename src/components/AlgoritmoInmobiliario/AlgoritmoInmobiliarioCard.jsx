@@ -1,9 +1,13 @@
 import React from 'react';
-import ProjectCard from '../Shared/ProjectCard';
+import ProjectCard from '../Shared/ProjectCard.jsx';
 import imgAlgoritmo from '../../assets/algoritmoinmobiliario.png'; 
-import { PROJECTS, COLORS } from '../../config/theme';
+import { PROJECTS } from '../../config/theme.js';
+import { useLanguage } from '../../context/LanguageContext.jsx';
 
-const AlgoritmoInmobiliarioCard = ({ onEjecutar, onClose, idioma, t }) => {
+const AlgoritmoInmobiliarioCard = ({ onEjecutar, onClose }) => {
+  const { idioma, t: fullT } = useLanguage();
+  const t = fullT.algoritmo;
+
   return (
     <ProjectCard
       title={t.fileName}
@@ -12,15 +16,15 @@ const AlgoritmoInmobiliarioCard = ({ onEjecutar, onClose, idioma, t }) => {
       image={imgAlgoritmo}
       onEjecutar={onEjecutar}
       onClose={onClose}
-      customBgColor={COLORS.background.panel}
-      customBtnColor={COLORS.ui.actionButton}
+      customBgColor="var(--fondo-panel)"
+      customBtnColor="var(--azul-electrico)"
       btnText={t.ejecutar}
     >
-      <p className="project-text" style={{ color: COLORS.text.secondary }}>
+      <p className="project-text" style={{ color: 'var(--texto-secundario)' }}>
         {t.cardDescription1}
       </p>
       
-      <p className="project-text" style={{ color: COLORS.text.secondary }}>
+      <p className="project-text" style={{ color: 'var(--texto-secundario)' }}>
         {t.cardDescription2}
       </p>
     </ProjectCard>

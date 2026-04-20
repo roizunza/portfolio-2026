@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FONTS, COLORS } from '../../config/theme';
 import ndviImg from '../../assets/ndvi_visual.png'; 
 import ndwiImg from '../../assets/ndwi_visual.png'; 
 
@@ -20,8 +19,8 @@ export default function RasterVisor({ t }) {
             {labels.map((l, i) => (
               <span key={i} style={{ 
                   fontSize: '10px', 
-                  color: '#B0B3B8', 
-                  fontFamily: FONTS.data, 
+                  color: 'var(--texto-secundario)', 
+                  fontFamily: 'var(--fuente-datos)', 
                   textShadow: '1px 1px 2px black' 
               }}>
                 {l}
@@ -32,8 +31,8 @@ export default function RasterVisor({ t }) {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '60px', justifyContent: 'flex-start' }}>
             <span style={{ 
                 fontSize: '10px', 
-                color: '#fff', 
-                fontFamily: FONTS.body, 
+                color: 'var(--texto-principal)', 
+                fontFamily: 'var(--fuente-ui)', 
                 fontWeight: 'bold', 
                 marginBottom: '4px', 
                 textAlign: 'center', 
@@ -48,7 +47,7 @@ export default function RasterVisor({ t }) {
                 flex: 1, 
                 background: gradient, 
                 borderRadius: '2px', 
-                border: '1px solid rgba(255,255,255,0.2)' 
+                border: '1px solid var(--borde-sutil)' 
             }}></div>
         </div>
     </div>
@@ -60,9 +59,9 @@ export default function RasterVisor({ t }) {
             flex: 1, 
             minHeight: 0, 
             width: '100%', 
-            backgroundColor: COLORS.background.panel,
+            backgroundColor: 'var(--fondo-panel)',
             borderRadius: '8px', overflow: 'hidden', 
-            border: `1px solid ${COLORS.ui.border}`,
+            border: '1px solid var(--borde-sutil)',
             display: 'flex', flexDirection: 'column', 
             position: 'relative'
         }}>
@@ -74,10 +73,10 @@ export default function RasterVisor({ t }) {
                 maxWidth: '150px' 
             }}>
                 <h2 style={{ 
-                    fontFamily: FONTS.body, 
+                    fontFamily: 'var(--fuente-ui)', 
                     fontSize: '14px', 
                     fontWeight: '700', 
-                    color: '#FFFFFF', 
+                    color: 'var(--texto-principal)', 
                     margin: 0,
                     letterSpacing: '0.3px',
                     lineHeight: '1.3', 
@@ -101,10 +100,10 @@ export default function RasterVisor({ t }) {
                     <RenderLegend gradient={gradient} labels={labels} topLabel={topLabel} />
                     
                     <h3 style={{
-                        fontFamily: FONTS.main, 
+                        fontFamily: 'var(--fuente-datos)', 
                         fontSize: '14px', 
                         fontWeight: '700', 
-                        color: '#FFFFFF', 
+                        color: 'var(--texto-principal)', 
                         margin: 0, 
                         letterSpacing: '1px',
                         textShadow: '0px 2px 4px rgba(0,0,0,0.8)'

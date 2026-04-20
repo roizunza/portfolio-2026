@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Indice.css'; 
-import { PROJECTS, STYLES } from '../config/theme'; 
+import { PROJECTS, STYLES } from '../config/theme.js'; 
+import { useLanguage } from '../context/LanguageContext.jsx'; 
 import ViajaSeguraCard from './ViajaSegura/ViajaSeguraCard.jsx';
 import VigilanciaEspectralCard from './VigilanciaEspectral/VigilanciaEspectralCard.jsx';
 import AlgoritmoInmobiliarioCard from './AlgoritmoInmobiliario/AlgoritmoInmobiliarioCard.jsx'; 
@@ -11,10 +12,11 @@ import iconTiff from '../assets/tiff.PNG';
 import iconJson from '../assets/json.PNG'; 
 import iconGpkg from '../assets/gpck.PNG'; 
 
-const Indice = ({ onActivarDashboard, idioma, t }) => {
+const Indice = ({ onActivarDashboard }) => {
+  const { idioma, t: fullT } = useLanguage();
+  const t = fullT;
   const [proyectoSeleccionado, setProyectoSeleccionado] = useState(null);
 
-  // Verificación de seguridad
   if (!t || !t.viajaSegura) return null;
 
   const proyectos = [

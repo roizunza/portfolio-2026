@@ -1,12 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { PROJECTS, STYLES, FONTS } from '../../config/theme';
+import { PROJECTS, STYLES } from '../../config/theme';
 
 import distritosData from '../../data/distritos-data-airbnb-hk.json';
 import unidadesData from '../../data/unidades-enteras-aribnb-hk.json';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+
+const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 export default function MapComponent({ t }) {
   const mapContainer = useRef(null);
@@ -15,8 +17,8 @@ export default function MapComponent({ t }) {
 
   const RAMP = PROJECTS.algoritmo.ramp;
   const PROJECT_COLOR = PROJECTS.algoritmo.color; 
+  const fontBody = getCssVar('--fuente-ui') || 'Inter, sans-serif';
 
-  // Mantener ref de traducción actualizado para los popups
   useEffect(() => {
     tRef.current = t;
   }, [t]);
@@ -36,7 +38,6 @@ export default function MapComponent({ t }) {
 
     map.current.on('load', () => {
 
-      // CAPA DE POLÍGONOS
       map.current.addSource('distritos', { type: 'geojson', data: distritosData });
       
       map.current.addLayer({
@@ -54,7 +55,6 @@ export default function MapComponent({ t }) {
         }
       });
       
-      // CAPA DE PUNTOS 
       map.current.addSource('unidades', { type: 'geojson', data: unidadesData });
       map.current.addLayer({
         'id': 'unidades-points', 'type': 'circle', 'source': 'unidades',
@@ -70,12 +70,10 @@ export default function MapComponent({ t }) {
           ]
         }
       });
-
       
       map.current.addLayer({ 'id': 'distritos-outline', 'type': 'line', 'source': 'distritos', 'paint': { 'line-color': '#FFFFFF', 'line-width': 0.2, 'line-opacity': 0.2 } });
     });
 
-    // POPUP INTERACTIVO
     const popup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false,
@@ -86,7 +84,7 @@ export default function MapComponent({ t }) {
       map.current.getCanvas().style.cursor = 'pointer';
       const props = e.features[0].properties;
       const coordinates = e.lngLat;
-      const currentT = tRef.current.map; // Usar la referencia segura
+      const currentT = tRef.current.map; 
 
       let precioHKD = 0;
       let titulo = '';
@@ -98,7 +96,6 @@ export default function MapComponent({ t }) {
         colorTitulo = RAMP.step4; 
       } else {
         precioHKD = props.PRECIO_PROMEDIO_HK;
-    
         titulo = `${currentT.popupDistrito}${props.distrito || ''}`;
         colorTitulo = PROJECT_COLOR; 
       }
@@ -106,7 +103,7 @@ export default function MapComponent({ t }) {
       const precioUSD = (precioHKD / 7.8).toFixed(2);
       const precioHKDFormat = precioHKD.toLocaleString();
 
-      const containerStyle = `font-family:${FONTS.body}; font-size:11px; color:#e0e0e0; min-width:140px;`;
+      const containerStyle = `font-family:${fontBody}; font-size:11px; color:#e0e0e0; min-width:140px;`;
       const titleStyle = `font-weight:bold; text-transform:uppercase; font-size:12px; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px; letter-spacing:0.5px; color:${colorTitulo};`;
       const rowStyle = `display:flex; justify-content:space-between; margin-bottom:3px;`;
       const labelStyle = `color:#aaa; margin-right:8px;`;
@@ -136,7 +133,6 @@ export default function MapComponent({ t }) {
       popup.remove();
     };
 
-    // Eventos
     map.current.on('mousemove', 'distritos-fill', (e) => showPopup(e, 'poligono'));
     map.current.on('mouseleave', 'distritos-fill', hidePopup);
 
@@ -147,10 +143,9 @@ export default function MapComponent({ t }) {
 
   if (!t || !t.map) return null;
 
-  // Estilos Leyenda
   const titleStyle = STYLES.legendTitle;
   const subTitleStyle = { fontSize: '9px', fontWeight: 'bold', color: '#aaa', margin: '6px 0 3px 0', textTransform: 'none' };
-  const itemStyle = { display: 'flex', alignItems: 'center', marginBottom: '4px', fontSize: '9px', fontWeight: '300' };
+  const itemStyle = { display: 'flex', alignItems: 'center', marginBottom: '4px', fontSize: '9px', fontWeight: '300', color: 'var(--texto-principal)' };
   const boxColor = { width: '10px', height: '10px', borderRadius: '2px', marginRight: '8px' };
   const circleColor = { width: '8px', height: '8px', borderRadius: '50%', marginRight: '8px' };
 

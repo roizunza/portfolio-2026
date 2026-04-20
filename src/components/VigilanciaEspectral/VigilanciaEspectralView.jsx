@@ -1,11 +1,15 @@
 import React from 'react';
-import ProjectDashboardLayout from '../Shared/ProjectDashboardLayout';
-import Sidebar from './VigilanciaEspectralSidebar';
-import MapComponent from './VigilanciaEspectralMap';
-import Scorecards from './VigilanciaEspectralScorecards';
-import RasterVisor from './VigilanciaEspectralRasterVisor';
+import ProjectDashboardLayout from '../Shared/ProjectDashboardLayout.jsx';
+import Sidebar from './VigilanciaEspectralSidebar.jsx';
+import MapComponent from './VigilanciaEspectralMap.jsx';
+import Scorecards from './VigilanciaEspectralScorecards.jsx';
+import RasterVisor from './VigilanciaEspectralRasterVisor.jsx';
+import { useLanguage } from '../../context/LanguageContext.jsx';
 
-const VigilanciaEspectralView = ({ t }) => {
+const VigilanciaEspectralView = () => {
+  const { t: fullT } = useLanguage();
+  const t = fullT.vigilancia;
+
   if (!t) return null;
 
   return (

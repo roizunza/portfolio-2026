@@ -1,14 +1,24 @@
 import React, { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { COLORS, FONTS, PROJECTS } from '../../config/theme';
+import { PROJECTS } from '../../config/theme';
 import paradasData from '../../data/paradas_r66.json';
 import equipData from '../../data/equipamiento.json';
 
-export default function ViajaSeguraGraphs({ t }) { // Recibe t como prop
+const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+export default function ViajaSeguraGraphs({ t }) { 
 
   const THEME = PROJECTS.viajaSegura;
   const RAMP = THEME.ramp;
   const C_DESCENSOS = RAMP.descensos; 
+
+  // Colores CSS extraídos
+  const panelBg = getCssVar('--fondo-panel') || '#12141E';
+  const borderColor = getCssVar('--borde-sutil') || 'rgba(255,255,255,0.1)';
+  const fontBody = getCssVar('--fuente-ui') || 'Inter, sans-serif';
+  const fontData = getCssVar('--fuente-datos') || 'Roboto Mono, monospace';
+  const textPrimary = getCssVar('--texto-principal') || '#ffffff';
+  const textSecondary = getCssVar('--texto-secundario') || '#b0b3b8';
 
   const processRouteData = (rutaName) => {
     return paradasData.features
@@ -49,12 +59,12 @@ export default function ViajaSeguraGraphs({ t }) { // Recibe t como prop
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{ backgroundColor: COLORS.background.panel, border: `1px solid ${COLORS.ui.border}`, padding: '6px', fontFamily: FONTS.body, fontSize: '10px' }}>
+        <div style={{ backgroundColor: panelBg, border: `1px solid ${borderColor}`, padding: '6px', fontFamily: fontBody, fontSize: '10px' }}>
           <p style={{color: 'white', fontWeight: 'bold', marginBottom:'3px', margin: 0}}>{label}</p>
           {payload.map((entry, index) => (
             <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
               <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: entry.fill }}></span>
-              <span style={{ color: COLORS.text.secondary }}>{entry.name}: <span style={{ color: '#fff', fontWeight: 'bold' }}>{Math.abs(entry.value)}</span></span>
+              <span style={{ color: textSecondary }}>{entry.name}: <span style={{ color: '#fff', fontWeight: 'bold' }}>{Math.abs(entry.value)}</span></span>
             </div>
           ))}
         </div>
@@ -64,13 +74,13 @@ export default function ViajaSeguraGraphs({ t }) { // Recibe t como prop
   };
 
   const CustomAxisTick = ({ x, y, payload }) => {
-    let color = COLORS.text.secondary;
+    let color = textSecondary;
     if (payload.value === 'Oyamel') color = RAMP.rutas.oyamel;
     if (payload.value === 'Ocotal') color = RAMP.rutas.ocotal;
     if (payload.value === 'Antigua') color = RAMP.rutas.antigua;
     return (
       <g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} dy={12} textAnchor="middle" fill={color} fontFamily={FONTS.data} fontSize={10} fontWeight="bold">
+        <text x={0} y={0} dy={12} textAnchor="middle" fill={color} fontFamily={fontData} fontSize={10} fontWeight="bold">
           {payload.value.toUpperCase()}
         </text>
       </g>
@@ -80,11 +90,11 @@ export default function ViajaSeguraGraphs({ t }) { // Recibe t como prop
   const styles = {
     mainContainer: { display: 'flex', flexWrap: 'wrap', width: '100%', height: '100%', padding: '10px 15px', overflow: 'hidden' },
     leftSection: { flex: '2 1 500px', display: 'flex', flexDirection: 'column', paddingRight: '15px', minHeight: '0' },
-    rightSection: { flex: '1 1 250px', display: 'flex', flexDirection: 'column', paddingLeft: '15px', minHeight: '0', borderLeft: `1px solid ${COLORS.ui.border}` },
-    header: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', borderBottom: `1px solid ${COLORS.ui.border}`, marginBottom: '8px', paddingBottom: '5px', gap: '4px' },
-    title: { fontFamily: FONTS.body, fontSize: '14px', fontWeight: '700', color: COLORS.text.primary, margin: 0, letterSpacing: '0.3px', width:'100%' },
-    legend: { display: 'flex', gap: '10px', fontSize: '11px', fontFamily: FONTS.body, color: COLORS.text.primary, flexWrap: 'wrap' },
-    subTitle: { fontFamily: FONTS.data, fontSize: '10px', color: COLORS.text.secondary, marginTop: '4px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 'bold' },
+    rightSection: { flex: '1 1 250px', display: 'flex', flexDirection: 'column', paddingLeft: '15px', minHeight: '0', borderLeft: `1px solid ${borderColor}` },
+    header: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', borderBottom: `1px solid ${borderColor}`, marginBottom: '8px', paddingBottom: '5px', gap: '4px' },
+    title: { fontFamily: fontBody, fontSize: '14px', fontWeight: '700', color: textPrimary, margin: 0, letterSpacing: '0.3px', width:'100%' },
+    legend: { display: 'flex', gap: '10px', fontSize: '11px', fontFamily: fontBody, color: textPrimary, flexWrap: 'wrap' },
+    subTitle: { fontFamily: fontData, fontSize: '10px', color: textSecondary, marginTop: '4px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 'bold' },
     dot: (color) => ({ width: '6px', height: '6px', backgroundColor: color, borderRadius: '2px', display: 'inline-block', marginRight: '4px' })
   };
 
@@ -131,7 +141,7 @@ export default function ViajaSeguraGraphs({ t }) { // Recibe t como prop
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dataEquip} margin={{top:5, right:0, left:-25, bottom:5}} barCategoryGap="25%">
               <XAxis dataKey="name" axisLine={false} tickLine={false} tick={<CustomAxisTick />} interval={0} />
-              <YAxis tick={{fill: COLORS.text.secondary, fontSize: 10, fontFamily: FONTS.body}} axisLine={false} tickLine={false} />
+              <YAxis tick={{fill: textSecondary, fontSize: 10, fontFamily: fontBody}} axisLine={false} tickLine={false} />
               <Tooltip cursor={{fill: 'rgba(255,255,255,0.05)'}} content={<CustomTooltip />} />
               <Bar dataKey="Educacion" name={t.graphs.educacion} stackId="a" fill={RAMP.equipamiento.educativo} radius={[0, 0, 2, 2]} />
               <Bar dataKey="Salud" name={t.graphs.salud} stackId="a" fill={RAMP.equipamiento.salud} />

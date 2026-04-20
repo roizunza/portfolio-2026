@@ -1,19 +1,23 @@
 import React from 'react';
-import ProjectCard from '../Shared/ProjectCard';
+import ProjectCard from '../Shared/ProjectCard.jsx';
 import imgVigilancia from '../../assets/vigilanciaespectral.png';
-import { PROJECTS, COLORS } from '../../config/theme';
+import { PROJECTS } from '../../config/theme.js';
+import { useLanguage } from '../../context/LanguageContext.jsx';
 
-const VigilanciaEspectralCard = ({ onEjecutar, onClose, idioma, t }) => {
+const VigilanciaEspectralCard = ({ onEjecutar, onClose }) => {
+  const { idioma, t: fullT } = useLanguage();
+  const t = fullT.vigilancia;
+
   return (
     <ProjectCard
       title={t.fileName}
-      defColor="#15BE80" 
+      defColor={PROJECTS.vigilancia.color} 
       comment={idioma === 'es' ? "// Auditoría de Datos Ambientales y ML" : "// Environmental Data Auditing & ML"}
       image={imgVigilancia}
       onEjecutar={onEjecutar}
       onClose={onClose}
-      customBgColor={COLORS.background.panel}
-      customBtnColor={COLORS.background.header}
+      customBgColor="var(--fondo-panel)"
+      customBtnColor="var(--azul-electrico)"
       btnText={t.ejecutar}
     >
       <p className="project-text">

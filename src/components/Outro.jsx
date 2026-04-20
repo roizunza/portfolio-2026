@@ -1,8 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FaPlug } from 'react-icons/fa'; 
+import { useLanguage } from '../context/LanguageContext.jsx';
 import './Outro.css'; 
 
-const Outro = ({ onContactClick, t }) => {
+const Outro = ({ onContactClick }) => { 
+  const { t: fullT } = useLanguage(); 
+  const t = fullT.outro;
+
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
   
@@ -18,7 +22,6 @@ const Outro = ({ onContactClick, t }) => {
   return (
     <section ref={sectionRef} className="outro-section">
       
-      {/* 1. LOGS ANIMADOS */}
       <div className="process-messages">
         {isVisible && (
           <>
@@ -28,13 +31,9 @@ const Outro = ({ onContactClick, t }) => {
         )}
       </div>
 
-      {/* 2. TÍTULO */}
       <h2 className="outro-title">{t.titulo}</h2>
 
-      {/* 3. PANEL */}
       <div className="hero-style-window">
-        
-        {/* Header */}
         <div className="profile-window-bar">
           <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ opacity: 0.5 }}>📂</span> {t.tab}
@@ -47,60 +46,50 @@ const Outro = ({ onContactClick, t }) => {
         </div>
 
         <div className="code-content">
-            
-            {/* const status = { */}
             <div>
-                <span className="ck-key">const</span>{' '}
-                <span className="ck-cls">status</span>
-                <span className="ck-punc"> = {`{`}</span>
+                <span className="ck-key" style={{color: 'var(--color-keyword)'}}>const</span>{' '}
+                <span className="ck-cls" style={{color: 'var(--color-function)'}}>status</span>
+                <span className="ck-punc" style={{color: 'var(--texto-principal)'}}> = {`{`}</span>
             </div>
             
-            {/* perfil: ... */}
             <div className="indent-1">
-                <span className="ck-key">perfil:</span>{' '}
-                <span className="ck-str">"{t.perfil}"</span>
-                <span className="ck-punc">,</span>
+                <span className="ck-key" style={{color: 'var(--color-keyword)'}}>perfil:</span>{' '}
+                <span className="ck-str" style={{color: 'var(--color-string)'}}>"{t.perfil}"</span>
+                <span className="ck-punc" style={{color: 'var(--texto-principal)'}}>,</span>
             </div>
 
-            {/* system_status: ... */}
             <div className="indent-1">
-                <span className="ck-key">system_status:</span>{' '}
-                <span className="ck-str">"{t.status}"</span>
-                <span className="ck-punc">,</span>
+                <span className="ck-key" style={{color: 'var(--color-keyword)'}}>system_status:</span>{' '}
+                <span className="ck-str" style={{color: 'var(--color-string)'}}>"{t.status}"</span>
+                <span className="ck-punc" style={{color: 'var(--texto-principal)'}}>,</span>
             </div>
 
-            {/* location: ... */}
             <div className="indent-1">
-                <span className="ck-key">location:</span>{' '}
-                <span className="ck-str">"CDMX [19.43° N, 99.13° W]"</span>
-                <span className="ck-punc">,</span>
+                <span className="ck-key" style={{color: 'var(--color-keyword)'}}>location:</span>{' '}
+                <span className="ck-str" style={{color: 'var(--color-string)'}}>"CDMX [19.43° N, 99.13° W]"</span>
+                <span className="ck-punc" style={{color: 'var(--texto-principal)'}}>,</span>
             </div>
 
-            {/* stack: ... */}
             <div className="indent-1">
-                <span className="ck-key">stack:</span>{' '}
-                <span className="ck-punc">[</span>
-                <span className="ck-str">'Python', 'React', 'QGIS', 'SQL', 'Figma'</span>
-                <span className="ck-punc">],</span>
+                <span className="ck-key" style={{color: 'var(--color-keyword)'}}>stack:</span>{' '}
+                <span className="ck-punc" style={{color: 'var(--texto-principal)'}}>[</span>
+                <span className="ck-str" style={{color: 'var(--color-string)'}}>'Python', 'React', 'QGIS', 'SQL', 'Figma'</span>
+                <span className="ck-punc" style={{color: 'var(--texto-principal)'}}>],</span>
             </div>
 
-            {/* layers: ... */}
             <div className="indent-1">
-                <span className="ck-key">layers:</span>{' '}
-                <span className="ck-punc">[</span>
-                <span className="ck-str">{t.layers}</span>
-                <span className="ck-punc">]</span>
+                <span className="ck-key" style={{color: 'var(--color-keyword)'}}>layers:</span>{' '}
+                <span className="ck-punc" style={{color: 'var(--texto-principal)'}}>[</span>
+                <span className="ck-str" style={{color: 'var(--color-string)'}}>{t.layers}</span>
+                <span className="ck-punc" style={{color: 'var(--texto-principal)'}}>]</span>
             </div>
 
-            {/* }; */}
             <div>
-                <span className="ck-punc">{`};`}</span>
+                <span className="ck-punc" style={{color: 'var(--texto-principal)'}}>{`};`}</span>
             </div>
-
         </div>
       </div>
 
-      {/* 4. BOTÓN */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <button className="hero-btn" onClick={onContactClick}>
           <FaPlug style={{ transform: 'rotate(90deg)' }}/> {t.btn}
