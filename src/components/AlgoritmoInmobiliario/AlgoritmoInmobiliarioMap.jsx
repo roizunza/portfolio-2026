@@ -3,8 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { PROJECTS, STYLES } from '../../config/theme';
 
-import distritosData from '../../data/distritos-data-airbnb-hk.json';
-import unidadesData from '../../data/unidades-enteras-aribnb-hk.json';
+import cuellosData from '../../data/cuellos_de_botella.json';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -29,49 +28,53 @@ export default function MapComponent({ t }) {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
-      center: [114.1694, 22.345],
-      zoom: 9,
+      center: [114.05, 22.54],
+      zoom: 10,
       pitch: 0
     });
 
     map.current.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
     map.current.on('load', () => {
-
-      map.current.addSource('distritos', { type: 'geojson', data: distritosData });
+      
+      map.current.addSource('cuellos', { type: 'geojson', data: cuellosData });
       
       map.current.addLayer({
-        'id': 'distritos-fill', 'type': 'fill', 'source': 'distritos',
+        'id': 'cuellos-heat', 'type': 'circle', 'source': 'cuellos',
         'paint': {
-          'fill-color': [
-            'step', ['get', 'PRECIO_PROMEDIO_HK'],
-            RAMP.step1, 898.08, 
-            RAMP.step2, 1496.97, 
-            RAMP.step3, 2423, 
-            RAMP.step4, 3482, 
-            RAMP.step5
+          'circle-radius': [
+            'interpolate', ['linear'], ['zoom'],
+            10, 15,
+            15, 50
           ],
-          'fill-opacity': 0.3 
-        }
-      });
-      
-      map.current.addSource('unidades', { type: 'geojson', data: unidadesData });
-      map.current.addLayer({
-        'id': 'unidades-points', 'type': 'circle', 'source': 'unidades',
-        'paint': {
-          'circle-radius': 3, 'circle-stroke-width': 0, 'circle-opacity': 0.6,
+          'circle-blur': 0.5,
+          'circle-opacity': 0.6,
           'circle-color': [
-            'step', ['get', 'price'],
-            RAMP.step1, 456, 
-            RAMP.step2, 706, 
-            RAMP.step3, 989.40, 
-            RAMP.step4, 1422.60, 
-            RAMP.step5
+            'match', ['get', 'nivel_riesgo'],
+            'Riesgo Crítico', RAMP.step4,
+            'Riesgo Moderado', RAMP.step3,
+            'Cobertura Adecuada', RAMP.step1,
+            RAMP.step2
           ]
         }
       });
       
-      map.current.addLayer({ 'id': 'distritos-outline', 'type': 'line', 'source': 'distritos', 'paint': { 'line-color': '#FFFFFF', 'line-width': 0.2, 'line-opacity': 0.2 } });
+      map.current.addLayer({
+        'id': 'cuellos-points', 'type': 'circle', 'source': 'cuellos',
+        'paint': {
+          'circle-radius': 5, 
+          'circle-stroke-width': 1, 
+          'circle-stroke-color': '#FFFFFF',
+          'circle-color': [
+            'match', ['get', 'nivel_riesgo'],
+            'Riesgo Crítico', RAMP.step4,
+            'Riesgo Moderado', RAMP.step3,
+            'Cobertura Adecuada', RAMP.step1,
+            RAMP.step2
+          ]
+        }
+      });
+      
     });
 
     const popup = new mapboxgl.Popup({
@@ -80,30 +83,22 @@ export default function MapComponent({ t }) {
       className: 'dark-popup'
     });
 
-    const showPopup = (e, type) => {
+    const showPopup = (e) => {
       map.current.getCanvas().style.cursor = 'pointer';
       const props = e.features[0].properties;
-      const coordinates = e.lngLat;
+      const coordinates = e.features[0].geometry.coordinates.slice();
       const currentT = tRef.current.map; 
 
-      let precioHKD = 0;
-      let titulo = '';
-      let colorTitulo = '#fff'; 
-      
-      if (type === 'punto') {
-        precioHKD = props.price;
-        titulo = currentT.popupUnidad;
-        colorTitulo = RAMP.step4; 
-      } else {
-        precioHKD = props.PRECIO_PROMEDIO_HK;
-        titulo = `${currentT.popupDistrito}${props.distrito || ''}`;
-        colorTitulo = PROJECT_COLOR; 
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
 
-      const precioUSD = (precioHKD / 7.8).toFixed(2);
-      const precioHKDFormat = precioHKD.toLocaleString();
+      const riesgo = props.nivel_riesgo;
+      const distancia = (props.distancia_a_cargador_m / 1000).toFixed(2);
+      const titulo = `${currentT.popupUnidad} ${props.cluster_id}`;
+      const colorTitulo = riesgo === 'Riesgo Crítico' ? RAMP.step4 : RAMP.step1;
 
-      const containerStyle = `font-family:${fontBody}; font-size:11px; color:#e0e0e0; min-width:140px;`;
+      const containerStyle = `font-family:${fontBody}; font-size:11px; color:#e0e0e0; min-width:160px;`;
       const titleStyle = `font-weight:bold; text-transform:uppercase; font-size:12px; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px; letter-spacing:0.5px; color:${colorTitulo};`;
       const rowStyle = `display:flex; justify-content:space-between; margin-bottom:3px;`;
       const labelStyle = `color:#aaa; margin-right:8px;`;
@@ -115,12 +110,16 @@ export default function MapComponent({ t }) {
             ${titulo}
           </div>
           <div style="${rowStyle}">
+            <span style="${labelStyle}">${currentT.popupDistrito}</span> 
+            <span style="${valStyle}">${riesgo}</span>
+          </div>
+          <div style="${rowStyle}">
             <span style="${labelStyle}">${currentT.popupPrecioHKD}</span> 
-            <span style="${valStyle}">$${precioHKDFormat}</span>
+            <span style="${valStyle}">${distancia} km</span>
           </div>
           <div style="${rowStyle}">
             <span style="${labelStyle}">${currentT.popupPrecioUSD}</span> 
-            <span style="${valStyle}">$${precioUSD}</span>
+            <span style="${valStyle}">${props.operador}</span>
           </div>
         </div>
       `;
@@ -133,11 +132,8 @@ export default function MapComponent({ t }) {
       popup.remove();
     };
 
-    map.current.on('mousemove', 'distritos-fill', (e) => showPopup(e, 'poligono'));
-    map.current.on('mouseleave', 'distritos-fill', hidePopup);
-
-    map.current.on('mouseenter', 'unidades-points', (e) => showPopup(e, 'punto'));
-    map.current.on('mouseleave', 'unidades-points', hidePopup);
+    map.current.on('mouseenter', 'cuellos-points', showPopup);
+    map.current.on('mouseleave', 'cuellos-points', hidePopup);
 
   }, [RAMP, PROJECT_COLOR]);
 
@@ -146,8 +142,7 @@ export default function MapComponent({ t }) {
   const titleStyle = STYLES.legendTitle;
   const subTitleStyle = { fontSize: '9px', fontWeight: 'bold', color: '#aaa', margin: '6px 0 3px 0', textTransform: 'none' };
   const itemStyle = { display: 'flex', alignItems: 'center', marginBottom: '4px', fontSize: '9px', fontWeight: '300', color: 'var(--texto-principal)' };
-  const boxColor = { width: '10px', height: '10px', borderRadius: '2px', marginRight: '8px' };
-  const circleColor = { width: '8px', height: '8px', borderRadius: '50%', marginRight: '8px' };
+  const circleColor = { width: '10px', height: '10px', borderRadius: '50%', marginRight: '8px' };
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -170,20 +165,9 @@ export default function MapComponent({ t }) {
         <h4 style={titleStyle}>{t.map.simbologia}</h4>
 
         <div style={subTitleStyle}>{t.map.subPrecioDistrito}</div>
-        <div style={itemStyle}><div style={{...boxColor, background: RAMP.step5}}></div> &gt; 3,482 </div>
-        <div style={itemStyle}><div style={{...boxColor, background: RAMP.step4}}></div> 2,423 - 3,482 </div>
-        <div style={itemStyle}><div style={{...boxColor, background: RAMP.step3}}></div> 1,497 - 2,423 </div>
-        <div style={itemStyle}><div style={{...boxColor, background: RAMP.step2}}></div> 898 - 1,496 </div>
-        <div style={itemStyle}><div style={{...boxColor, background: RAMP.step1}}></div> 590 - 898 </div>
-
-        <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '8px 0' }}></div>
-
-        <div style={subTitleStyle}>{t.map.subPrecioUnidad}</div>
-        <div style={itemStyle}><div style={{...circleColor, background: RAMP.step5}}></div> &gt; 1,422 </div>
-        <div style={itemStyle}><div style={{...circleColor, background: RAMP.step4}}></div> 989 - 1,422 </div>
-        <div style={itemStyle}><div style={{...circleColor, background: RAMP.step3}}></div> 706 - 989 </div>
-        <div style={itemStyle}><div style={{...circleColor, background: RAMP.step2}}></div> 456 - 706 </div>
-        <div style={itemStyle}><div style={{...circleColor, background: RAMP.step1}}></div> &lt; 456 </div>
+        <div style={itemStyle}><div style={{...circleColor, background: RAMP.step4}}></div> &gt; 1000m (Riesgo Crítico) </div>
+        <div style={itemStyle}><div style={{...circleColor, background: RAMP.step3}}></div> 500m - 1000m (Riesgo Moderado) </div>
+        <div style={itemStyle}><div style={{...circleColor, background: RAMP.step1}}></div> &lt; 500m (Cobertura Adecuada) </div>
 
       </div>
     </div>

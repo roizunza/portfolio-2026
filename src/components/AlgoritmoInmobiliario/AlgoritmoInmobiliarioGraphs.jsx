@@ -4,14 +4,14 @@ import {
   ScatterChart, Scatter, ZAxis, Cell 
 } from 'recharts';
 import { PROJECTS } from '../../config/theme';
-import distritosData from '../../data/distritos-data-airbnb-hk.json';
+import cuellosData from '../../data/cuellos_de_botella.json';
 
 const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 export default function GraphsPanel({ t }) {
   const THEME = PROJECTS.algoritmo;
   const RAMP = THEME.ramp;
-  const features = distritosData.features || [];
+  const features = cuellosData.features || [];
 
   const borderColor = getCssVar('--borde-sutil') || 'rgba(255,255,255,0.1)';
   const fontBody = getCssVar('--fuente-ui') || 'Inter, sans-serif';
@@ -21,26 +21,25 @@ export default function GraphsPanel({ t }) {
 
   const scatterData = useMemo(() => {
     return features.map(f => ({
-      x: f.properties.PRECIO_PROMEDIO_HK,      
-      y: f.properties.ROTACION_PORCENTAJE,     
-      z: f.properties.price_count,             
-      name: f.properties.distrito,
-      fill: (f.properties.ROTACION_PORCENTAJE > 5 && f.properties.PRECIO_PROMEDIO_HK > 2000) 
-            ? RAMP.step3 
-            : RAMP.step4 
+      x: f.properties.cluster_id,      
+      y: f.properties.distancia_a_cargador_m,     
+      z: 50,             
+      name: `Clúster ${f.properties.cluster_id}`,
+      riesgo: f.properties.nivel_riesgo,
+      fill: f.properties.nivel_riesgo === 'Riesgo Crítico' ? RAMP.step4 : RAMP.step1
     }));
   }, [features, RAMP]);
 
   const barData = useMemo(() => {
     return [...features]
-      .sort((a, b) => b.properties.price_count - a.properties.price_count)
+      .sort((a, b) => b.properties.distancia_a_cargador_m - a.properties.distancia_a_cargador_m)
       .slice(0, 7)
       .map(f => ({
-        name: f.properties.distrito,
-        Unidades: f.properties.price_count,
-        fill: THEME.color
+        name: `Clúster ${f.properties.cluster_id}`,
+        Distancia: Math.round(f.properties.distancia_a_cargador_m),
+        fill: f.properties.nivel_riesgo === 'Riesgo Crítico' ? RAMP.step4 : RAMP.step1
       }));
-  }, [features, THEME]);
+  }, [features, THEME, RAMP]);
 
   const CustomTooltipScatter = ({ active, payload }) => {
     if (active && payload && payload.length) {
@@ -48,9 +47,9 @@ export default function GraphsPanel({ t }) {
       return (
         <div style={{ backgroundColor: 'var(--fondo-panel)', border: '1px solid var(--borde-sutil)', padding: '8px', fontFamily: 'var(--fuente-ui)', fontSize: '10px' }}>
           <p style={{color: 'white', fontWeight: 'bold', marginBottom:'4px', margin: 0}}>{data.name}</p>
-          <div style={{ color: 'var(--texto-secundario)' }}>{t.graphs.precio}: <span style={{color:'#fff'}}>${Math.round(data.x)} HKD</span></div>
-          <div style={{ color: 'var(--texto-secundario)' }}>{t.graphs.rotacion}: <span style={{color:'#fff'}}>{data.y.toFixed(1)}%</span></div>
-          <div style={{ color: 'var(--texto-secundario)' }}>{t.graphs.stockTooltip}: <span style={{color:'#fff'}}>{data.z} {t.graphs.unidades}</span></div>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.graphs.precio}: <span style={{color:'#fff'}}>{data.x}</span></div>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.graphs.rotacion}: <span style={{color:'#fff'}}>{data.y.toFixed(0)}m</span></div>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.graphs.stockTooltip}: <span style={{color: data.fill}}>{data.riesgo}</span></div>
         </div>
       );
     }
@@ -64,7 +63,7 @@ export default function GraphsPanel({ t }) {
           <p style={{color: 'white', fontWeight: 'bold', marginBottom:'3px', margin: 0}}>{label}</p>
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: payload[0].fill }}></span>
-            <span style={{ color: 'var(--texto-secundario)' }}>{t.graphs.unidadesTooltip} <span style={{ color: '#fff', fontWeight: 'bold' }}>{payload[0].value}</span></span>
+            <span style={{ color: 'var(--texto-secundario)' }}>{t.graphs.unidadesTooltip} <span style={{ color: '#fff', fontWeight: 'bold' }}>{payload[0].value}m</span></span>
           </div>
         </div>
       );
@@ -90,7 +89,7 @@ export default function GraphsPanel({ t }) {
           <div style={styles.title}>{t.graphs.scatterTitle}</div>
           <div style={styles.legend}>
             <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.step4)}></span> {t.graphs.altaPresion}</div>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.step3)}></span> {t.graphs.estandar}</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.step1)}></span> {t.graphs.estandar}</div>
           </div>
         </div>
         
@@ -98,10 +97,9 @@ export default function GraphsPanel({ t }) {
           <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{top: 10, right: 10, bottom: 10, left: -10}}>
               <XAxis 
-                type="number" 
+                type="category" 
                 dataKey="x" 
                 name={t.graphs.precio} 
-                unit="HKD" 
                 tick={{fontSize: 10, fill: textSecondary}} 
                 tickLine={false} 
                 axisLine={{stroke: borderColor}}
@@ -110,14 +108,20 @@ export default function GraphsPanel({ t }) {
                 type="number" 
                 dataKey="y" 
                 name={t.graphs.rotacion} 
-                unit="%" 
+                unit="m" 
                 tick={{fontSize: 10, fill: textSecondary}} 
                 tickLine={false} 
                 axisLine={{stroke: borderColor}} 
               />
-              <ZAxis type="number" dataKey="z" range={[20, 200]} /> 
+              <ZAxis type="number" dataKey="z" range={[50, 50]} /> 
               <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltipScatter />} />
-              <Scatter name="Distritos" data={scatterData} fill={THEME.color} />
+              <Scatter name="Clústeres" data={scatterData} fill={THEME.color}>
+                {
+                  scatterData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))
+                }
+              </Scatter>
             </ScatterChart>
           </ResponsiveContainer>
         </div>
@@ -149,7 +153,7 @@ export default function GraphsPanel({ t }) {
                 axisLine={false}
               />
               <Tooltip cursor={{fill: 'rgba(255,255,255,0.05)'}} content={<CustomTooltipBar />} />
-              <Bar dataKey="Unidades" radius={[0, 4, 4, 0]} background={{ fill: 'rgba(255,255,255,0.05)' }}>
+              <Bar dataKey="Distancia" radius={[0, 4, 4, 0]} background={{ fill: 'rgba(255,255,255,0.05)' }}>
                 {
                   barData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />

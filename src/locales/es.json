@@ -159,76 +159,76 @@
       "presion": "Zona del manglar en presión"
     }
   },
-  "algoritmo": {
-    "fileName": "03_algoritmo_inmobiliario",
+    "algoritmo": {
+    "fileName": "03_logistica_ev_shenzhen",
     "ejecutar": "EJECUTAR ANÁLISIS",
-    "title": "ALGORITMO INMOBILIARIO",
-    "subtitle": "INTELIGENCIA DE MERCADO",
-    "role": "Análisis cuantitativo de la dinámica de plataforma de hospedaje en entornos de hiperdensidad.",
-    "cardDescription1": "Intelligence de Mercado: Análisis cuantitativo de la dinámica de la plataforma de hospedaje en Hong Kong para tangibilizar la financiarización de la vivienda en entornos de hiperdensidad.",
-    "cardDescription2": "A través de SQL (PostgreSQL) y Python, se modelan datos masivos para identificar clústeres de especulación y el volumen de stock habitacional transformado en activos financieros.",
+    "title": "LOGÍSTICA EV SHENZHEN",
+    "subtitle": "PRESIÓN LOGÍSTICA E INFRAESTRUCTURA",
+    "role": "Análisis espacial y detección de cuellos de botella mediante Machine Learning.",
+    "cardDescription1": "Data Engineering & ML: Identificación de 'desiertos de carga eléctrica' para el sector comercial en Shenzhen, la capital del hardware.",
+    "cardDescription2": "Mediante clustering espacial (DBSCAN) y cruces en PostGIS, se detectan zonas de altísima demanda logística sin infraestructura de carga cercana, evidenciando fallas en la electrificación comercial.",
     "proposito": {
       "title": "01. El Propósito",
-      "tag": "#BigDataAnalysis",
-      "content": "El proyecto analiza la operación de la plataforma airbnb en su apartado de renta a corto plazo en Hong Kong, territorio definido por su hiperdensidad y su rol central en las finanzas globales. El objetivo es tangibilizar cómo la dinámica de la plataforma contribuye a la financiarización de la vivienda, reconfigurando las reglas de acceso urbano y transformando el stock habitacional en activos financieros líquidos mediante el análisis de datos masivos."
+      "tag": "#SpatialMachineLearning",
+      "content": "Shenzhen electrificó casi por completo su flota de transporte y logística. Sin embargo, este proyecto busca identificar 'desiertos de carga eléctrica' para el sector comercial. Utilizando inteligencia artificial, se detectaron clústeres de altísima demanda logística para cruzar su ubicación geométrica con la red de cargadores eléctricos, revelando cuellos de botella donde la demanda supera la infraestructura."
     },
     "metodologia": {
       "title": "02. Estructura y Metodología",
-      "tag": "#DataEngineering",
-      "intro": "Se implementa un flujo de trabajo de ingeniería de datos para procesar y modelar información unificada proveniente de Inside Airbnb:",
-      "item1Key": "Limpieza y Gestión de Datos (SQL):",
-      "item1Text": "Se utiliza PostgreSQL para la ingesta y depuración de los datasets unificados. Se ejecutan consultas para el filtrado de outliers, normalización de tipos de datos y eliminación de registros inconsistentes.",
-      "item2Key": "Procesamiento Geoespacial (Python):",
-      "item2Text": "Mediante el empleo de Python (GeoPandas) y la librería SQLAlchemy, se extraen los datos limpios para ejecutar agregaciones espaciales por distrito y calcular métricas críticas de rotación.",
-      "item3Key": "Normalización de Métricas:",
-      "item3Text": "Desarrollo de algoritmos para estandarizar indicadores de presión habitacional, permitiendo una comparativa consistente."
+      "tag": "#ETL_PostGIS",
+      "intro": "Se implementa un flujo de trabajo de ingeniería de datos para extraer, procesar y modelar la información:",
+      "item1Key": "Extracción y Carga (Python & SQL):",
+      "item1Text": "Web scraping con la API de Overpass para extraer miles de nodos logísticos y cargadores. Ingesta a PostgreSQL y creación de geometría con PostGIS.",
+      "item2Key": "Clustering Espacial (DBSCAN):",
+      "item2Text": "Ejecución de Machine Learning con Scikit-learn (radio de 500m, mínimo 3 nodos) para agrupar la demanda bruta en clústeres hiperdensos.",
+      "item3Key": "Análisis de Cuellos de Botella:",
+      "item3Text": "Cálculo de la distancia desde el centroide de cada clúster hasta el cargador más cercano para categorizar el nivel de riesgo."
     },
     "insights": {
       "title": "03. Insights y Visualización",
-      "tag": "#MarketInsights",
-      "intro": "El análisis permite identificar una fractura estructural en el mercado de vivienda mediante métricas de alta precisión:",
-      "item1Key": "Stock Mercantilizado:",
-      "item1Text": "Cuantificación de unidades extraídas del mercado tradicional que superan la capacidad local.",
-      "item2Key": "Clústeres de Especulación:",
-      "item2Text": "Revelación de zonas de alta intensidad en Yau Tsim Mong y Central & Western.",
-      "item3Key": "Visualización de Datos:",
-      "item3Text": "Cartografía temática que correlaciona precio con disponibilidad."
+      "tag": "#LogisticsInsights",
+      "intro": "El algoritmo detectó una grave deficiencia en la planeación urbana de Shenzhen para flotas de última milla:",
+      "item1Key": "Macro-clústeres de demanda:",
+      "item1Text": "Se identificaron 8 zonas críticas de concentración de furgonetas y centros de mensajería.",
+      "item2Key": "Riesgo Crítico Masivo:",
+      "item2Text": "7 de los 8 clústeres no tienen ningún cargador eléctrico a menos de 1 kilómetro (algunos hasta a 8 km).",
+      "item3Key": "Sesgo Residencial:",
+      "item3Text": "La infraestructura favorece al usuario particular, abandonando la operatividad crítica de la logística urbana."
     },
     "stack": {
       "title": "Stack Tecnológico",
       "tag": "#TechSpecs",
-      "content": "Python (GeoPandas, SQLAlchemy), SQL (PostgreSQL), QGIS, Figma."
+      "content": "Python (Scikit-learn, GeoPandas), PostgreSQL (PostGIS), Mapbox GL JS."
     },
     "scorecards": {
-      "stock": "STOCK MERCANTILIZADO",
-      "stock_sub": "Viviendas extraídas del mercado",
-      "barrera": "BARRERA DE ACCESO",
-      "barrera_sub": "Costo promedio por noche",
-      "subutilizacion": "SUBUTILIZACIÓN",
-      "subutilizacion_sub": "Días/Año de suelo vacío",
-      "rotacion": "PRESIÓN DE ROTACIÓN",
-      "rotacion_sub": "Intensidad de recambio"
+      "stock": "CLÚSTERES",
+      "stock_sub": "Zonas de alta demanda detectadas",
+      "barrera": "RIESGO CRÍTICO",
+      "barrera_sub": "Clústeres sin acceso a < 1km",
+      "subutilizacion": "DISTANCIA MÁXIMA",
+      "subutilizacion_sub": "Al cargador más cercano",
+      "rotacion": "DISTANCIA MEDIA",
+      "rotacion_sub": "Promedio de desabasto"
     },
     "graphs": {
-      "scatterTitle": "Especulación: Precio vs. Rotación",
-      "barTitle": "Absorción por Distrito",
-      "altaPresion": "Alta Presión",
-      "estandar": "Estándar",
-      "unidadesAirbnb": "Unidades Airbnb",
-      "precio": "Precio",
-      "rotacion": "Rotación",
-      "stockTooltip": "Stock",
-      "unidades": "unidades",
-      "unidadesTooltip": "Unidades:"
+      "scatterTitle": "Distribución del Riesgo: Distancia por Clúster",
+      "barTitle": "Top Clústeres más Aislados",
+      "altaPresion": "Riesgo Crítico",
+      "estandar": "Cobertura Adecuada",
+      "unidadesAirbnb": "Distancia a Cargador (m)",
+      "precio": "ID de Clúster",
+      "rotacion": "Distancia (m)",
+      "stockTooltip": "Nivel de Riesgo",
+      "unidades": "",
+      "unidadesTooltip": "Metros:"
     },
     "map": {
-      "simbologia": "SIMBOLOGÍA",
-      "subPrecioDistrito": "Precio Promedio/Distrito(HK$)",
-      "subPrecioUnidad": "Precio Unidad (HK$)",
-      "popupUnidad": "UNIDAD AIRBNB",
-      "popupDistrito": "DISTRITO: ",
-      "popupPrecioHKD": "Precio HKD:",
-      "popupPrecioUSD": "Precio USD:"
+      "simbologia": "NIVEL DE RIESGO",
+      "subPrecioDistrito": "Distancia a Cargador EV",
+      "subPrecioUnidad": "Nodos Logísticos",
+      "popupUnidad": "CLÚSTER LOGÍSTICO",
+      "popupDistrito": "RIESGO: ",
+      "popupPrecioHKD": "Distancia:",
+      "popupPrecioUSD": "Operador cercano:"
     }
   },
   "factorEsfuerzo": {

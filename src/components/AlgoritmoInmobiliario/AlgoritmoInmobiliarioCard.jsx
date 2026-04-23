@@ -12,7 +12,7 @@ const AlgoritmoInmobiliarioCard = ({ onEjecutar, onClose }) => {
     <ProjectCard
       title={t.fileName}
       defColor={PROJECTS.algoritmo.color} 
-      comment={idioma === 'es' ? "// Inteligencia de Mercado & Big Data" : "// Market Intelligence & Big Data"}
+      comment={idioma === 'es' ? "// Logística & Machine Learning Espacial" : "// Logistics & Spatial Machine Learning"}
       image={imgAlgoritmo}
       onEjecutar={onEjecutar}
       onClose={onClose}

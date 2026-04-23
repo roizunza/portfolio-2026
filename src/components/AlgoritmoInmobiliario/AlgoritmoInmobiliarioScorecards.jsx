@@ -1,8 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { PROJECTS } from '../../config/theme';
-import distritosData from '../../data/distritos-data-airbnb-hk.json';
+import cuellosData from '../../data/cuellos_de_botella.json';
 
-// Componente modular para no repetir el HTML de las tarjetas
 const ScorecardItem = ({ number, title, subtitle, titleColor, styles }) => (
   <div style={styles.card}>
     <div style={styles.number}>{number}</div>
@@ -20,30 +19,24 @@ const Scorecards = ({ t }) => {
 
     const kpis = useMemo(() => {
         try {
-            const features = distritosData.features || [];
+            const features = cuellosData.features || [];
             const len = features.length;
             
-            const totalStock = features.reduce((acc, curr) => acc + (curr.properties.price_count || 0), 0);
-            const totalRevenuePotential = features.reduce((acc, curr) => acc + (curr.properties.price_sum || 0), 0);
-            const avgTicket = totalStock > 0 ? (totalRevenuePotential / totalStock) : 0;
-            
-            const totalAvailability = features.reduce((acc, curr) => acc + (curr.properties.availability_365_sum || 0), 0);
-            const totalAvailabilityCount = features.reduce((acc, curr) => acc + (curr.properties.availability_365_count || 0), 0);
-            const avgVacancyDays = totalAvailabilityCount > 0 ? (totalAvailability / totalAvailabilityCount) : 0;
-            
-            // FIX MATEMÁTICO: Previene que divida entre cero si la data no ha cargado (evita el NaN%)
-            const avgRotation = len > 0 ? features.reduce((acc, curr) => acc + (curr.properties.ROTACION_PORCENTAJE || 0), 0) / len : 0;
+            const totalClusters = len;
+            const criticalRiesgo = features.filter(f => f.properties.nivel_riesgo === 'Riesgo Crítico').length;
+            const maxDistance = features.reduce((max, f) => Math.max(max, f.properties.distancia_a_cargador_m), 0);
+            const avgDistance = len > 0 ? features.reduce((acc, curr) => acc + curr.properties.distancia_a_cargador_m, 0) / len : 0;
 
             return {
-                stock: totalStock.toLocaleString(),
-                ticket: `$${avgTicket.toFixed(0)} HKD`,
-                vacancy: `${avgVacancyDays.toFixed(0)} Días`,
-                rotation: `${avgRotation.toFixed(1)}%`
+                clusters: totalClusters.toString(),
+                criticos: `${criticalRiesgo}`,
+                maxDist: `${(maxDistance / 1000).toFixed(1)} km`,
+                avgDist: `${(avgDistance / 1000).toFixed(1)} km`
             };
 
         } catch (error) {
             console.error("Error KPI:", error);
-            return { stock: "0", ticket: "$0", vacancy: "0", rotation: "0.0%" };
+            return { clusters: "0", criticos: "0", maxDist: "0 km", avgDist: "0 km" };
         }
     }, []);
 
@@ -73,31 +66,30 @@ const Scorecards = ({ t }) => {
     return (
       <React.Fragment>
           <ScorecardItem 
-            number={kpis.stock}
+            number={kpis.clusters}
             title={t.scorecards.stock}
             subtitle={t.scorecards.stock_sub}
             titleColor="#FFFFFF"
             styles={s}
           />
           <ScorecardItem 
-            number={kpis.ticket}
+            number={kpis.criticos}
             title={t.scorecards.barrera}
             subtitle={t.scorecards.barrera_sub}
             titleColor={RAMP.step4}
             styles={s}
           />
           <ScorecardItem 
-            number={kpis.vacancy}
+            number={kpis.maxDist}
             title={t.scorecards.subutilizacion}
             subtitle={t.scorecards.subutilizacion_sub}
             titleColor={RAMP.step3}
             styles={s}
           />
-          {/* Aquí inyectamos tus textos fijos como respaldo por si falla la traducción */}
           <ScorecardItem 
-            number={kpis.rotation}
-            title={t.scorecards.rotacion || 'PRESIÓN DE ROTACIÓN'}
-            subtitle={t.scorecards.rotacion_sub || 'Intensidad de recambio'}
+            number={kpis.avgDist}
+            title={t.scorecards.rotacion}
+            subtitle={t.scorecards.rotacion_sub}
             titleColor={RAMP.step2}
             styles={s}
           />
