@@ -4,6 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { PROJECTS, STYLES } from '../../config/theme';
 
 import cuellosData from '../../data/cuellos_de_botella.json';
+import boundariesData from '../../data/boundaries_shenzhen_hk.json';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -37,8 +38,56 @@ export default function MapComponent({ t }) {
 
     map.current.on('load', () => {
       
+      // 1. Cargamos las fronteras
+      map.current.addSource('boundaries', { type: 'geojson', data: boundariesData });
+      
+      // Oscurecemos Hong Kong para centrar la atencion en Shenzhen
+      map.current.addLayer({
+        'id': 'hk-dim', 
+        'type': 'fill', 
+        'source': 'boundaries',
+        'filter': ['==', 'nombre', 'Hong Kong'],
+        'paint': {
+          'fill-color': '#000000',
+          'fill-opacity': 0.5
+        }
+      });
+
+      // Dibujamos las divisiones distritales de Shenzhen (linea punteada)
+      map.current.addLayer({
+        'id': 'sz-districts', 
+        'type': 'line', 
+        'source': 'boundaries',
+        'filter': ['==', 'tipo', 'Distrito'],
+        'paint': {
+          'line-color': 'rgba(255, 255, 255, 0.15)',
+          'line-width': 1,
+          'line-dasharray': [2, 3]
+        }
+      });
+
+      // Dibujamos el limite exterior de la ciudad
+      map.current.addLayer({
+        'id': 'sz-boundary', 
+        'type': 'line', 
+        'source': 'boundaries',
+        'filter': ['==', 'tipo', 'Ciudad'],
+        'paint': {
+          'line-color': PROJECT_COLOR,
+          'line-width': 1.5,
+          'line-opacity': 0.8
+        }
+      });
+
+      // 2. Interceptamos las autopistas nativas de Mapbox para resaltarlas
+      if (map.current.getLayer('road-motorway-trunk')) {
+        map.current.setPaintProperty('road-motorway-trunk', 'line-color', 'rgba(255, 255, 255, 0.3)');
+      }
+
+      // 3. Cargamos los datos logisticos y de Machine Learning
       map.current.addSource('cuellos', { type: 'geojson', data: cuellosData });
       
+      // Mapa de calor (intensidad del riesgo)
       map.current.addLayer({
         'id': 'cuellos-heat', 'type': 'circle', 'source': 'cuellos',
         'paint': {
@@ -59,11 +108,12 @@ export default function MapComponent({ t }) {
         }
       });
       
+      // Puntos exactos de los centros logisticos
       map.current.addLayer({
         'id': 'cuellos-points', 'type': 'circle', 'source': 'cuellos',
         'paint': {
-          'circle-radius': 5, 
-          'circle-stroke-width': 1, 
+          'circle-radius': 4, 
+          'circle-stroke-width': 0.5, 
           'circle-stroke-color': '#FFFFFF',
           'circle-color': [
             'match', ['get', 'nivel_riesgo'],
@@ -168,6 +218,9 @@ export default function MapComponent({ t }) {
         <div style={itemStyle}><div style={{...circleColor, background: RAMP.step4}}></div> &gt; 1000m (Riesgo Crítico) </div>
         <div style={itemStyle}><div style={{...circleColor, background: RAMP.step3}}></div> 500m - 1000m (Riesgo Moderado) </div>
         <div style={itemStyle}><div style={{...circleColor, background: RAMP.step1}}></div> &lt; 500m (Cobertura Adecuada) </div>
+        <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '8px 0' }}></div>
+        <div style={itemStyle}><div style={{width: '12px', height: '2px', background: 'rgba(255, 255, 255, 0.3)', marginRight: '8px'}}></div> Red de Autopistas </div>
+        <div style={itemStyle}><div style={{width: '12px', height: '2px', borderTop: '1px dashed rgba(255, 255, 255, 0.2)', marginRight: '8px'}}></div> Límites Distritales </div>
 
       </div>
     </div>
