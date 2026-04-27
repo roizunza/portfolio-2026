@@ -33,7 +33,7 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
       try {
         const baseUrl = import.meta.env.VITE_SUPABASE_URL;
         const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-        const url = `${baseUrl}/rest/v1/buildings_3d?select=*&limit=20000`;
+        const url = `${baseUrl}/rest/v1/buildings_3d?select=*&order=inferred_height_m.desc.nullslast&limit=20000`;
         const response = await fetch(url, {
           headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}`, Accept: 'application/geo+json' }
         });
