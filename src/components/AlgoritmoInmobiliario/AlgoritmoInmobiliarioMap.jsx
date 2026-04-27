@@ -4,6 +4,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import { PROJECTS, STYLES } from '../../config/theme';
 
+import roadsUrl from '../../data/roads.geojson?url';
+import poisUrl from '../../data/pois.geojson?url';
+
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
@@ -16,9 +19,12 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
   const [hoverInfo, setHoverInfo] = useState(null);
   const [mapLoaded, setMapLoaded] = useState(false); 
 
+  const [showBuildings, setShowBuildings] = useState(true);
+  const [showNetworks, setShowNetworks] = useState(true);
+
   const fontBody = getCssVar('--fuente-ui') || 'Inter, sans-serif';
 
-  // Fetch de datos desde Supabase
+  // 1. Fetch de datos desde Supabase (Fase 1)
   useEffect(() => {
     const fetchBuildings = async () => {
       try {
@@ -43,7 +49,7 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
     fetchBuildings();
   }, []);
 
-  // Inicializacion de Mapbox y Topografia Segmentada
+  // 2. Inicializacion de Mapbox 
   useEffect(() => {
     if (map.current) return;
 
@@ -111,7 +117,6 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
         url: 'mapbox://mapbox.mapbox-terrain-v2'
       });
       
-      // Curvas de Nivel Inferiores (< 220m)
       map.current.addLayer({
         'id': 'contour-glow-base',
         'type': 'line',
@@ -139,7 +144,6 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
         }
       });
 
-      // Curvas de Nivel Superiores (>= 220m)
       map.current.addLayer({
         'id': 'contour-core-top',
         'type': 'line',
@@ -154,11 +158,74 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
         }
       });
 
+      // --- FASE 2: VIALIDADES LOCALES ---
+      map.current.addSource('roads-source', {
+        type: 'geojson',
+        data: roadsUrl
+      });
+
+      map.current.addLayer({
+        'id': 'roads-layer',
+        'type': 'line',
+        'source': 'roads-source',
+        'paint': {
+          'line-color': '#ffffff',
+          'line-width': [
+            'match', ['get', 'highway'],
+            'primary', 1.5,
+            'trunk', 1.5,
+            'secondary', 1.0,
+            0.5 
+          ],
+          'line-opacity': [
+            'match', ['get', 'highway'],
+            'primary', 0.9,
+            'trunk', 0.9,
+            'secondary', 0.6,
+            0.3 
+          ]
+        }
+      });
+
+      // --- FASE 2: PUNTOS DE INTERÉS LOCALES ---
+      map.current.addSource('pois-source', {
+        type: 'geojson',
+        data: poisUrl
+      });
+
+      map.current.addLayer({
+        'id': 'pois-glow',
+        'type': 'circle',
+        'source': 'pois-source',
+        'paint': {
+          'circle-color': [
+            'case',
+            ['all', ['has', 'tourism'], ['!=', ['get', 'tourism'], null], ['!=', ['get', 'tourism'], 'nan']], '#00e5ff',
+            ['all', ['has', 'shop'], ['!=', ['get', 'shop'], null], ['!=', ['get', 'shop'], 'nan']], '#ffeb3b',
+            ['all', ['has', 'office'], ['!=', ['get', 'office'], null], ['!=', ['get', 'office'], 'nan']], '#ff007f',
+            '#a2d2ff'
+          ],
+          'circle-radius': 8,
+          'circle-blur': 1,
+          'circle-opacity': 0.6
+        }
+      });
+
+      map.current.addLayer({
+        'id': 'pois-core',
+        'type': 'circle',
+        'source': 'pois-source',
+        'paint': {
+          'circle-color': '#ffffff',
+          'circle-radius': 2
+        }
+      });
+
       setMapLoaded(true);
     });
   }, []);
 
-  // Renderizado de Edificios 3D ajustado a brincos estadisticos
+  // 3. Renderizado de Edificios 3D
   useEffect(() => {
     if (!buildingData || !mapLoaded || !map.current) return;
 
@@ -179,9 +246,9 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
           'fill-extrusion-color': [
             'step',
             ['coalesce', ['to-number', ['get', 'inferred_height_m']], 0],
-            '#2a065c',     // Tejido Base (< 25m)
-            25, '#4c72ea', // Media Densidad (25m - 65m)
-            65, '#f24c3b'  // Alta Densidad (> 65m)
+            '#2a065c',     
+            25, '#4c72ea', 
+            65, '#f24c3b'  
           ],
           'fill-extrusion-opacity': 0.85
         }
@@ -204,6 +271,23 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
       });
     }
   }, [buildingData, mapLoaded]);
+
+  // 4. Lógica de interactividad
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return;
+
+    if (map.current.getLayer('digital-twin-buildings')) {
+      map.current.setLayoutProperty('digital-twin-buildings', 'visibility', showBuildings ? 'visible' : 'none');
+    }
+
+    const networkLayers = ['roads-layer', 'pois-glow', 'pois-core'];
+    networkLayers.forEach(layer => {
+      if (map.current.getLayer(layer)) {
+        map.current.setLayoutProperty(layer, 'visibility', showNetworks ? 'visible' : 'none');
+      }
+    });
+  }, [showBuildings, showNetworks, mapLoaded]);
+
 
   if (!t || !t.map) return null;
 
@@ -234,21 +318,50 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
         </div>
       )}
 
-      <div style={{...STYLES.legendBox, backgroundColor: 'rgba(13, 15, 22, 0.85)', border: '1px solid #333', width: '160px'}}>
-        <h4 style={{...STYLES.legendTitle, color: '#fff', marginBottom: '8px'}}>Intensidad Constructiva</h4>
+      <div style={{ position: 'absolute', bottom: '25px', right: '25px', display: 'flex', flexDirection: 'column', gap: '15px', zIndex: 2 }}>
         
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc' }}>
-          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#f24c3b', marginRight: '8px' }}></div>
-          &gt; 65m (Alta Densidad)
+        <div 
+          onClick={() => setShowBuildings(!showBuildings)}
+          style={{...STYLES.legendBox, backgroundColor: showBuildings ? 'rgba(13, 15, 22, 0.85)' : 'rgba(13, 15, 22, 0.3)', border: showBuildings ? '1px solid #555' : '1px solid #222', width: '160px', cursor: 'pointer', transition: 'all 0.3s ease'}}
+        >
+          <h4 style={{...STYLES.legendTitle, color: showBuildings ? '#fff' : '#666', marginBottom: '8px'}}>1. Intensidad Constructiva</h4>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc', opacity: showBuildings ? 1 : 0.3 }}>
+            <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#f24c3b', marginRight: '8px' }}></div>
+            &gt; 65m (Alta Densidad)
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc', opacity: showBuildings ? 1 : 0.3 }}>
+            <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#4c72ea', marginRight: '8px' }}></div>
+            25m - 65m (Media Dens)
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', fontSize: '9px', color: '#ccc', opacity: showBuildings ? 1 : 0.3 }}>
+            <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#2a065c', marginRight: '8px' }}></div>
+            &lt; 25m (Tejido Base)
+          </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc' }}>
-          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#4c72ea', marginRight: '8px' }}></div>
-          25m - 65m (Media Dens)
+
+        <div 
+          onClick={() => setShowNetworks(!showNetworks)}
+          style={{...STYLES.legendBox, backgroundColor: showNetworks ? 'rgba(13, 15, 22, 0.85)' : 'rgba(13, 15, 22, 0.3)', border: showNetworks ? '1px solid #555' : '1px solid #222', width: '160px', cursor: 'pointer', transition: 'all 0.3s ease'}}
+        >
+          <h4 style={{...STYLES.legendTitle, color: showNetworks ? '#fff' : '#666', marginBottom: '8px'}}>2. Nodos y Flujos</h4>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc', opacity: showNetworks ? 1 : 0.3 }}>
+            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#00e5ff', marginRight: '8px', boxShadow: '0 0 5px #00e5ff' }}></div>
+            Turismo y Cultura
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc', opacity: showNetworks ? 1 : 0.3 }}>
+            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ffeb3b', marginRight: '8px', boxShadow: '0 0 5px #ffeb3b' }}></div>
+            Comercio
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc', opacity: showNetworks ? 1 : 0.3 }}>
+            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff007f', marginRight: '8px', boxShadow: '0 0 5px #ff007f' }}></div>
+            Oficinas / Corporativos
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', fontSize: '9px', color: '#ccc', opacity: showNetworks ? 1 : 0.3 }}>
+            <div style={{ width: '10px', height: '2px', background: '#ffffff', marginRight: '8px' }}></div>
+            Red Vial Activa
+          </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', fontSize: '9px', color: '#ccc' }}>
-          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#2a065c', marginRight: '8px' }}></div>
-          &lt; 25m (Tejido Base)
-        </div>
+
       </div>
     </div>
   );
