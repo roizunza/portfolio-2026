@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-// Mantenemos Deck.gl listo por si lo necesitamos para los POIs (Fase 2)
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import { PROJECTS, STYLES } from '../../config/theme';
 
@@ -15,11 +14,11 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
   
   const [buildingData, setBuildingData] = useState(null);
   const [hoverInfo, setHoverInfo] = useState(null);
-  const [mapLoaded, setMapLoaded] = useState(false); // <-- Estado para saber cuando el mapa base esta listo
+  const [mapLoaded, setMapLoaded] = useState(false); 
 
   const fontBody = getCssVar('--fuente-ui') || 'Inter, sans-serif';
 
-  // 1. Fetch de datos desde Supabase
+  // Fetch de datos desde Supabase
   useEffect(() => {
     const fetchBuildings = async () => {
       try {
@@ -44,7 +43,7 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
     fetchBuildings();
   }, []);
 
-  // 2. Inicializacion de Mapbox: Topografia y Rios
+  // Inicializacion de Mapbox y Topografia Segmentada
   useEffect(() => {
     if (map.current) return;
 
@@ -58,7 +57,6 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
       antialias: true
     });
 
-    // Preparamos el canvas de Deck.gl vacio para la Fase 2 (Calles y POIs)
     overlay.current = new MapboxOverlay({
       interleaved: true,
       layers: []
@@ -66,8 +64,16 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
     map.current.addControl(overlay.current);
     map.current.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
-    map.current.on('load', () => {
-      // A. Topografia 3D Base
+    map.current.on('style.load', () => {
+      map.current.setPaintProperty('background', 'background-color', '#181b2b');
+
+      map.current.setFog({
+        'range': [0.5, 3],
+        'color': '#0d0f16', 
+        'high-color': '#12141E',
+        'horizon-blend': 0.2
+      });
+
       map.current.addSource('mapbox-dem', {
         'type': 'raster-dem',
         'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
@@ -76,7 +82,18 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
       });
       map.current.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
 
-      // B. El Rio (Con mas transparencia)
+      map.current.addLayer({
+        'id': 'hillshade-layer',
+        'type': 'hillshade',
+        'source': 'mapbox-dem',
+        'paint': {
+          'hillshade-exaggeration': 1.0,
+          'hillshade-shadow-color': '#05060a', 
+          'hillshade-highlight-color': 'rgba(86, 224, 122, 0.15)', 
+          'hillshade-accent-color': '#12141E'
+        }
+      });
+
       map.current.addLayer({
         'id': 'water-layer',
         'type': 'fill',
@@ -84,93 +101,98 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
         'source-layer': 'water',
         'paint': {
           'fill-color': '#47d3f4', 
-          'fill-opacity': 0.25 // <-- Ajuste de opacidad al azul
+          'fill-opacity': 0.25 
         }
       });
 
-      // C. Curvas de Nivel Holográficas (Con mas transparencia)
       const holoColor = '#56e07a'; 
       map.current.addSource('mapbox-terrain-vector', {
         type: 'vector',
         url: 'mapbox://mapbox.mapbox-terrain-v2'
       });
       
-      // Resplandor (Blur)
+      // Curvas de Nivel Inferiores (< 220m)
       map.current.addLayer({
-        'id': 'contour-glow',
+        'id': 'contour-glow-base',
         'type': 'line',
         'source': 'mapbox-terrain-vector',
         'source-layer': 'contour',
+        'filter': ['<', ['get', 'ele'], 220],
         'paint': {
           'line-color': holoColor,
           'line-width': 4,
-          'line-blur': 6,
-          'line-opacity': 0.15 // <-- Ajuste de opacidad al resplandor verde
+          'line-blur': 4,
+          'line-opacity': 0.15
         }
       });
       
-      // Linea Central Solida
       map.current.addLayer({
-        'id': 'contour-core',
+        'id': 'contour-core-base',
         'type': 'line',
         'source': 'mapbox-terrain-vector',
         'source-layer': 'contour',
+        'filter': ['<', ['get', 'ele'], 220],
         'paint': {
           'line-color': holoColor,
-          'line-width': 1,
-          'line-opacity': 0.35 // <-- Ajuste de opacidad al verde solido
+          'line-width': 1.0,
+          'line-opacity': 0.25
         }
       });
 
-      // Avisamos a React que el relieve ya esta dibujado
+      // Curvas de Nivel Superiores (>= 220m)
+      map.current.addLayer({
+        'id': 'contour-core-top',
+        'type': 'line',
+        'source': 'mapbox-terrain-vector',
+        'source-layer': 'contour',
+        'filter': ['>=', ['get', 'ele'], 220],
+        'paint': {
+          'line-color': '#7a8b99',
+          'line-width': 0.8, 
+          'line-dasharray': [4, 3],
+          'line-opacity': 0.8 
+        }
+      });
+
       setMapLoaded(true);
     });
   }, []);
 
-  // 3. Renderizado de Edificios 3D (Cambiado a motor NATIVO de Mapbox)
+  // Renderizado de Edificios 3D ajustado a brincos estadisticos
   useEffect(() => {
     if (!buildingData || !mapLoaded || !map.current) return;
 
-    // Si la capa ya existe, solo actualizamos los datos (por si refrescas)
     if (map.current.getSource('digital-twin-source')) {
       map.current.getSource('digital-twin-source').setData(buildingData);
     } else {
-      // Le pasamos el GeoJSON de Supabase directamente al mapa base
       map.current.addSource('digital-twin-source', {
         type: 'geojson',
         data: buildingData
       });
 
-      // Dibujamos las extrusiones. Mapbox ancla esto al piso 3D automaticamente
       map.current.addLayer({
         'id': 'digital-twin-buildings',
         'type': 'fill-extrusion',
         'source': 'digital-twin-source',
         'paint': {
-          // Obligamos a leer la altura como numero
           'fill-extrusion-height': ['coalesce', ['to-number', ['get', 'inferred_height_m']], 9],
-          // Rampa de colores termica
           'fill-extrusion-color': [
             'step',
             ['coalesce', ['to-number', ['get', 'inferred_height_m']], 0],
-            '#23057b',     // < 20m
-            20, '#00e5ff', // 20m - 50m
-            50, '#ffeb3b', // 50m - 100m
-            100, '#ff8c00', // 100m - 200m
-            200, '#f30a41'  // > 200m
+            '#2a065c',     // Tejido Base (< 25m)
+            25, '#4c72ea', // Media Densidad (25m - 65m)
+            65, '#f24c3b'  // Alta Densidad (> 65m)
           ],
           'fill-extrusion-opacity': 0.85
         }
       });
 
-      // Reconstruccion del Tooltip para que funcione con Mapbox
       map.current.on('mousemove', 'digital-twin-buildings', (e) => {
         if (e.features.length > 0) {
           map.current.getCanvas().style.cursor = 'pointer';
           setHoverInfo({
             x: e.point.x,
             y: e.point.y,
-            // Replicamos la estructura que esperaba tu UI anterior
             object: { properties: e.features[0].properties }
           });
         }
@@ -189,7 +211,6 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
 
-      {/* Tooltip Dinamico */}
       {hoverInfo && hoverInfo.object && (
         <div style={{
           position: 'absolute', zIndex: 1, pointerEvents: 'none',
@@ -213,29 +234,20 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
         </div>
       )}
 
-      {/* Leyenda 3D Heatmap */}
       <div style={{...STYLES.legendBox, backgroundColor: 'rgba(13, 15, 22, 0.85)', border: '1px solid #333', width: '160px'}}>
         <h4 style={{...STYLES.legendTitle, color: '#fff', marginBottom: '8px'}}>Intensidad Constructiva</h4>
         
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc' }}>
-          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'rgb(243, 10, 65)', marginRight: '8px' }}></div>
-          &gt; 200m (Megatorres)
+          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#f24c3b', marginRight: '8px' }}></div>
+          &gt; 65m (Alta Densidad)
         </div>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc' }}>
-          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'rgb(255, 140, 0)', marginRight: '8px' }}></div>
-          100m - 200m (Rascacielos)
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc' }}>
-          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'rgb(255, 235, 59)', marginRight: '8px' }}></div>
-          50m - 100m (Alta Dens)
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px', fontSize: '9px', color: '#ccc' }}>
-          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'rgb(0, 229, 255)', marginRight: '8px' }}></div>
-          20m - 50m (Media Dens)
+          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#4c72ea', marginRight: '8px' }}></div>
+          25m - 65m (Media Dens)
         </div>
         <div style={{ display: 'flex', alignItems: 'center', fontSize: '9px', color: '#ccc' }}>
-          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'rgb(35, 5, 123)', marginRight: '8px' }}></div>
-          &lt; 20m (Tejido Base)
+          <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#2a065c', marginRight: '8px' }}></div>
+          &lt; 25m (Tejido Base)
         </div>
       </div>
     </div>
