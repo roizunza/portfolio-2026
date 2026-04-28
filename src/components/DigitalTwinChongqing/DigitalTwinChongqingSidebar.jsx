@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PROJECTS } from '../../config/theme';
+import { FaGithub } from 'react-icons/fa';
 
 const THEME = PROJECTS.digitaltwin; 
 
@@ -42,6 +43,10 @@ export default function DigitalTwinSidebar() {
     setSectionsState(prevState => ({ ...prevState, [section]: !prevState[section] }));
   };
 
+  const handleRepoClick = () => {
+    window.open('https://github.com/roizunza/urban-data-pipelines/tree/main/03_DigitaltwinChongqing', '_blank');
+  };
+
   const s = {
     container: { display: 'flex', flexDirection: 'column', height: '100%', color: 'var(--texto-secundario)' },
     headerBox: { backgroundColor: 'var(--fondo-app)', padding: '15px 15px', borderBottom: '1px solid var(--borde-sutil)', flexShrink: 0 },
@@ -52,7 +57,47 @@ export default function DigitalTwinSidebar() {
     contentBody: { flex: 1, padding: '15px 15px', overflowY: 'auto', paddingRight: '5px', scrollbarWidth: 'thin', scrollbarColor: '#424242 transparent' },
     bodyText: { fontFamily: 'var(--fuente-ui)', fontSize: '12px', fontWeight: '400', lineHeight: '1.4', color: '#E0E0E0', marginBottom: '8px' },
     listItem: { marginBottom: '8px' },
-    listKey: { color: '#FFFFFF', fontWeight: '500' }
+    listKey: { color: '#FFFFFF', fontWeight: '500' },
+    repoBtn: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px',
+      backgroundColor: 'var(--azul-electrico)',
+      color: '#FFFFFF',
+      fontFamily: 'var(--fuente-datos)',
+      fontSize: '12px',
+      fontWeight: '700',
+      padding: '12px 15px',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      width: '100%',
+      marginTop: '25px',
+      marginBottom: '15px',
+      transition: 'opacity 0.3s'
+    },
+    badge: {
+      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+      border: '1px solid rgba(255, 255, 255, 0.15)',
+      padding: '3px 8px',
+      borderRadius: '4px',
+      fontSize: '10px',
+      fontFamily: 'var(--fuente-datos)',
+      color: '#A8B2C1',
+      display: 'inline-block',
+      marginRight: '6px',
+      marginBottom: '6px'
+    },
+    categoryLabel: {
+      color: '#FFFFFF',
+      fontSize: '10px',
+      fontWeight: '700',
+      fontFamily: 'var(--fuente-datos)',
+      marginBottom: '6px',
+      display: 'block',
+      marginTop: '8px'
+    }
   };
 
   return (
@@ -61,13 +106,14 @@ export default function DigitalTwinSidebar() {
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         .custom-scrollbar::-webkit-scrollbar { width: 2px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #424242; border-radius: 2px; }
+        .btn-repo:hover { opacity: 0.85; }
       `}</style>
 
       <div style={s.headerBox}>
-        <h2 style={s.subHeader}>INFERENCIA ESPACIAL</h2>
-        <h1 style={s.mainTitle}>DIGITAL TWIN</h1>
+        <h2 style={s.subHeader}>INFERENCIA ESPACIAL EN CHONGQING</h2>
+        <h1 style={s.mainTitle}>GEMELO DIGITAL 2.5D</h1>
         <div style={s.authorBox}>
-          <p style={s.authorRole}>Desarrollo de Geointeligencia</p>
+          <p style={s.authorRole}>Modelación de escala urbana inferida a partir de variables urbanas</p>
         </div>
       </div>
 
@@ -125,10 +171,37 @@ export default function DigitalTwinSidebar() {
         </AccordionSection>
 
         <AccordionSection title="Stack" tag="TECNOLOGÍAS" isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
-          <p style={s.bodyText}>
-            Python (GeoPandas, OSMnx, Rasterio, Earth Engine API), Evaluaciones Multicriterio Espaciales (MCDA), QGIS, React, Mapbox GL JS / Deck.gl, Recharts, Supabase.
-          </p>
+          <div style={{ marginBottom: '12px' }}>
+            <span style={s.categoryLabel}>// BACKEND & DATA</span>
+            <div>
+              <span style={s.badge}>Python</span>
+              <span style={s.badge}>GeoPandas</span>
+              <span style={s.badge}>OSMnx</span>
+              <span style={s.badge}>Rasterio</span>
+            </div>
+          </div>
+          <div style={{ marginBottom: '12px' }}>
+            <span style={s.categoryLabel}>// GEOSPATIAL</span>
+            <div>
+              <span style={s.badge}>Earth Engine API</span>
+              <span style={s.badge}>QGIS</span>
+              <span style={s.badge}>MCDA</span>
+            </div>
+          </div>
+          <div>
+            <span style={s.categoryLabel}>// FRONTEND & CLOUD</span>
+            <div>
+              <span style={s.badge}>React</span>
+              <span style={s.badge}>Mapbox GL JS</span>
+              <span style={s.badge}>Recharts</span>
+              <span style={s.badge}>Supabase</span>
+            </div>
+          </div>
         </AccordionSection>
+        
+        <button className="btn-repo" style={s.repoBtn} onClick={handleRepoClick}>
+          <FaGithub size={16} /> Ver análisis en GitHub
+        </button>
         
       </div>
     </div>
