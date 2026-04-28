@@ -169,7 +169,7 @@ export default function AlgoritmoInmobiliarioMap({ t: propT }) {
     } else if (buildingMetric === 'viirs') {
       buildingColor = [
         'step', ['to-number', ['get', 'val_viirs'], 0],
-        '#392f42', 28, '#43255f', 38, '#00cec3', 55, '#da7ec3'
+        '#052785', 28, '#1930b1', 38, '#185fc9', 55, '#05b7c4'
       ];
     }
 
@@ -320,16 +320,16 @@ export default function AlgoritmoInmobiliarioMap({ t: propT }) {
           {(showBuildings && buildingMetric === 'viirs') && (
             <div className="dtc-section-content">
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#da7ec3', boxShadow: '0 0 5px #f0fcef' }}></div> {tMap.radMaxima}
+                <div className="dtc-swatch" style={{ background: '#05b7c4', boxShadow: '0 0 5px #f0fcef' }}></div> {tMap.radMaxima}
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#00cec3' }}></div> {tMap.actividadAlta}
+                <div className="dtc-swatch" style={{ background: '#185fc9' }}></div> {tMap.actividadAlta}
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#43255f' }}></div> {tMap.actividadMedia}
+                <div className="dtc-swatch" style={{ background: '#1930b1' }}></div> {tMap.actividadMedia}
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#392f42' }}></div> {tMap.actividadBaja}
+                <div className="dtc-swatch" style={{ background: '#052785' }}></div> {tMap.actividadBaja}
               </div>
             </div>
           )}
