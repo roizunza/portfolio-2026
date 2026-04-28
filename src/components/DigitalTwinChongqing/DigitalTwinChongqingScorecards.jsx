@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import { PROJECTS } from '../../config/theme';
 
 const ScorecardItem = ({ number, title, subtitle, titleColor, styles, numberColor }) => (
   <div style={styles.card}>
@@ -8,27 +9,19 @@ const ScorecardItem = ({ number, title, subtitle, titleColor, styles, numberColo
   </div>
 );
 
-const DigitalTwinScorecards = () => {
+const DigitalTwinScorecards = ({ t }) => {
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => setIsMounted(true), []);
 
-    // Paleta de colores del indice VIIRS (Luminiscencia)
-    const PALETTE_VIIRS = {
-      baja: '#052785',
-      media: '#1930b1',
-      alta: '#185fc9',
-      maxima: '#05b7c4',
-      blanco: '#ffffff'
-    };
+    // Inyección de variables globales de color
+    const RAMP = PROJECTS.digitaltwin.ramp;
 
     const kpis = useMemo(() => {
-        // Se utilizan los valores estaticos de la evaluacion final 
-        // para evitar un query pesado de 16,606 geometrias en el render inicial.
         return {
             volumen: "16,606",
-            promedio: "6",
-            pico: "110",
-            radiancia: "36.39"
+            moda: "3",
+            supertalls: "14",
+            viirs: "92%"
         };
     }, []);
 
@@ -39,55 +32,51 @@ const DigitalTwinScorecards = () => {
         backgroundColor: 'var(--fondo-panel)', 
         borderRadius: '8px', padding: '5px',
         border: '1px solid var(--borde-sutil)',
-        backdropFilter: 'blur(10px)'
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)'
       },
       number: {
-        color: PALETTE_VIIRS.maxima, 
         fontFamily: 'var(--fuente-datos)', fontSize: '22px', fontWeight: '700', marginBottom: '4px', lineHeight: '1'
       },
       title: {
         fontFamily: 'var(--fuente-ui)', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px',
-        color: PALETTE_VIIRS.blanco
+        color: '#ffffff'
       },
       subtitle: {
         color: 'var(--texto-secundario)', fontFamily: 'var(--fuente-ui)', fontSize: '8px', fontWeight: '500', lineHeight: '1.2', opacity: 0.8
       }
     };
 
-    if (!isMounted) return null;
+    if (!isMounted || !t || !t.scorecards) return null;
 
     return (
       <React.Fragment>
           <ScorecardItem 
             number={kpis.volumen}
-            title="Volumen Modelado"
-            subtitle="Polígonos codificados"
-            titleColor={PALETTE_VIIRS.blanco}
-            numberColor={PALETTE_VIIRS.maxima}
+            title={t.scorecards.volumen}
+            subtitle={t.scorecards.volumen_sub}
+            numberColor={RAMP.height.top} // Amarillo
             styles={s}
           />
           <ScorecardItem 
-            number={kpis.promedio}
-            title="Escala Promedio"
-            subtitle="Niveles inferidos"
-            titleColor={PALETTE_VIIRS.blanco}
-            numberColor={PALETTE_VIIRS.alta}
+            number={kpis.moda}
+            title={t.scorecards.moda}
+            subtitle={t.scorecards.moda_sub}
+            numberColor={RAMP.height.alta} // Cian
             styles={s}
           />
           <ScorecardItem 
-            number={kpis.pico}
-            title="Pico de Densidad"
-            subtitle="Niveles (Supertall)"
-            titleColor={PALETTE_VIIRS.blanco}
-            numberColor={PALETTE_VIIRS.media}
+            number={kpis.supertalls}
+            title={t.scorecards.supertalls}
+            subtitle={t.scorecards.supertalls_sub}
+            numberColor={RAMP.viirs.alta} // Magenta
             styles={s}
           />
           <ScorecardItem 
-            number={kpis.radiancia}
-            title="Validación VIIRS"
-            subtitle="Promedio Radiancia Top 10%"
-            titleColor={PALETTE_VIIRS.blanco}
-            numberColor={PALETTE_VIIRS.baja}
+            number={kpis.viirs}
+            title={t.scorecards.viirs}
+            subtitle={t.scorecards.viirs_sub}
+            numberColor={RAMP.viirs.maxima} // Verde tóxico
             styles={s}
           />
       </React.Fragment>

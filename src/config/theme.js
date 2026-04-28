@@ -17,10 +17,28 @@ export const PROJECTS = {
     ramp: { manglar: '#15BE80', inversion: '#a7a469', presion: '#f30a41', riesgo: '#f4976c' }
   },
   digitaltwin: {
-    title: 'Digital Twin Chongqing',
-    color: '#ff5a60', 
-    ramp: { step1: '#23057b', step2: '#664daf', step3: '#6ab515', step4: '#a44113', step5: '#f30a41' }
-  },
+    title: 'Gemelo Digital 2.5D',
+    color: '#fcff30', 
+    ramp: {
+      height: {
+        base: '#162238',
+        media: '#0d5c80',
+        alta: '#00e1ff',
+        top: '#fcff30'
+      },
+      viirs: {
+        baja: '#160824',
+        media: '#6b127b',
+        alta: '#de0082',
+        maxima: '#d1e429'
+      },
+      mca: {
+        nodos: '#ff5a60',
+        pois: '#00e1ff',
+        vias: '#ffffff'
+      }
+    } // <--- Faltaba cerrar el objeto 'ramp' aquí...
+  },  // <--- ... Y FALTABA CERRAR EL OBJETO 'digitaltwin' AQUÍ CON SU COMA.
   factorEsfuerzo: {
     title: 'Factor Esfuerzo',
     color: '#00e5ff', 

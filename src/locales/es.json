@@ -162,27 +162,39 @@
   "digitaltwin": {
     "map": {
       "simbologia": "SIMBOLOGÍA",
+      "niveles": "Niveles",
+      "altura": "Altura",
       "mapaBase": "Mapa Base",
-      "rios": "Río Yangtze y Jialing",
-      "relieve": "Relieve 3D (Hillshade)",
-      "curvas": "Curvas de Nivel (Gris)",
+      "rios": "Ríos",
+      "relieve": "Relieve",
+      "curvas": "Curvas de Nivel",
       "variablesMca": "Variables del MCA",
       "nodosTransporte": "Nodos de Transporte",
       "poisEstrategicos": "POIs Estratégicos",
       "jerarquiaVial": "Jerarquía Vial",
-      "escalaInferida": "Escala de Construcción Inferida",
+      "escalaInferida": "ESCALA",
+      "escalaSub": "Inferencia 2.5D",
       "rascacielos": "Rascacielos",
       "altaDensidad": "Alta Densidad",
-      "mediaDensidad": "Media Densidad",
+      "mediaDensidad": "Densidad Media",
       "tejidoBase": "Tejido Base",
-      "validacionSatelital": "VIIRS índice de luminiscencia nocturna",
-      "radMaxima": "Radiación Máxima",
+      "validacionSatelital": "VIIRS",
+      "viirsSub": "Luminiscencia",
+      "radMaxima": "Radiancia Máxima",
       "actividadAlta": "Actividad Alta",
       "actividadMedia": "Actividad Media",
-      "actividadBaja": "Actividad Baja",
-      "niveles": "Niveles",
-      "altura": "Altura"
-    }  
+      "actividadBaja": "Actividad Baja"
+    }, 
+    "scorecards": {
+      "volumen": "VOLUMEN MODELADO",
+      "volumen_sub": "Polígonos codificados",
+      "moda": "ESCALA PREDOMINANTE",
+      "moda_sub": "Moda de niveles inferidos",
+      "supertalls": "SUPERTALLS",
+      "supertalls_sub": "Edificios con >80 niveles",
+      "viirs": "VALIDACIÓN VIIRS",
+      "viirs_sub": "Compatibilidad de densidad"
+    }
   },
   "factorEsfuerzo": {
     "fileName": "04_factor_esfuerzo_turistico",

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useLanguage } from '../../context/LanguageContext.jsx';
+import { PROJECTS } from '../../config/theme';
 
 import roadsUrl from '../../data/roads.geojson?url';
 import poisUrl from '../../data/pois.geojson?url';
@@ -12,10 +13,10 @@ mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 export default function DigitalTwinChongqingMap({ t: propT }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
+  const RAMP = PROJECTS.digitaltwin.ramp;
   
   const { t: fullT } = useLanguage();
-  // Forzamos a leer el DigitalTwin que acabas de crear, o usamos el fallback
-  const tMap = fullT?.digitaltwin.map || propT?.map; 
+  const tMap = fullT?.digitaltwin?.map || propT?.map; 
   
   const [buildingData, setBuildingData] = useState(null);
   const [hoverInfo, setHoverInfo] = useState(null);
@@ -27,6 +28,13 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
   const [buildingMetric, setBuildingMetric] = useState('height'); 
   
   const [is3DView, setIs3DView] = useState(true);
+
+  const CAMERA = {
+    center: [106.5520, 29.5520],
+    zoom: 12.8,
+    pitch3D: 65,
+    bearing3D: -35
+  };
 
   useEffect(() => {
     const fetchBuildings = async () => {
@@ -49,10 +57,10 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
-      center: [106.5516, 29.5630], 
-      zoom: 13.5, 
-      pitch: 60, 
-      bearing: -20, 
+      center: CAMERA.center, 
+      zoom: CAMERA.zoom, 
+      pitch: CAMERA.pitch3D, 
+      bearing: CAMERA.bearing3D, 
       antialias: true
     });
 
@@ -69,28 +77,28 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
 
       map.current.addLayer({
         'id': 'water-layer', 'type': 'fill', 'source': 'composite', 'source-layer': 'water',
-        'paint': { 'fill-color': '#47d3f4', 'fill-opacity': 0.10 }
+        'paint': { 'fill-color': '#090e17', 'fill-opacity': 0.80 }
       });
 
       map.current.addSource('mapbox-terrain-vector', { type: 'vector', url: 'mapbox://mapbox.mapbox-terrain-v2' });
       map.current.addLayer({
         'id': 'contour-base', 'type': 'line', 'source': 'mapbox-terrain-vector', 'source-layer': 'contour',
         'filter': ['<', ['get', 'ele'], 220],
-        'paint': { 'line-color': '#666666', 'line-width': 0.8, 'line-opacity': 0.5 }
+        'paint': { 'line-color': '#3b4252', 'line-width': 0.8, 'line-opacity': 0.2 }
       });
       map.current.addLayer({
         'id': 'contour-top', 'type': 'line', 'source': 'mapbox-terrain-vector', 'source-layer': 'contour',
         'filter': ['>=', ['get', 'ele'], 220],
-        'paint': { 'line-color': '#888888', 'line-width': 0.6, 'line-dasharray': [2, 4], 'line-opacity': 0.7 }
+        'paint': { 'line-color': '#3b4252', 'line-width': 0.6, 'line-dasharray': [2, 4], 'line-opacity': 0.2 }
       });
 
       map.current.addSource('roads-source', { type: 'geojson', data: roadsUrl });
       map.current.addLayer({
         'id': 'roads-layer', 'type': 'line', 'source': 'roads-source',
         'paint': {
-          'line-color': '#ffffff',
+          'line-color': RAMP.mca.vias,
           'line-width': ['match', ['get', 'highway'], 'primary', 1.8, 'trunk', 1.8, 'secondary', 1.0, 0.4],
-          'line-opacity': ['match', ['get', 'highway'], 'primary', 0.9, 'trunk', 0.9, 'secondary', 0.7, 0.3]
+          'line-opacity': ['match', ['get', 'highway'], 'primary', 0.4, 'trunk', 0.4, 'secondary', 0.2, 0.1]
         }
       });
 
@@ -101,7 +109,7 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
           'circle-color': 'transparent', 
           'circle-radius': 5,
           'circle-stroke-width': 2,
-          'circle-stroke-color': '#ff0800' 
+          'circle-stroke-color': RAMP.mca.nodos 
         }
       });
 
@@ -109,7 +117,7 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
       map.current.addLayer({
         'id': 'pois-core', 'type': 'circle', 'source': 'pois-source',
         'paint': {
-          'circle-color': '#d8f725',
+          'circle-color': RAMP.mca.pois,
           'circle-radius': 4.5, 
           'circle-stroke-width': 0,
           'circle-blur': 0.4
@@ -126,14 +134,13 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
     if (!map.current.getSource('digital-twin-source')) {
       map.current.addSource('digital-twin-source', { type: 'geojson', data: buildingData });
       
-      // Inyectamos la expresion de color matematica directa en el render inicial
       map.current.addLayer({
         'id': 'digital-twin-buildings', 'type': 'fill-extrusion', 'source': 'digital-twin-source',
         'paint': {
           'fill-extrusion-height': ['to-number', ['get', 'inferred_height_m'], 9],
           'fill-extrusion-color': [
             'step', ['to-number', ['get', 'inferred_height_m'], 0],
-            '#051447', 30, '#024b45', 90, '#0db4ac', 150, '#04da88'  
+            RAMP.height.base, 30, RAMP.height.media, 90, RAMP.height.alta, 150, RAMP.height.top  
           ],
           'fill-extrusion-opacity': 0.9
         }
@@ -159,22 +166,20 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
     if (!map.current || !mapLoaded || !map.current.getLayer('digital-twin-buildings')) return;
 
     let buildingColor;
-    let buildingOpacity = 0.9;
 
     if (buildingMetric === 'height') {
       buildingColor = [
         'step', ['to-number', ['get', 'inferred_height_m'], 0],
-        '#051447', 30, '#024b45', 90, '#0db4ac', 150, '#04da88'  
+        RAMP.height.base, 30, RAMP.height.media, 90, RAMP.height.alta, 150, RAMP.height.top  
       ];
     } else if (buildingMetric === 'viirs') {
       buildingColor = [
         'step', ['to-number', ['get', 'val_viirs'], 0],
-        '#052785', 28, '#1930b1', 38, '#185fc9', 55, '#05b7c4'
+        RAMP.viirs.baja, 28, RAMP.viirs.media, 38, RAMP.viirs.alta, 55, RAMP.viirs.maxima
       ];
     }
 
     map.current.setPaintProperty('digital-twin-buildings', 'fill-extrusion-color', buildingColor);
-    map.current.setPaintProperty('digital-twin-buildings', 'fill-extrusion-opacity', buildingOpacity);
   }, [buildingMetric, mapLoaded]);
 
   useEffect(() => {
@@ -196,9 +201,9 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
   const handleZoomOut = () => map.current?.zoomOut({ duration: 400 });
   const handleCameraToggle = () => {
     if (is3DView) {
-      map.current?.easeTo({ pitch: 0, bearing: 0, duration: 1200 });
+      map.current?.easeTo({ pitch: 0, bearing: 0, center: CAMERA.center, zoom: CAMERA.zoom, duration: 1200 });
     } else {
-      map.current?.easeTo({ pitch: 60, bearing: -20, duration: 1200 });
+      map.current?.easeTo({ pitch: CAMERA.pitch3D, bearing: CAMERA.bearing3D, center: CAMERA.center, zoom: CAMERA.zoom, duration: 1200 });
     }
     setIs3DView(!is3DView);
   };
@@ -233,13 +238,13 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
         </button>
       </div>
 
-      <div className="dtc-legend dtc-panel-glass">
+      <div className="dtc-legend">
         
-        <h3 className="dtc-legend-title">{tMap.simbologia || "SIMBOLOGÍA"}</h3>
+        <h3 className="dtc-legend-title">{tMap.simbologia}</h3>
 
         <div>
           <div className="dtc-section-header" onClick={() => setShowBaseMap(!showBaseMap)}>
-            <h4 className="dtc-section-title">{tMap.mapaBase || "Mapa Base"}</h4>
+            <h4 className="dtc-section-title">{tMap.mapaBase}</h4>
             <span className={`dtc-status-label ${showBaseMap ? 'on' : 'off'}`}>{showBaseMap ? 'ON' : 'OFF'}</span>
           </div>
           {showBaseMap && (
@@ -253,19 +258,19 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
 
         <div>
           <div className="dtc-section-header" onClick={() => setShowMCA(!showMCA)}>
-            <h4 className="dtc-section-title">{tMap.variablesMca || "Variables del MCA"}</h4>
+            <h4 className="dtc-section-title">{tMap.variablesMca}</h4>
             <span className={`dtc-status-label ${showMCA ? 'on' : 'off'}`}>{showMCA ? 'ON' : 'OFF'}</span>
           </div>
           {showMCA && (
             <div className="dtc-section-content">
               <div className="dtc-legend-item">
-                <div className="dtc-swatch ring" style={{ borderColor: '#ff0800' }}></div> {tMap.nodosTransporte}
+                <div className="dtc-swatch" style={{ width: '10px', height: '10px', borderRadius: '50%', border: `2px solid ${RAMP.mca.nodos}`, backgroundColor: 'transparent' }}></div> {tMap.nodosTransporte}
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch circle" style={{ background: '#d8f725', filter: 'blur(1px)' }}></div> {tMap.poisEstrategicos}
+                <div className="dtc-swatch" style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: RAMP.mca.pois, boxShadow: `0 0 4px ${RAMP.mca.pois}` }}></div> {tMap.poisEstrategicos}
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch line"></div> {tMap.jerarquiaVial}
+                <div className="dtc-swatch" style={{ width: '16px', height: '2px', backgroundColor: RAMP.mca.vias, opacity: 0.4 }}></div> {tMap.jerarquiaVial}
               </div>
             </div>
           )}
@@ -280,7 +285,9 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
               setShowBuildings(true);
             }
           }}>
-            <h4 className="dtc-section-title">{tMap.escalaInferida || "Escala de Construcción"}</h4>
+            <h4 className="dtc-section-title">
+              {tMap.escalaInferida}<br/><span style={{ fontWeight: '400', opacity: 0.7 }}>{tMap.escalaSub}</span>
+            </h4>
             <span className={`dtc-status-label ${showBuildings && buildingMetric === 'height' ? 'on' : 'off'}`}>
               {showBuildings && buildingMetric === 'height' ? 'ON' : 'OFF'}
             </span>
@@ -288,16 +295,16 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
           {(showBuildings && buildingMetric === 'height') && (
             <div className="dtc-section-content">
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#04da88', boxShadow: '0 0 4px #04da88' }}></div> &gt; 150m ({tMap.rascacielos})
+                <div className="dtc-swatch" style={{ background: RAMP.height.top, boxShadow: `0 0 4px ${RAMP.height.top}` }}></div> &gt; 150m ({tMap.rascacielos})
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#0db4ac' }}></div> 90m - 150m ({tMap.altaDensidad})
+                <div className="dtc-swatch" style={{ background: RAMP.height.alta }}></div> 90m - 150m ({tMap.altaDensidad})
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#024b45' }}></div> 30m - 90m ({tMap.mediaDensidad})
+                <div className="dtc-swatch" style={{ background: RAMP.height.media }}></div> 30m - 90m ({tMap.mediaDensidad})
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#051447' }}></div> &lt; 30m ({tMap.tejidoBase})
+                <div className="dtc-swatch" style={{ background: RAMP.height.base }}></div> &lt; 30m ({tMap.tejidoBase})
               </div>
             </div>
           )}
@@ -312,7 +319,9 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
               setShowBuildings(true);
             }
           }}>
-            <h4 className="dtc-section-title">{tMap.validacionSatelital || "VIIRS Luminiscencia"}</h4>
+            <h4 className="dtc-section-title">
+              {tMap.validacionSatelital}<br/><span style={{ fontWeight: '400', opacity: 0.7 }}>{tMap.viirsSub}</span>
+            </h4>
             <span className={`dtc-status-label ${showBuildings && buildingMetric === 'viirs' ? 'on' : 'off'}`}>
               {showBuildings && buildingMetric === 'viirs' ? 'ON' : 'OFF'}
             </span>
@@ -320,16 +329,16 @@ export default function DigitalTwinChongqingMap({ t: propT }) {
           {(showBuildings && buildingMetric === 'viirs') && (
             <div className="dtc-section-content">
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#05b7c4', boxShadow: '0 0 5px #f0fcef' }}></div> {tMap.radMaxima}
+                <div className="dtc-swatch" style={{ background: RAMP.viirs.maxima, boxShadow: `0 0 5px ${RAMP.viirs.maxima}` }}></div> {tMap.radMaxima}
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#185fc9' }}></div> {tMap.actividadAlta}
+                <div className="dtc-swatch" style={{ background: RAMP.viirs.alta }}></div> {tMap.actividadAlta}
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#1930b1' }}></div> {tMap.actividadMedia}
+                <div className="dtc-swatch" style={{ background: RAMP.viirs.media }}></div> {tMap.actividadMedia}
               </div>
               <div className="dtc-legend-item">
-                <div className="dtc-swatch" style={{ background: '#052785' }}></div> {tMap.actividadBaja}
+                <div className="dtc-swatch" style={{ background: RAMP.viirs.baja }}></div> {tMap.actividadBaja}
               </div>
             </div>
           )}

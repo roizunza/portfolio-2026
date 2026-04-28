@@ -14,14 +14,11 @@
   --borde-sutil: rgba(255, 255, 255, 0.1);
   --controles-ventana: rgba(170, 170, 170, 0.6);
   
-  /* --- COLORES DE PROYECTOS (Identidad Visual Original) --- */
+  /* --- COLORES DE PROYECTOS (Identidad Visual) --- */
   --color-viaja: #a020f0;
   --color-vigilancia: #15be80;
-  --color-digitaltwin: #ff5a60;
+  --color-digitaltwin: #fcff30;
   --color-esfuerzo: #00e5ff;
-
-  /* Identidad Visual para Digital Twin Chongqing */
-  --dtc-accent: #00e5ff; /* Cyan base para UI */
 
   /* --- FUENTES --- */
   --fuente-ui: 'Inter', sans-serif;
@@ -54,6 +51,10 @@ body {
 @keyframes entradaSuave {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .cursor-terminal {
@@ -381,7 +382,6 @@ body {
 
 /* =========================================
    UI MAPA: DIGITAL TWIN CHONGQING
-   Copia fiel del diseño "Viaja Segura"
    ========================================= */
 .dtc-wrapper { position: relative; width: 100%; height: 100%; }
 
@@ -407,42 +407,117 @@ body {
 .dtc-tooltip-value { color: #fff; font-weight: bold; font-family: var(--fuente-datos); }
 
 .dtc-nav-controls {
-  position: absolute; bottom: 25px; right: 25px;
-  width: 40px; display: flex; flex-direction: column; gap: 6px; z-index: 100;
+  position: absolute; 
+  bottom: 10px; 
+  right: 10px;
+  width: 32px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 6px; 
+  z-index: 100;
 }
-.dtc-nav-btn {
-  width: 100%; height: 28px; 
-  background-color: rgba(0, 0, 0, 0.6); color: #00e5ff;
-  border: 1px solid rgba(0, 229, 255, 0.4); border-radius: 3px; cursor: pointer;
-  font-size: 16px; display: flex; align-items: center; justify-content: center; 
-  transition: all 0.2s ease;
-}
-.dtc-nav-btn.text { font-size: 9px; font-weight: 700; font-family: var(--fuente-datos); }
-.dtc-nav-btn:hover { background-color: rgba(0, 229, 255, 0.2); border-color: rgba(0, 229, 255, 0.8); }
 
-.dtc-legend {
-  position: absolute; top: 25px; left: 25px;
-  width: 260px; max-height: calc(100vh - 120px); overflow-y: auto;
-  display: flex; flex-direction: column; gap: 15px; z-index: 100;
+.dtc-nav-btn {
+  width: 100%; 
+  height: 32px; 
+  background-color: rgba(37, 41, 62, 0.5); 
+  color: #00e1ff;
+  border: 1px solid rgba(255,255,255,0.1); 
+  border-radius: 6px; 
+  cursor: pointer;
+  font-size: 16px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
-.dtc-legend-title { 
-  margin: 0; font-size: 12px; color: #fff; 
-  border-bottom: 1px solid #444; padding-bottom: 8px; 
-  text-align: left; 
-  letter-spacing: 1px; font-weight: 700;
+
+.dtc-nav-btn.text { 
+  font-size: 9px; 
+  font-weight: 700; 
   font-family: var(--fuente-datos); 
 }
 
-.dtc-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; }
-.dtc-section-title { margin: 0; font-size: 11px; color: #fff; font-weight: 500; font-family: var(--fuente-datos); }
-.dtc-status-label { font-size: 10px; font-weight: bold; font-family: var(--fuente-datos); }
-.dtc-status-label.on { color: #00e5ff; }
-.dtc-status-label.off { color: #555; }
+.dtc-nav-btn:hover { 
+  background-color: rgba(255, 255, 255, 0.1); 
+  border-color: rgba(255, 255, 255, 0.3); 
+}
+.dtc-legend {
+  position: absolute; 
+  top: 10px; 
+  left: 10px; 
+  width: 140px; 
+  background-color: rgba(37, 41, 62, 0.5); 
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; 
+  color: #FFFFFF; 
+  font-family: var(--fuente-datos); 
+  font-size: 9px;
+  z-index: 10; 
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px;
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px;
+}
 
-.dtc-section-content { padding-left: 8px; border-left: 1px solid rgba(255,255,255,0.1); }
-.dtc-legend-item { display: flex; align-items: center; margin-bottom: 4px; font-size: 10px; color: #ccc; font-family: var(--fuente-ui); }
+.dtc-legend-title { 
+  margin: 0 0 4px 0; 
+  font-size: 11px; 
+  font-weight: bold; 
+  color: #B0B3B8; 
+  letter-spacing: 0.5px;
+  border: none; 
+  padding: 0;
+  font-family: var(--fuente-datos);
+}
 
-.dtc-swatch { width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
-.dtc-swatch.ring { background: transparent; border: 2px solid; border-radius: 50%; width: 8px; height: 8px; }
-.dtc-swatch.circle { border-radius: 50%; width: 8px; height: 8px; }
-.dtc-swatch.line { width: 12px; height: 2px; background: #fff; }
+.dtc-section-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: flex-start; 
+  margin: 2px 0; 
+  cursor: pointer; 
+}
+
+.dtc-section-title { 
+  margin: 0; 
+  font-size: 9px; 
+  font-weight: 500; 
+  color: #B4A7AF; 
+  font-family: var(--fuente-datos); 
+  line-height: 1.2;
+}
+
+.dtc-status-label { 
+  font-size: 8px; 
+  font-weight: bold; 
+  font-family: var(--fuente-datos); 
+  padding-top: 1px; 
+}
+.dtc-status-label.on { color: #00e1ff; } 
+.dtc-status-label.off { color: #555555; }
+
+.dtc-section-content { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 2px; 
+  animation: fadeIn 0.3s ease; 
+}
+
+.dtc-legend-item { 
+  display: flex; 
+  align-items: center; 
+  margin-bottom: 2px; 
+  font-size: 9px; 
+  color: #FFFFFF; 
+  font-family: var(--fuente-datos); 
+}
+
+.dtc-swatch { width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; flex-shrink: 0; }
+.dtc-swatch.ring { background: transparent; border: 1.5px solid; border-radius: 50%; width: 6px; height: 6px; }
+.dtc-swatch.circle { border-radius: 50%; width: 6px; height: 6px; }
+.dtc-swatch.line { width: 10px; height: 2px; background: #fff; }

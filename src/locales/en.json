@@ -159,29 +159,85 @@
       "presion": "Pressured mangrove zone"
     }
   },
-    "digitaltwin": {
+  "digitaltwin": {
+    "fileName": "DigitalTwinChongqing",
+    "ejecutar": "VIEW MODEL",
+    "cardDescription1": "Development of a spatial inference engine to model the construction scale and density of Chongqing city.",
+    "cardDescription2": "The algorithm integrates topographic spatial friction and multi-criteria evaluation, validating its results with nighttime lights satellite spectrometry.",
+    "subtitle": "SPATIAL INFERENCE IN CHONGQING",
+    "title": "2.5D DIGITAL TWIN",
+    "role": "Urban scale modeling inferred from urban variables",
+    "proposito": {
+      "title": "The Purpose",
+      "tag": "CONTEXT",
+      "content1": "This project presents the first approach to developing a geointelligence tool based on Digital Twins. Its goal is to model a city's construction scale by inferring building heights, using strictly the urban variables of its environment.",
+      "content2": "Chongqing city was chosen for its development and testing; its extreme morphological and topographic characteristics work as the ideal environment, as these challenges are absorbed directly through the spatial variables that feed the algorithm. As a result of this simulation, a 2.5D model with more than 16,606 polygons was successfully encoded and extruded."
+    },
+    "scorecards": {
+      "volumen": "MODELED VOLUME",
+      "volumen_sub": "Encoded polygons",
+      "moda": "PREDOMINANT SCALE",
+      "moda_sub": "Mode of inferred levels",
+      "supertalls": "SUPERTALLS",
+      "supertalls_sub": "Buildings with >80 levels",
+      "viirs": "VIIRS VALIDATION",
+      "viirs_sub": "Density peak compatibility"
+    },
+    "metodologia": {
+      "title": "Methodology",
+      "tag": "ANALYTICAL PIPELINE",
+      "intro": "The inference engine executes the following logical flow:",
+      "item1Key": "1. Data Extraction:",
+      "item1Text": "Web scraping of base urban infrastructures (transport nodes, building footprints, road networks, and POIs).",
+      "item2Key": "2. Spatial Processing:",
+      "item2Text": "Execution of topological calculations, measuring real distance to main roads and topographic friction towards transit.",
+      "item3Key": "3. Multi-Criteria Analysis (MCDA):",
+      "item3Text": "Assignment of geometric scores and parametric normalization of variables.",
+      "item4Key": "4. Inference Engine:",
+      "item4Text": "Extrusion of architectural volumes dictated by theoretical real estate pressure.",
+      "item5Key": "5. Validation:",
+      "item5Text": "Download of VIIRS satellite spectrometry (nighttime lights) from Google Earth Engine as an empirical reference."
+    },
+    "insights": {
+      "title": "Insights",
+      "tag": "FINDINGS",
+      "item1Key": "Effectiveness proven from space:",
+      "item1Text": "Cross-referencing with VIIRS satellite radiance proves the model works. The areas where the tool mathematically predicted the highest vertical density coincide with the city's actual peaks of economic activity and light emissions.",
+      "item2Key": "Calibration to local reality:",
+      "item2Text": "The model was adjusted to the characteristic metrics of Chongqing's relief, a mountain city. Therefore, instead of using flat radii, topography was absorbed to calculate spatial friction using percentiles, contextually inferring vertical density."
+    },
+    "stack": {
+      "title": "Stack",
+      "tag": "TECHNOLOGIES",
+      "catGeospatial": "// GEOSPATIAL & DATABASE",
+      "catBackend": "// BACKEND & DATA",
+      "catFrontend": "// FRONTEND & CLOUD"
+    },
+    "btnRepo": "View analysis on GitHub",
     "map": {
       "simbologia": "SYMBOLOGY",
+      "niveles": "Levels",
+      "altura": "Height",
       "mapaBase": "Base Map",
-      "rios": "Yangtze and Jialing Rivers",
-      "relieve": "3D Relief (Hillshade)",
-      "curvas": "Contour Lines (Grey)",
-      "variablesMca": "MCA Variables",
+      "rios": "Rivers",
+      "relieve": "Terrain",
+      "curvas": "Contour Lines",
+      "variablesMca": "MCDA Variables",
       "nodosTransporte": "Transit Nodes",
       "poisEstrategicos": "Strategic POIs",
       "jerarquiaVial": "Road Hierarchy",
-      "escalaInferida": "Inferred Construction Scale",
+      "escalaInferida": "SCALE",
+      "escalaSub": "2.5D Inference",
       "rascacielos": "Skyscrapers",
       "altaDensidad": "High Density",
       "mediaDensidad": "Medium Density",
       "tejidoBase": "Base Fabric",
-      "validacionSatelital": "VIIRS Nighttime Luminiscence Index",
-      "radMaxima": "Maximum Radiation",
+      "validacionSatelital": "VIIRS",
+      "viirsSub": "Nighttime Lights",
+      "radMaxima": "Maximum Radiance",
       "actividadAlta": "High Activity",
       "actividadMedia": "Medium Activity",
-      "actividadBaja": "Low Activity",
-      "niveles": "Levels",
-      "altura": "Height"
+      "actividadBaja": "Low Activity"
     }
   },
   "factorEsfuerzo": {
