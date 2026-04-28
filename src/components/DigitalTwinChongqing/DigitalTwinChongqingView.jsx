@@ -1,14 +1,14 @@
 import React from 'react';
 import ProjectDashboardLayout from '../Shared/ProjectDashboardLayout.jsx';
-import Sidebar from './AlgoritmoInmobiliarioSidebar.jsx';
-import MapComponent from './AlgoritmoInmobiliarioMap.jsx';
-import Scorecards from './AlgoritmoInmobiliarioScorecards.jsx';
-import ChartsContainer from './AlgoritmoInmobiliarioGraphs.jsx';
+import Sidebar from './DigitalTwinChongqingSidebar.jsx';
+import MapComponent from './DigitalTwinChongqingMap.jsx';
+import Scorecards from './DigitalTwinChongqingScorecards.jsx';
+import ChartsContainer from './DigitalTwinChongqingGraphs.jsx';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 
-const AlgoritmoView = () => {
+const DigitalTwinChongqingView = () => {
   const { t: fullT } = useLanguage();
-  const t = fullT.algoritmo;
+  const t = fullT.digitaltwin;
 
   if (!t) return null;
 
@@ -22,4 +22,4 @@ const AlgoritmoView = () => {
   );
 };
 
-export default AlgoritmoView;
+export default DigitalTwinChongqingView;

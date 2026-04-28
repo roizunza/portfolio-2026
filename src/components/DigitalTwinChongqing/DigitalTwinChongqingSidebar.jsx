@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PROJECTS } from '../../config/theme';
 
-const THEME = PROJECTS.algoritmo;
+const THEME = PROJECTS.digitaltwin; 
 
 const AccordionSection = ({ title, tag, isOpen, onClick, children }) => {
   const s = {
@@ -35,10 +35,8 @@ const AccordionSection = ({ title, tag, isOpen, onClick, children }) => {
   );
 };
 
-export default function AlgoritmoInmobiliarioSidebar({ t }) {
+export default function DigitalTwinSidebar() {
   const [sectionsState, setSectionsState] = useState({ purpose: true, methodology: false, insights: false, stack: false });
-
-  if (!t) return null;
 
   const toggle = (section) => {
     setSectionsState(prevState => ({ ...prevState, [section]: !prevState[section] }));
@@ -66,53 +64,70 @@ export default function AlgoritmoInmobiliarioSidebar({ t }) {
       `}</style>
 
       <div style={s.headerBox}>
-        <h2 style={s.subHeader}>{t.subtitle}</h2>
-        <h1 style={s.mainTitle}>{t.title}</h1>
+        <h2 style={s.subHeader}>INFERENCIA ESPACIAL</h2>
+        <h1 style={s.mainTitle}>DIGITAL TWIN</h1>
         <div style={s.authorBox}>
-          <p style={s.authorRole}>{t.role}</p>
+          <p style={s.authorRole}>Desarrollo de Geointeligencia</p>
         </div>
       </div>
 
       <div style={s.contentBody} className="custom-scrollbar">
         
-        <AccordionSection title={t.proposito.title} tag={t.proposito.tag} isOpen={sectionsState.purpose} onClick={() => toggle('purpose')}>
-          <p style={s.bodyText}>{t.proposito.content}</p>
+        <AccordionSection title="El Propósito" tag="CONTEXTO" isOpen={sectionsState.purpose} onClick={() => toggle('purpose')}>
+          <p style={s.bodyText}>
+            El presente proyecto expone el primer acercamiento al desarrollo de una herramienta de geointeligencia basada en Gemelos Digitales (Digital Twins). Su objetivo es modelar la escala constructiva de una ciudad calculando la altura de los edificios por inferencia, utilizando estrictamente las variables urbanas de su entorno.
+          </p>
+          <p style={s.bodyText}>
+            Para su desarrollo y prueba se eligió la ciudad de Chongqing; sus características morfológicas y topográficas extremas funcionan como el entorno ideal, ya que estos desafíos se absorben directamente a través de las variables espaciales que alimentan el algoritmo. Como resultado de esta simulación, se logró codificar y extruir un modelo 2.5D con más de 16,000 polígonos.
+          </p>
         </AccordionSection>
 
-        <AccordionSection title={t.metodologia.title} tag={t.metodologia.tag} isOpen={sectionsState.methodology} onClick={() => toggle('methodology')}>
-          <p style={s.bodyText}>{t.metodologia.intro}</p>
+        <AccordionSection title="Metodología" tag="PIPELINE ANALÍTICO" isOpen={sectionsState.methodology} onClick={() => toggle('methodology')}>
+          <p style={s.bodyText}>El motor de inferencia ejecuta el siguiente flujo lógico:</p>
           <div style={s.listItem}>
             <p style={s.bodyText}>
-              <span style={s.listKey}>{t.metodologia.item1Key}</span> {t.metodologia.item1Text}
+              <span style={s.listKey}>1. Extracción de Datos:</span> Web scraping de infraestructuras urbanas base (nodos de transporte, huellas de edificación, vialidades y POIs).
             </p>
           </div>
           <div style={s.listItem}>
             <p style={s.bodyText}>
-              <span style={s.listKey}>{t.metodologia.item2Key}</span> {t.metodologia.item2Text}
+              <span style={s.listKey}>2. Procesamiento Espacial:</span> Ejecución de cálculos topológicos, midiendo la distancia real a vías principales y la fricción topográfica hacia el transporte.
             </p>
           </div>
           <div style={s.listItem}>
             <p style={s.bodyText}>
-              <span style={s.listKey}>{t.metodologia.item3Key}</span> {t.metodologia.item3Text}
+              <span style={s.listKey}>3. Análisis Multicriterio (MCDA):</span> Asignación de puntuaciones geométricas y normalización paramétrica de las variables.
+            </p>
+          </div>
+          <div style={s.listItem}>
+            <p style={s.bodyText}>
+              <span style={s.listKey}>4. Motor de Inferencia:</span> Extrusión de los volúmenes arquitectónicos dictados por la presión inmobiliaria teórica.
+            </p>
+          </div>
+          <div style={s.listItem}>
+            <p style={s.bodyText}>
+              <span style={s.listKey}>5. Comprobación:</span> Descarga de espectrometría satelital VIIRS (luces nocturnas) desde Google Earth Engine para tomar como referencia empírica.
             </p>
           </div>
         </AccordionSection>
 
-        <AccordionSection title={t.insights.title} tag={t.insights.tag} isOpen={sectionsState.insights} onClick={() => toggle('insights')}>
-          <p style={s.bodyText}>{t.insights.intro}</p>
-          <div style={{ marginBottom: '8px', borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>{t.insights.item1Key}</span> {t.insights.item1Text}</p>
+        <AccordionSection title="Insights" tag="HALLAZGOS" isOpen={sectionsState.insights} onClick={() => toggle('insights')}>
+          <div style={{ marginBottom: '12px', borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '8px' }}>
+            <p style={s.bodyText}>
+              <span style={s.listKey}>Efectividad comprobada desde el espacio:</span> El cruce con la radiancia satelital VIIRS demuestra que el modelo funciona. Las zonas donde la herramienta predijo matemáticamente la mayor densidad vertical coinciden con los picos reales de actividad económica y emisiones lumínicas de la ciudad.
+            </p>
           </div>
-          <div style={{ marginBottom: '8px', borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>{t.insights.item2Key}</span> {t.insights.item2Text}</p>
-          </div>
-          <div style={{ borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>{t.insights.item3Key}</span> {t.insights.item3Text}</p>
+          <div style={{ borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '8px' }}>
+            <p style={s.bodyText}>
+              <span style={s.listKey}>Calibración a la realidad local:</span> El modelo se ajustó a métricas características del relieve de Chongqing, una ciudad montaña. Por lo que, en vez de usar radios llanos, se absorbió la topografía para calcular la fricción espacial mediante percentiles, infiriendo la densidad vertical de forma contextual.
+            </p>
           </div>
         </AccordionSection>
 
-        <AccordionSection title={t.stack.title} tag={t.stack.tag} isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
-          <p style={s.bodyText}>{t.stack.content}</p>
+        <AccordionSection title="Stack" tag="TECNOLOGÍAS" isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
+          <p style={s.bodyText}>
+            Python (GeoPandas, OSMnx, Rasterio, Earth Engine API), Evaluaciones Multicriterio Espaciales (MCDA), QGIS, React, Mapbox GL JS / Deck.gl, Recharts, Supabase.
+          </p>
         </AccordionSection>
         
       </div>

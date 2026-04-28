@@ -4,7 +4,7 @@ import { PROJECTS, STYLES } from '../config/theme.js';
 import { useLanguage } from '../context/LanguageContext.jsx'; 
 import ViajaSeguraCard from './ViajaSegura/ViajaSeguraCard.jsx';
 import VigilanciaEspectralCard from './VigilanciaEspectral/VigilanciaEspectralCard.jsx';
-import AlgoritmoInmobiliarioCard from './AlgoritmoInmobiliario/AlgoritmoInmobiliarioCard.jsx'; 
+import DigitalTwinChongqingCard from './DigitalTwinChongqing/DigitalTwinChongqingCard.jsx'; 
 import FactorEsfuerzoCard from './FactorEsfuerzo/FactorEsfuerzoCard.jsx';
 
 import iconKml from '../assets/kml.PNG';   
@@ -22,7 +22,7 @@ const Indice = ({ onActivarDashboard }) => {
   const proyectos = [
     { id: 1, baseName: t.viajaSegura.fileName, extension: ".kml", extensionColor: PROJECTS.viajaSegura.color, icono: iconKml, idScroll: "seccion-viaja-segura" },
     { id: 2, baseName: t.vigilancia.fileName, extension: ".tiff", extensionColor: PROJECTS.vigilancia.color, icono: iconTiff, idScroll: "seccion-vigilancia" },
-    { id: 3, baseName: t.algoritmo.fileName, extension: ".json", extensionColor: PROJECTS.algoritmo.color, icono: iconJson, idScroll: "seccion-algoritmo" },
+    { id: 3, baseName: t.digitaltwin.fileName, extension: ".json", extensionColor: PROJECTS.digitaltwin.color, icono: iconJson, idScroll: "seccion-digitaltwin" },
     { id: 4, baseName: t.factorEsfuerzo.fileName, extension: ".gpkg", extensionColor: PROJECTS.factorEsfuerzo.color, icono: iconGpkg, idScroll: "seccion-esfuerzo" }
   ];
 
@@ -69,7 +69,7 @@ const Indice = ({ onActivarDashboard }) => {
                   <VigilanciaEspectralCard idioma={idioma} t={t.vigilancia} onEjecutar={() => manejarEjecucion(proyectoSeleccionado.idScroll)} onClose={() => setProyectoSeleccionado(null)} />
                 )}
                 {proyectoSeleccionado.id === 3 && (
-                  <AlgoritmoInmobiliarioCard idioma={idioma} t={t.algoritmo} onEjecutar={() => manejarEjecucion(proyectoSeleccionado.idScroll)} onClose={() => setProyectoSeleccionado(null)} />
+                  <DigitalTwinChongqingCard idioma={idioma} t={t.digitaltwin} onEjecutar={() => manejarEjecucion(proyectoSeleccionado.idScroll)} onClose={() => setProyectoSeleccionado(null)} />
                 )}
                 {proyectoSeleccionado.id === 4 && (
                   <FactorEsfuerzoCard idioma={idioma} t={t.factorEsfuerzo} onEjecutar={() => manejarEjecucion(proyectoSeleccionado.idScroll)} onClose={() => setProyectoSeleccionado(null)} />

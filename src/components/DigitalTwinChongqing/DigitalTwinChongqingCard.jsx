@@ -1,19 +1,19 @@
 import React from 'react';
 import ProjectCard from '../Shared/ProjectCard.jsx';
-import imgAlgoritmo from '../../assets/algoritmoinmobiliario.png'; 
+import imgDigitalTwin from '../../assets/DigitalTwinChongqing.png'; 
 import { PROJECTS } from '../../config/theme.js';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 
-const AlgoritmoInmobiliarioCard = ({ onEjecutar, onClose }) => {
+const DigitalTwinChongqingCard = ({ onEjecutar, onClose }) => {
   const { idioma, t: fullT } = useLanguage();
-  const t = fullT.algoritmo;
+  const t = fullT.digitaltwin;
 
   return (
     <ProjectCard
       title={t.fileName}
-      defColor={PROJECTS.algoritmo.color} 
+      defColor={PROJECTS.digitaltwin.color} 
       comment={idioma === 'es' ? "// Logística & Machine Learning Espacial" : "// Logistics & Spatial Machine Learning"}
-      image={imgAlgoritmo}
+      image={imgDigitalTwin}
       onEjecutar={onEjecutar}
       onClose={onClose}
       customBgColor="var(--fondo-panel)"
@@ -31,4 +31,4 @@ const AlgoritmoInmobiliarioCard = ({ onEjecutar, onClose }) => {
   );
 };
 
-export default AlgoritmoInmobiliarioCard;
+export default DigitalTwinChongqingCard;

@@ -9,13 +9,13 @@ import transitUrl from '../../data/transit.geojson?url';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-export default function AlgoritmoInmobiliarioMap({ t: propT }) {
+export default function DigitalTwinChongqingMap({ t: propT }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   
   const { t: fullT } = useLanguage();
   // Forzamos a leer el DigitalTwin que acabas de crear, o usamos el fallback
-  const tMap = fullT?.digitalTwin?.map || propT?.map; 
+  const tMap = fullT?.digitaltwin.map || propT?.map; 
   
   const [buildingData, setBuildingData] = useState(null);
   const [hoverInfo, setHoverInfo] = useState(null);

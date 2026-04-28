@@ -16,7 +16,7 @@ import { useLanguage } from './context/LanguageContext.jsx';
 
 import ViajaSeguraView from './components/ViajaSegura/ViajaSeguraView.jsx';
 import VigilanciaEspectralView from './components/VigilanciaEspectral/VigilanciaEspectralView.jsx';
-import AlgoritmoView from './components/AlgoritmoInmobiliario/AlgoritmoInmobiliarioView.jsx'; 
+import DigitalTwinChongqingView from './components/DigitalTwinChongqing/DigitalTwinChongqingView.jsx'; 
 import FactorEsfuerzoView from './components/FactorEsfuerzo/FactorEsfuerzoView.jsx';
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
     let targetId = '';
     if(idScroll.includes('viaja')) targetId = 'seccion-viaja-segura';
     else if(idScroll.includes('vigilancia')) targetId = 'seccion-vigilancia';
-    else if(idScroll.includes('algoritmo')) targetId = 'seccion-algoritmo';
+    else if(idScroll.includes('digitaltwin')) targetId = 'seccion-digitaltwin';
     else if(idScroll.includes('esfuerzo')) targetId = 'seccion-esfuerzo'; 
     else if(idScroll.includes('formacion')) targetId = 'formacion-tecnica-seccion';
     
@@ -65,8 +65,8 @@ function App() {
             <VigilanciaEspectralView t={t.vigilancia} idioma={idioma} />
         </section>
         
-        <section id="seccion-algoritmo" style={{ paddingBottom: '40px' }}>
-            <AlgoritmoView t={t.algoritmo} idioma={idioma} />
+        <section id="seccion-digitaltwin" style={{ paddingBottom: '40px' }}>
+            <DigitalTwinChongqingView t={t.digitaltwin} idioma={idioma} />
         </section>
         
         <section id="seccion-esfuerzo" style={{ paddingBottom: '40px' }}>

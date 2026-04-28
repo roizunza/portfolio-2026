@@ -16,8 +16,8 @@ export const PROJECTS = {
     color: '#15be80', 
     ramp: { manglar: '#15BE80', inversion: '#a7a469', presion: '#f30a41', riesgo: '#f4976c' }
   },
-  algoritmo: {
-    title: 'Algoritmo Inmobiliario',
+  digitaltwin: {
+    title: 'Digital Twin Chongqing',
     color: '#ff5a60', 
     ramp: { step1: '#23057b', step2: '#664daf', step3: '#6ab515', step4: '#a44113', step5: '#f30a41' }
   },
