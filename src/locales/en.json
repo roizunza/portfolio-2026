@@ -230,6 +230,31 @@
       "popupPrecioHKD": "Price HKD:",
       "popupPrecioUSD": "Price USD:"
     }
+   },
+    "digitalTwin": {
+    "map": {
+      "simbologia": "SYMBOLOGY",
+      "mapaBase": "Base Map",
+      "rios": "Yangtze and Jialing Rivers",
+      "relieve": "3D Relief (Hillshade)",
+      "curvas": "Contour Lines (Grey)",
+      "variablesMca": "MCA Variables",
+      "nodosTransporte": "Transit Nodes",
+      "poisEstrategicos": "Strategic POIs",
+      "jerarquiaVial": "Road Hierarchy",
+      "escalaInferida": "Inferred Construction Scale",
+      "rascacielos": "Skyscrapers",
+      "altaDensidad": "High Density",
+      "mediaDensidad": "Medium Density",
+      "tejidoBase": "Base Fabric",
+      "validacionSatelital": "VIIRS Nighttime Luminiscence Index",
+      "radMaxima": "Maximum Radiation",
+      "actividadAlta": "High Activity",
+      "actividadMedia": "Medium Activity",
+      "actividadBaja": "Low Activity",
+      "niveles": "Levels",
+      "altura": "Height"
+    }
   },
   "factorEsfuerzo": {
     "fileName": "04_effort_factor_analysis",

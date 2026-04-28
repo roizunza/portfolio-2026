@@ -1,18 +1,21 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { PROJECTS, STYLES } from '../../config/theme';
+import { useLanguage } from '../../context/LanguageContext.jsx';
 
 import roadsUrl from '../../data/roads.geojson?url';
 import poisUrl from '../../data/pois.geojson?url';
 import transitUrl from '../../data/transit.geojson?url';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
-export default function AlgoritmoInmobiliarioMap({ t }) {
+export default function AlgoritmoInmobiliarioMap({ t: propT }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
+  
+  const { t: fullT } = useLanguage();
+  // Forzamos a leer el DigitalTwin que acabas de crear, o usamos el fallback
+  const tMap = fullT?.digitalTwin?.map || propT?.map; 
   
   const [buildingData, setBuildingData] = useState(null);
   const [hoverInfo, setHoverInfo] = useState(null);
@@ -23,17 +26,14 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
   const [showBuildings, setShowBuildings] = useState(true);
   const [buildingMetric, setBuildingMetric] = useState('height'); 
   
-  // Estado para el control de camara
   const [is3DView, setIs3DView] = useState(true);
-
-  const fontBody = getCssVar('--fuente-ui') || 'Inter, sans-serif';
 
   useEffect(() => {
     const fetchBuildings = async () => {
       try {
         const baseUrl = import.meta.env.VITE_SUPABASE_URL;
         const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-        const url = `${baseUrl}/rest/v1/buildings_3d?select=*&order=inferred_height_m.desc.nullslast&limit=20000`;
+        const url = `${baseUrl}/rest/v1/chongqingZ_inferred_buildings?select=*&order=inferred_height_m.desc.nullslast&limit=20000`;
         const response = await fetch(url, {
           headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}`, Accept: 'application/geo+json' }
         });
@@ -57,7 +57,6 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
     });
 
     map.current.on('style.load', () => {
-      map.current.setPaintProperty('background', 'background-color', '#181b2b');
       map.current.setFog({ 'range': [0.5, 3], 'color': '#0d0f16', 'high-color': '#12141E', 'horizon-blend': 0.2 });
 
       map.current.addSource('mapbox-dem', { 'type': 'raster-dem', 'url': 'mapbox://mapbox.mapbox-terrain-dem-v1', 'tileSize': 512 });
@@ -68,36 +67,21 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
         'paint': { 'hillshade-exaggeration': 1.0, 'hillshade-shadow-color': '#05060a', 'hillshade-highlight-color': 'rgba(86, 224, 122, 0.15)' }
       });
 
-      // Capa Raster de NDVI
-      map.current.addSource('ndvi-raster-source', {
-        type: 'raster',
-        url: 'mapbox://rociop.TU_TILESET_ID_AQUI', // No olvides volver a pegar tu ID aqui
-        tileSize: 256
-      });
-
-      map.current.addLayer({
-        'id': 'ndvi-layer',
-        'type': 'raster',
-        'source': 'ndvi-raster-source',
-        'paint': { 'raster-opacity': 0.65, 'raster-resampling': 'nearest' },
-        'layout': { 'visibility': 'none' } 
-      });
-
       map.current.addLayer({
         'id': 'water-layer', 'type': 'fill', 'source': 'composite', 'source-layer': 'water',
-        'paint': { 'fill-color': '#47d3f4', 'fill-opacity': 0.15 }
+        'paint': { 'fill-color': '#47d3f4', 'fill-opacity': 0.10 }
       });
 
       map.current.addSource('mapbox-terrain-vector', { type: 'vector', url: 'mapbox://mapbox.mapbox-terrain-v2' });
       map.current.addLayer({
         'id': 'contour-base', 'type': 'line', 'source': 'mapbox-terrain-vector', 'source-layer': 'contour',
         'filter': ['<', ['get', 'ele'], 220],
-        'paint': { 'line-color': '#464c59', 'line-width': 0.8, 'line-opacity': 0.5 }
+        'paint': { 'line-color': '#666666', 'line-width': 0.8, 'line-opacity': 0.5 }
       });
       map.current.addLayer({
         'id': 'contour-top', 'type': 'line', 'source': 'mapbox-terrain-vector', 'source-layer': 'contour',
         'filter': ['>=', ['get', 'ele'], 220],
-        'paint': { 'line-color': '#8ca2ad', 'line-width': 0.6, 'line-dasharray': [2, 4], 'line-opacity': 0.7 }
+        'paint': { 'line-color': '#888888', 'line-width': 0.6, 'line-dasharray': [2, 4], 'line-opacity': 0.7 }
       });
 
       map.current.addSource('roads-source', { type: 'geojson', data: roadsUrl });
@@ -114,10 +98,10 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
       map.current.addLayer({
         'id': 'transit-layer', 'type': 'circle', 'source': 'transit-source',
         'paint': {
-          'circle-color': '#ff5e00',
-          'circle-radius': 4.5,
-          'circle-stroke-width': 1.5,
-          'circle-stroke-color': '#ffffff'
+          'circle-color': 'transparent', 
+          'circle-radius': 5,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ff0800' 
         }
       });
 
@@ -125,16 +109,10 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
       map.current.addLayer({
         'id': 'pois-core', 'type': 'circle', 'source': 'pois-source',
         'paint': {
-          'circle-color': [
-            'case',
-            ['all', ['has', 'tourism'], ['!=', ['get', 'tourism'], 'nan']], '#00e5ff',
-            ['all', ['has', 'shop'], ['!=', ['get', 'shop'], 'nan']], '#ffeb3b',
-            ['all', ['has', 'office'], ['!=', ['get', 'office'], 'nan']], '#ff007f',
-            '#a2d2ff'
-          ],
-          'circle-radius': 3.5, 
-          'circle-stroke-width': 0.5,
-          'circle-stroke-color': '#0d0f16'
+          'circle-color': '#d8f725',
+          'circle-radius': 4.5, 
+          'circle-stroke-width': 0,
+          'circle-blur': 0.4
         }
       });
 
@@ -147,11 +125,16 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
     
     if (!map.current.getSource('digital-twin-source')) {
       map.current.addSource('digital-twin-source', { type: 'geojson', data: buildingData });
+      
+      // Inyectamos la expresion de color matematica directa en el render inicial
       map.current.addLayer({
         'id': 'digital-twin-buildings', 'type': 'fill-extrusion', 'source': 'digital-twin-source',
         'paint': {
-          'fill-extrusion-height': ['coalesce', ['to-number', ['get', 'inferred_height_m']], 9],
-          'fill-extrusion-color': '#2a065c', 
+          'fill-extrusion-height': ['to-number', ['get', 'inferred_height_m'], 9],
+          'fill-extrusion-color': [
+            'step', ['to-number', ['get', 'inferred_height_m'], 0],
+            '#051447', 30, '#024b45', 90, '#0db4ac', 150, '#04da88'  
+          ],
           'fill-extrusion-opacity': 0.9
         }
       });
@@ -177,30 +160,21 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
 
     let buildingColor;
     let buildingOpacity = 0.9;
-    let showNdviRaster = false;
 
     if (buildingMetric === 'height') {
       buildingColor = [
-        'step', ['coalesce', ['to-number', ['get', 'inferred_height_m']], 0],
-        '#2a065c', 20, '#4c72ea', 50, '#f24c3b'  
+        'step', ['to-number', ['get', 'inferred_height_m'], 0],
+        '#051447', 30, '#024b45', 90, '#0db4ac', 150, '#04da88'  
       ];
-    } else if (buildingMetric === 'ndvi') {
-      buildingColor = '#181b2b';
-      buildingOpacity = 0.3; 
-      showNdviRaster = true;
     } else if (buildingMetric === 'viirs') {
       buildingColor = [
-        'step', ['coalesce', ['to-number', ['get', 'val_viirs']], 0],
-        '#0a0b10', 5, '#1e3264', 15, '#ff007f', 30, '#ffeb3b', 50, '#ffffff'
+        'step', ['to-number', ['get', 'val_viirs'], 0],
+        '#392f42', 28, '#2e0852', 38, '#4909af', 55, '#ff00bf'
       ];
     }
 
     map.current.setPaintProperty('digital-twin-buildings', 'fill-extrusion-color', buildingColor);
     map.current.setPaintProperty('digital-twin-buildings', 'fill-extrusion-opacity', buildingOpacity);
-    
-    if (map.current.getLayer('ndvi-layer')) {
-      map.current.setLayoutProperty('ndvi-layer', 'visibility', showNdviRaster ? 'visible' : 'none');
-    }
   }, [buildingMetric, mapLoaded]);
 
   useEffect(() => {
@@ -214,16 +188,10 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
 
     ['hillshade-layer', 'water-layer', 'contour-base', 'contour-top'].forEach(l => toggleLayer(l, showBaseMap));
     ['roads-layer', 'transit-layer', 'pois-core'].forEach(l => toggleLayer(l, showMCA));
-    
     toggleLayer('digital-twin-buildings', showBuildings);
-    if (!showBuildings && map.current.getLayer('ndvi-layer')) {
-      map.current.setLayoutProperty('ndvi-layer', 'visibility', 'none');
-    } else if (showBuildings && buildingMetric === 'ndvi' && map.current.getLayer('ndvi-layer')) {
-      map.current.setLayoutProperty('ndvi-layer', 'visibility', 'visible');
-    }
+
   }, [showBaseMap, showMCA, showBuildings, buildingMetric, mapLoaded]);
 
-  // Funciones de control de camara
   const handleZoomIn = () => map.current?.zoomIn({ duration: 400 });
   const handleZoomOut = () => map.current?.zoomOut({ duration: 400 });
   const handleCameraToggle = () => {
@@ -235,149 +203,134 @@ export default function AlgoritmoInmobiliarioMap({ t }) {
     setIs3DView(!is3DView);
   };
 
-  if (!t || !t.map) return null;
+  if (!tMap) return null;
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div className="dtc-wrapper">
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
 
-      {/* Tooltip */}
       {hoverInfo && hoverInfo.object && (
-        <div style={{
-          position: 'absolute', zIndex: 1, pointerEvents: 'none', left: hoverInfo.x, top: hoverInfo.y,
-          backgroundColor: 'rgba(18, 20, 30, 0.9)', backdropFilter: 'blur(5px)',
-          border: '1px solid rgba(0, 229, 255, 0.3)', color: '#e0e0e0',
-          borderRadius: '4px', padding: '8px', fontFamily: fontBody, fontSize: '11px',
-          minWidth: '150px', transform: 'translate(-50%, -110%)'
-        }}>
-          <div style={{ color: '#00e5ff', fontWeight: 'bold', textTransform: 'uppercase', borderBottom: '1px solid rgba(255,255,255,0.2)', paddingBottom: '3px', marginBottom: '4px' }}>
+        <div className="dtc-tooltip" style={{ left: hoverInfo.x, top: hoverInfo.y }}>
+          <div className="dtc-tooltip-header">
             ID: {hoverInfo.object.properties.id || hoverInfo.object.properties.fid || 'N/A'}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px' }}>
-            <span style={{ color: '#aaa' }}>Niveles:</span>
-            <span style={{ color: '#fff', fontWeight: 'bold' }}>{hoverInfo.object.properties.inferred_levels || 0}</span>
+          <div className="dtc-tooltip-row">
+            <span className="dtc-tooltip-label">{tMap.niveles}:</span>
+            <span className="dtc-tooltip-value">{hoverInfo.object.properties.inferred_levels || 0}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ color: '#aaa' }}>Altura:</span>
-            <span style={{ color: '#fff', fontWeight: 'bold' }}>{Math.round(Number(hoverInfo.object.properties.inferred_height_m) || 0)} m</span>
+          <div className="dtc-tooltip-row">
+            <span className="dtc-tooltip-label">{tMap.altura}:</span>
+            <span className="dtc-tooltip-value">{Math.round(Number(hoverInfo.object.properties.inferred_height_m) || 0)} m</span>
           </div>
         </div>
       )}
 
-      {/* Panel de Controles de Navegacion (Cyberpunk Estilo) */}
-      <div style={{
-        ...STYLES.legendBox,
-        position: 'absolute', top: 'auto', bottom: '25px', left: 'auto', right: '25px',
-        width: '40px', padding: '6px',
-        display: 'flex', flexDirection: 'column', gap: '6px', zIndex: 9999
-      }}>
-        <button 
-          onClick={handleZoomIn}
-          style={{ width: '100%', height: '28px', background: '#111', color: '#00e5ff', border: '1px solid #444', borderRadius: '3px', cursor: 'pointer', fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          +
-        </button>
-        <button 
-          onClick={handleZoomOut}
-          style={{ width: '100%', height: '28px', background: '#111', color: '#00e5ff', border: '1px solid #444', borderRadius: '3px', cursor: 'pointer', fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          -
-        </button>
-        <button 
-          onClick={handleCameraToggle}
-          style={{ width: '100%', height: '28px', background: is3DView ? '#00e5ff' : '#111', color: is3DView ? '#000' : '#00e5ff', border: '1px solid #444', borderRadius: '3px', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s ease' }}
-        >
-          {is3DView ? '2D' : '3D'}
+      <div className="dtc-nav-controls">
+        <button onClick={handleZoomIn} className="dtc-nav-btn">+</button>
+        <button onClick={handleZoomOut} className="dtc-nav-btn">-</button>
+        <button onClick={handleCameraToggle} className="dtc-nav-btn text">
+          {is3DView ? '2D' : '2.5D'}
         </button>
       </div>
 
-      {/* Simbologia (Esquina Superior Izquierda) */}
-      <div style={{
-        ...STYLES.legendBox, 
-        position: 'absolute', top: '25px', bottom: 'auto', left: '25px', right: 'auto', 
-        width: '260px', maxHeight: '85vh', overflowY: 'auto',
-        display: 'flex', flexDirection: 'column', gap: '15px', zIndex: 9999
-      }}>
+      <div className="dtc-legend dtc-panel-glass">
         
-        <h3 style={{ margin: 0, fontSize: '12px', color: '#fff', borderBottom: '1px solid #444', paddingBottom: '8px', textAlign: 'center' }}>
-          Simbología y Control de Capas
-        </h3>
+        <h3 className="dtc-legend-title">{tMap.simbologia || "SIMBOLOGÍA"}</h3>
 
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', cursor: 'pointer' }} onClick={() => setShowBaseMap(!showBaseMap)}>
-            <h4 style={{ margin: 0, fontSize: '11px', color: showBaseMap ? '#fff' : '#666' }}>1. Mapa Base</h4>
-            <span style={{ fontSize: '10px', color: showBaseMap ? '#56e07a' : '#555' }}>{showBaseMap ? 'ON' : 'OFF'}</span>
+          <div className="dtc-section-header" onClick={() => setShowBaseMap(!showBaseMap)}>
+            <h4 className="dtc-section-title">{tMap.mapaBase || "Mapa Base"}</h4>
+            <span className={`dtc-status-label ${showBaseMap ? 'on' : 'off'}`}>{showBaseMap ? 'ON' : 'OFF'}</span>
           </div>
           {showBaseMap && (
-            <div style={{ paddingLeft: '8px', borderLeft: '1px solid #333' }}>
-              <div style={{ fontSize: '10px', color: '#ccc', marginBottom: '4px' }}>• Río Yangtze y Jialing</div>
-              <div style={{ fontSize: '10px', color: '#ccc', marginBottom: '4px' }}>• Relieve 3D (Hillshade)</div>
-              <div style={{ fontSize: '10px', color: '#ccc' }}>• Curvas de Nivel (Gris/Verde)</div>
+            <div className="dtc-section-content">
+              <div className="dtc-legend-item">• {tMap.rios}</div>
+              <div className="dtc-legend-item">• {tMap.relieve}</div>
+              <div className="dtc-legend-item">• {tMap.curvas}</div>
             </div>
           )}
         </div>
 
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', cursor: 'pointer' }} onClick={() => setShowMCA(!showMCA)}>
-            <h4 style={{ margin: 0, fontSize: '11px', color: showMCA ? '#fff' : '#666' }}>2. Variables del MCA</h4>
-            <span style={{ fontSize: '10px', color: showMCA ? '#56e07a' : '#555' }}>{showMCA ? 'ON' : 'OFF'}</span>
+          <div className="dtc-section-header" onClick={() => setShowMCA(!showMCA)}>
+            <h4 className="dtc-section-title">{tMap.variablesMca || "Variables del MCA"}</h4>
+            <span className={`dtc-status-label ${showMCA ? 'on' : 'off'}`}>{showMCA ? 'ON' : 'OFF'}</span>
           </div>
           {showMCA && (
-            <div style={{ paddingLeft: '8px', borderLeft: '1px solid #333' }}>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px', fontSize: '10px', color: '#ccc' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff5e00', border: '1px solid #fff', marginRight: '6px' }}></div> Nodos de Transporte
+            <div className="dtc-section-content">
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch ring" style={{ borderColor: '#ff0800' }}></div> {tMap.nodosTransporte}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px', fontSize: '10px', color: '#ccc' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff007f', marginRight: '6px' }}></div> POIs (Comercio / Corporativos)
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch circle" style={{ background: '#d8f725', filter: 'blur(1px)' }}></div> {tMap.poisEstrategicos}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', fontSize: '10px', color: '#ccc' }}>
-                <div style={{ width: '12px', height: '2px', background: '#ffffff', marginRight: '6px' }}></div> Jerarquía Vial
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch line"></div> {tMap.jerarquiaVial}
               </div>
             </div>
           )}
         </div>
 
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', cursor: 'pointer' }} onClick={() => { setShowBuildings(!showBuildings); if(!showBuildings) setBuildingMetric('height'); }}>
-            <h4 style={{ margin: 0, fontSize: '11px', color: (showBuildings && buildingMetric === 'height') ? '#fff' : '#666' }}>3. Escala de Construcción Inferida</h4>
-            <span style={{ fontSize: '10px', color: showBuildings ? '#56e07a' : '#555' }}>{showBuildings ? 'ON' : 'OFF'}</span>
+          <div className="dtc-section-header" onClick={() => {
+            if (buildingMetric === 'height') {
+              setShowBuildings(!showBuildings);
+            } else {
+              setBuildingMetric('height');
+              setShowBuildings(true);
+            }
+          }}>
+            <h4 className="dtc-section-title">{tMap.escalaInferida || "Escala de Construcción"}</h4>
+            <span className={`dtc-status-label ${showBuildings && buildingMetric === 'height' ? 'on' : 'off'}`}>
+              {showBuildings && buildingMetric === 'height' ? 'ON' : 'OFF'}
+            </span>
           </div>
           {(showBuildings && buildingMetric === 'height') && (
-            <div style={{ paddingLeft: '8px', borderLeft: '1px solid #333' }}>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px', fontSize: '10px', color: '#ccc' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#f24c3b', marginRight: '6px' }}></div> &gt; 50m (Alta Densidad)
+            <div className="dtc-section-content">
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch" style={{ background: '#04da88', boxShadow: '0 0 4px #04da88' }}></div> &gt; 150m ({tMap.rascacielos})
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px', fontSize: '10px', color: '#ccc' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#4c72ea', marginRight: '6px' }}></div> 20m - 50m (Media Densidad)
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch" style={{ background: '#0db4ac' }}></div> 90m - 150m ({tMap.altaDensidad})
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', fontSize: '10px', color: '#ccc' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#2a065c', marginRight: '6px' }}></div> &lt; 20m (Tejido Base)
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch" style={{ background: '#024b45' }}></div> 30m - 90m ({tMap.mediaDensidad})
+              </div>
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch" style={{ background: '#051447' }}></div> &lt; 30m ({tMap.tejidoBase})
               </div>
             </div>
           )}
         </div>
 
         <div>
-          <div style={{ marginBottom: '8px' }}>
-            <h4 style={{ margin: 0, fontSize: '11px', color: '#fff' }}>4. Análisis de Comprobación</h4>
+          <div className="dtc-section-header" onClick={() => {
+            if (buildingMetric === 'viirs') {
+              setShowBuildings(!showBuildings);
+            } else {
+              setBuildingMetric('viirs');
+              setShowBuildings(true);
+            }
+          }}>
+            <h4 className="dtc-section-title">{tMap.validacionSatelital || "VIIRS Luminiscencia"}</h4>
+            <span className={`dtc-status-label ${showBuildings && buildingMetric === 'viirs' ? 'on' : 'off'}`}>
+              {showBuildings && buildingMetric === 'viirs' ? 'ON' : 'OFF'}
+            </span>
           </div>
-          <div style={{ display: 'flex', gap: '4px', marginBottom: '10px' }}>
-            <button onClick={() => { setShowBuildings(true); setBuildingMetric('ndvi'); }} style={{ flex: 1, padding: '4px 0', fontSize: '9px', background: buildingMetric === 'ndvi' ? '#333' : '#111', color: buildingMetric === 'ndvi' ? '#fff' : '#888', border: '1px solid #444', borderRadius: '3px', cursor: 'pointer' }}>NDVI (Suelo)</button>
-            <button onClick={() => { setShowBuildings(true); setBuildingMetric('viirs'); }} style={{ flex: 1, padding: '4px 0', fontSize: '9px', background: buildingMetric === 'viirs' ? '#333' : '#111', color: buildingMetric === 'viirs' ? '#fff' : '#888', border: '1px solid #444', borderRadius: '3px', cursor: 'pointer' }}>VIIRS (Luz Noc.)</button>
-          </div>
-
-          {(showBuildings && buildingMetric === 'ndvi') && (
-            <div style={{ paddingLeft: '8px', borderLeft: '1px solid #333', fontSize: '10px', color: '#ccc', fontStyle: 'italic' }}>
-              Densidad vegetal renderizada directamente sobre el modelo de elevación digital.
-            </div>
-          )}
-
           {(showBuildings && buildingMetric === 'viirs') && (
-            <div style={{ paddingLeft: '8px', borderLeft: '1px solid #333' }}>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px', fontSize: '10px', color: '#ccc' }}><div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#ffffff', marginRight: '6px', boxShadow: '0 0 5px #fff' }}></div> Radiación Máxima</div>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px', fontSize: '10px', color: '#ccc' }}><div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#ffeb3b', marginRight: '6px' }}></div> Actividad Alta (Comercio)</div>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px', fontSize: '10px', color: '#ccc' }}><div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#ff007f', marginRight: '6px' }}></div> Actividad Media (Oficinas)</div>
-              <div style={{ display: 'flex', alignItems: 'center', fontSize: '10px', color: '#ccc' }}><div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#0a0b10', marginRight: '6px' }}></div> Baja Luminiscencia</div>
+            <div className="dtc-section-content">
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch" style={{ background: '#ff00bf', boxShadow: '0 0 5px #f0fcef' }}></div> {tMap.radMaxima}
+              </div>
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch" style={{ background: '#4909af' }}></div> {tMap.actividadAlta}
+              </div>
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch" style={{ background: '#2e0852' }}></div> {tMap.actividadMedia}
+              </div>
+              <div className="dtc-legend-item">
+                <div className="dtc-swatch" style={{ background: '#392f42' }}></div> {tMap.actividadBaja}
+              </div>
             </div>
           )}
         </div>

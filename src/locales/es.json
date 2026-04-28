@@ -231,6 +231,31 @@
       "popupPrecioUSD": "Operador cercano:"
     }
   },
+  "digitalTwin": {
+    "map": {
+      "simbologia": "SIMBOLOGÍA",
+      "mapaBase": "Mapa Base",
+      "rios": "Río Yangtze y Jialing",
+      "relieve": "Relieve 3D (Hillshade)",
+      "curvas": "Curvas de Nivel (Gris)",
+      "variablesMca": "Variables del MCA",
+      "nodosTransporte": "Nodos de Transporte",
+      "poisEstrategicos": "POIs Estratégicos",
+      "jerarquiaVial": "Jerarquía Vial",
+      "escalaInferida": "Escala de Construcción Inferida",
+      "rascacielos": "Rascacielos",
+      "altaDensidad": "Alta Densidad",
+      "mediaDensidad": "Media Densidad",
+      "tejidoBase": "Tejido Base",
+      "validacionSatelital": "VIIRS índice de luminiscencia nocturna",
+      "radMaxima": "Radiación Máxima",
+      "actividadAlta": "Actividad Alta",
+      "actividadMedia": "Actividad Media",
+      "actividadBaja": "Actividad Baja",
+      "niveles": "Niveles",
+      "altura": "Altura"
+    }  
+  },
   "factorEsfuerzo": {
     "fileName": "04_factor_esfuerzo_turistico",
     "ejecutar": "EJECUTAR ANÁLISIS",
