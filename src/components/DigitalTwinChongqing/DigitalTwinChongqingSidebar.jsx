@@ -22,8 +22,8 @@ const AccordionSection = ({ title, tag, isOpen, onClick, children }) => {
     metaContainer: { display: 'flex', alignItems: 'center', marginTop: '2px' },
     line: { height: '1px', backgroundColor: 'rgba(188, 186, 192, 0.43)', flexGrow: 1, marginRight: '8px' },
     tag: {
-      fontFamily: 'var(--fuente-datos)', fontSize: '9px', color: '#FFFFFF',
-      letterSpacing: '0.5px', textTransform: 'uppercase'
+      fontFamily: 'var(--fuente-datos)', fontSize: '9px',
+      letterSpacing: '0.5px'
     },
     content: {
       display: isOpen ? 'block' : 'none', marginTop: '10px', animation: 'fadeIn 0.3s ease-in-out'

@@ -187,7 +187,7 @@
     },
     "insights": {
       "title": "03. Insights & Visualization",
-      "tag": "#DataInsights",
+      "tag": "#Insights",
       "intro": "The inference model reveals critical spatial behaviors regarding vertical density:",
       "item1Key": "The Reality Mirror:",
       "item1Text": "Both the spatial model and the VIIRS index show an aggressive densification peak at the convergence of the Jialing and Yangtze rivers, matching the real-world Jiangbeizui financial district.",
