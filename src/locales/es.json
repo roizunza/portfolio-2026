@@ -190,11 +190,31 @@
       "volumen_sub": "Polígonos codificados",
       "moda": "ESCALA PREDOMINANTE",
       "moda_sub": "Moda de niveles inferidos",
-      "supertalls": "SUPERTALLS",
-      "supertalls_sub": "Edificios con >80 niveles",
-      "viirs": "VALIDACIÓN VIIRS",
-      "viirs_sub": "Compatibilidad de densidad"
+      "supertalls": "ALTA DENSIDAD",
+      "supertalls_sub": "Edificios con >50 niveles",
+      "viirs": "CORRELACIÓN ESPACIAL",
+      "viirs_sub": "Coincidencia Altura / Luz (VIIRS)"
+    },
+   "graphs": {
+      "scatterTitle": "Fricción Espacial vs. Escala Constructiva",
+      "radarTitle": "El ADN de un Rascacielos",
+      "rascacielosTop": "Rascacielos (Top 5%)",
+      "rascacielos": "Rascacielos",
+      "densidadMedia": "Densidad Media",
+      "tejidoBase": "Tejido Base",
+      "distanciaEq": "Distancia Equivalente",
+      "nivelesInf": "Niveles Inferidos",
+      "parcelaEval": "Parcela Evaluada",
+      "friccionTop": "Fricción Topográfica:",
+      "alturaConst": "Altura Constructiva:",
+      "decaimiento": "Decaimiento de Densidad",
+      "radar": {
+        "comercial": "Densidad Comercial",
+        "vial": "Capacidad Vial",
+        "topografico": "Acceso Topográfico"
+      }
     }
+
   },
   "factorEsfuerzo": {
     "fileName": "04_factor_esfuerzo_turistico",

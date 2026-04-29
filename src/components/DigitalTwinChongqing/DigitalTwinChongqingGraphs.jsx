@@ -1,108 +1,59 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { 
-  ScatterChart, Scatter, XAxis, YAxis, ZAxis, Tooltip, ResponsiveContainer, Cell,
+  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
 
+import { PROJECTS } from '../../config/theme';
+import { useLanguage } from '../../context/LanguageContext.jsx'; 
+// Importación crucial: los datos locales
+import SCATTER_RAW from '../../data/digitaltwin_scatter.json';
+
 const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
-export default function DigitalTwinGraphs() {
-  const [data, setData] = useState([]);
+export default function DigitalTwinGraphs({ t: propT }) {
+  const { t: contextT } = useLanguage();
   
-  // Paleta de colores extraida del mapa
-  const PALETTE = {
-    base: '#051447',
-    media: '#024b45',
-    alta: '#0db4ac',
-    rascacielos: '#04da88',
-    viirsBaja: '#052785',
-    viirsAlta: '#05b7c4'
-  };
+  // Priorizamos los textos del contexto, si no, usamos la prop
+  const fullT = contextT || propT;
+  const t = fullT?.digitaltwin?.graphs;
 
+  const RAMP = PROJECTS.digitaltwin.ramp;
+  const MAIN_COLOR = PROJECTS.digitaltwin.color;
+  
   const borderColor = getCssVar('--borde-sutil') || 'rgba(255,255,255,0.1)';
   const fontBody = getCssVar('--fuente-ui') || 'Inter, sans-serif';
   const textSecondary = getCssVar('--texto-secundario') || '#b0b3b8';
 
-  // Consumo directo desde Supabase
-  useEffect(() => {
-    const fetchGraphData = async () => {
-      try {
-        const baseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-        // Limitamos a 3000 registros ordenados para no saturar el DOM con SVG, pero representando los extremos
-        const url = `${baseUrl}/rest/v1/chongqingZ_inferred_buildings?select=dist_transit_eq,inferred_levels,inferred_height_m,poi_count_200m,road_weight,val_viirs&order=inferred_height_m.desc.nullslast&limit=3000`;
-        const response = await fetch(url, {
-          headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}`, Accept: 'application/json' }
-        });
-        const result = await response.json();
-        setData(result);
-      } catch (error) { 
-        console.error("Error al obtener datos para graficas:", error); 
-      }
-    };
-    fetchGraphData();
-  }, []);
-
-  // Procesamiento para Grafica de Dispersion
-  const scatterData = useMemo(() => {
-    return data.map((d, index) => {
-      let color = PALETTE.base;
-      if (d.inferred_height_m > 150) color = PALETTE.rascacielos;
-      else if (d.inferred_height_m > 90) color = PALETTE.alta;
-      else if (d.inferred_height_m > 30) color = PALETTE.media;
-
-      return {
-        id: index,
-        x: Math.round(d.dist_transit_eq || 0),
-        y: d.inferred_levels || 0,
-        z: 50,
-        height: Math.round(d.inferred_height_m || 0),
-        fill: color
-      };
-    });
-  }, [data]);
-
-  // Procesamiento para Grafica de Radar (Calculando promedios por decil/estrato)
+  // Eliminamos el estado 'data' y el useEffect de Supabase.
+  // Ahora usamos SCATTER_RAW directamente.
   const radarData = useMemo(() => {
-    if (!data || data.length === 0) return [];
-
-    const topTier = data.filter(d => d.inferred_levels >= 40);
-    const baseTier = data.filter(d => d.inferred_levels <= 6);
-
-    const getAvg = (arr, key) => arr.reduce((sum, item) => sum + (item[key] || 0), 0) / (arr.length || 1);
-
-    const maxPoi = Math.max(...data.map(d => d.poi_count_200m || 0)) || 1;
-    const maxDist = Math.max(...data.map(d => d.dist_transit_eq || 0)) || 1;
-    const maxViirs = Math.max(...data.map(d => d.val_viirs || 0)) || 1;
-
-    // Normalizacion 0-100 para comparar en el mismo eje del radar
-    const calcMetrics = (subset) => ({
-      poi: (getAvg(subset, 'poi_count_200m') / maxPoi) * 100,
-      road: getAvg(subset, 'road_weight'), 
-      access: 100 - ((getAvg(subset, 'dist_transit_eq') / maxDist) * 100), // Invertido: Menor distancia = Mayor puntaje
-      viirs: (getAvg(subset, 'val_viirs') / maxViirs) * 100
-    });
-
-    const topMetrics = calcMetrics(topTier);
-    const baseMetrics = calcMetrics(baseTier);
-
+    if (!t) return [];
     return [
-      { subject: 'Densidad Comercial', Rascacielos: topMetrics.poi, TejidoBase: baseMetrics.poi },
-      { subject: 'Capacidad Vial', Rascacielos: topMetrics.road, TejidoBase: baseMetrics.road },
-      { subject: 'Acceso Topográfico', Rascacielos: topMetrics.access, TejidoBase: baseMetrics.access },
-      { subject: 'Radiancia (VIIRS)', Rascacielos: topMetrics.viirs, TejidoBase: baseMetrics.viirs }
+      { subject: t.radar.comercial, Rascacielos: 32, TejidoBase: 3 },
+      { subject: t.radar.vial, Rascacielos: 58, TejidoBase: 54 },
+      { subject: t.radar.topografico, Rascacielos: 95, TejidoBase: 65 }
     ];
-  }, [data]);
+  }, [t]);
 
-  const CustomTooltipScatter = ({ active, payload }) => {
+  // Si no hay textos, mostramos el error que ya conoces
+  if (!t) {
+    return (
+      <div style={{ padding: '20px', color: '#ff5a60', border: '1px dashed #ff5a60', width: '100%', fontFamily: 'var(--fuente-datos)', fontSize: '12px' }}>
+        &gt; ERROR_DE_DATOS: Verifica la estructura de tus archivos JSON de idioma.
+      </div>
+    );
+  }
+
+  const CustomTooltipArea = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const pData = payload[0].payload;
       return (
         <div style={{ backgroundColor: 'var(--fondo-panel)', border: '1px solid var(--borde-sutil)', padding: '8px', fontFamily: 'var(--fuente-ui)', fontSize: '10px' }}>
-          <p style={{color: 'white', fontWeight: 'bold', marginBottom:'4px', margin: 0}}>Parcela Evaluada</p>
-          <div style={{ color: 'var(--texto-secundario)' }}>Fricción Topográfica: <span style={{color:'#fff'}}>{pData.x} m</span></div>
-          <div style={{ color: 'var(--texto-secundario)' }}>Niveles Inferidos: <span style={{color:'#fff'}}>{pData.y}</span></div>
-          <div style={{ color: 'var(--texto-secundario)' }}>Altura Constructiva: <span style={{color: pData.fill, fontWeight: 'bold'}}>{pData.height} m</span></div>
+          <p style={{color: 'white', fontWeight: 'bold', marginBottom:'4px', margin: 0}}>{t.parcelaEval}</p>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.friccionTop} <span style={{color:'#fff'}}>{pData.x} m</span></div>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.nivelesInf}: <span style={{color:'#fff'}}>{pData.y}</span></div>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.alturaConst} <span style={{color: MAIN_COLOR, fontWeight: 'bold'}}>{pData.height} m</span></div>
         </div>
       );
     }
@@ -117,7 +68,7 @@ export default function DigitalTwinGraphs() {
           {payload.map((entry, index) => (
             <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
               <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: entry.color }}></span>
-              <span style={{ color: 'var(--texto-secundario)' }}>{entry.name}: <span style={{ color: '#fff', fontWeight: 'bold' }}>{Math.round(entry.value)}%</span></span>
+              <span style={{ color: 'var(--texto-secundario)' }}>{entry.name}: <span style={{ color: '#fff', fontWeight: 'bold' }}>{entry.value}%</span></span>
             </div>
           ))}
         </div>
@@ -127,85 +78,75 @@ export default function DigitalTwinGraphs() {
   };
 
   const styles = {
-    mainContainer: { display: 'flex', flexWrap: 'wrap', width: '100%', height: '100%', padding: '10px 15px', overflow: 'hidden' },
-    leftSection: { flex: '2 1 500px', display: 'flex', flexDirection: 'column', paddingRight: '15px', minHeight: '0' },
-    rightSection: { flex: '1 1 250px', display: 'flex', flexDirection: 'column', paddingLeft: '15px', minHeight: '0', borderLeft: '1px solid var(--borde-sutil)' },
-    header: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', borderBottom: '1px solid var(--borde-sutil)', marginBottom: '8px', paddingBottom: '5px', gap: '4px' },
+    mainGrid: { 
+      display: 'grid', 
+      gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+      gap: '30px', 
+      width: '100%', 
+      padding: '10px 10px' 
+    },
+    section: { 
+      display: 'flex', 
+      flexDirection: 'column', 
+      height: '260px', 
+      width: '100%' 
+    },
+    header: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', borderBottom: '1px solid var(--borde-sutil)', marginBottom: '15px', paddingBottom: '5px', gap: '4px' },
     title: { fontFamily: 'var(--fuente-ui)', fontSize: '14px', fontWeight: '700', color: 'var(--texto-principal)', margin: 0, letterSpacing: '0.3px', width:'100%' },
     legend: { display: 'flex', gap: '10px', fontSize: '11px', fontFamily: 'var(--fuente-ui)', color: 'var(--texto-principal)', flexWrap: 'wrap' },
     dot: (color) => ({ width: '6px', height: '6px', backgroundColor: color, borderRadius: '50%', display: 'inline-block', marginRight: '4px' })
   };
 
   return (
-    <div style={styles.mainContainer}>
-      
-      <div style={styles.leftSection}>
+    <div style={styles.mainGrid}>
+      <div style={styles.section}>
         <div style={styles.header}>
-          <div style={styles.title}>Fricción Espacial vs. Escala Constructiva</div>
+          <div style={styles.title}>{t.scatterTitle}</div>
           <div style={styles.legend}>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(PALETTE.rascacielos)}></span> Rascacielos (Top 5%)</div>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(PALETTE.media)}></span> Densidad Media</div>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(PALETTE.base)}></span> Tejido Base</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={styles.dot(MAIN_COLOR)}></span> {t.decaimiento}
+            </div>
           </div>
         </div>
-        
-        <div style={{ flex: 1, minHeight: 0 }}>
+        <div style={{ flex: 1, width: '100%' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{top: 10, right: 10, bottom: 10, left: -10}}>
-              <XAxis 
-                type="number" 
-                dataKey="x" 
-                name="Distancia Equivalente" 
-                unit="m"
-                tick={{fontSize: 10, fill: textSecondary}} 
-                tickLine={false} 
-                axisLine={{stroke: borderColor}}
-              />
-              <YAxis 
-                type="number" 
-                dataKey="y" 
-                name="Niveles Inferidos" 
-                tick={{fontSize: 10, fill: textSecondary}} 
-                tickLine={false} 
-                axisLine={{stroke: borderColor}} 
-              />
-              <ZAxis type="number" dataKey="z" range={[20, 20]} /> 
-              <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltipScatter />} />
-              <Scatter name="Parcelas" data={scatterData}>
-                {
-                  scatterData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))
-                }
-              </Scatter>
-            </ScatterChart>
+            <AreaChart data={SCATTER_RAW} margin={{top: 10, right: 20, bottom: 10, left: 0}}>
+              <defs>
+                <linearGradient id="colorHeight" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={MAIN_COLOR} stopOpacity={0.6}/>
+                  <stop offset="95%" stopColor={MAIN_COLOR} stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="x" tick={{fontSize: 9, fill: textSecondary}} tickLine={false} axisLine={{stroke: borderColor}} minTickGap={30} tickMargin={8} />
+              <YAxis dataKey="height" tick={{fontSize: 9, fill: textSecondary}} tickLine={false} axisLine={{stroke: borderColor}} tickMargin={8} />
+              <Tooltip content={<CustomTooltipArea />} />
+              <Area type="monotone" dataKey="height" stroke={MAIN_COLOR} strokeWidth={2} fillOpacity={1} fill="url(#colorHeight)" />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div style={styles.rightSection}>
+      <div style={styles.section}>
         <div style={styles.header}>
-          <div style={styles.title}>El ADN de un Rascacielos</div>
+          <div style={styles.title}>{t.radarTitle}</div>
           <div style={styles.legend}>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(PALETTE.rascacielos)}></span> Rascacielos</div>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(PALETTE.base)}></span> Tejido Base</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.mca.nodos)}></span> {t.rascacielos}</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.mca.pois)}></span> {t.tejidoBase}</div>
           </div>
         </div>
-        
-        <div style={{ flex: 1, minHeight: 0 }}>
+        <div style={{ flex: 1, width: '100%' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <RadarChart cx="50%" cy="50%" outerRadius="65%" data={radarData} margin={{top: 10, right: 10, left: 10, bottom: 10}}>
+            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData} margin={{top: 10, right: 10, left: 10, bottom: 10}}>
               <PolarGrid stroke={borderColor} />
               <PolarAngleAxis dataKey="subject" tick={{ fill: textSecondary, fontSize: 9, fontFamily: fontBody }} />
               <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
               <Tooltip content={<CustomTooltipRadar />} />
-              <Radar name="Rascacielos" dataKey="Rascacielos" stroke={PALETTE.rascacielos} fill={PALETTE.rascacielos} fillOpacity={0.5} />
-              <Radar name="Tejido Base" dataKey="TejidoBase" stroke={PALETTE.base} fill={PALETTE.base} fillOpacity={0.5} />
+              <Radar name={t.rascacielos} dataKey="Rascacielos" stroke={RAMP.mca.nodos} fill={RAMP.mca.nodos} fillOpacity={0.5} />
+              <Radar name={t.tejidoBase} dataKey="TejidoBase" stroke={RAMP.mca.pois} fill={RAMP.mca.pois} fillOpacity={0.5} />
             </RadarChart>
           </ResponsiveContainer>
         </div>
       </div>
-
     </div>
   );
 }

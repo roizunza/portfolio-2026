@@ -178,10 +178,29 @@
       "volumen_sub": "Encoded polygons",
       "moda": "PREDOMINANT SCALE",
       "moda_sub": "Mode of inferred levels",
-      "supertalls": "SUPERTALLS",
-      "supertalls_sub": "Buildings with >80 levels",
-      "viirs": "VIIRS VALIDATION",
-      "viirs_sub": "Density peak compatibility"
+      "supertalls": "HIGH DENSITY",
+      "supertalls_sub": "Buildings with >50 levels",
+      "viirs": "SPATIAL CORRELATION",
+      "viirs_sub": "Height / Light (VIIRS) Match"
+    },
+    "graphs": {
+      "scatterTitle": "Spatial Friction vs. Construction Scale",
+      "radarTitle": "The DNA of a Skyscraper",
+      "rascacielosTop": "Skyscrapers (Top 5%)",
+      "rascacielos": "Skyscrapers",
+      "densidadMedia": "Medium Density",
+      "tejidoBase": "Base Fabric",
+      "distanciaEq": "Equivalent Distance",
+      "nivelesInf": "Inferred Levels",
+      "parcelaEval": "Evaluated Parcel",
+      "friccionTop": "Topographic Friction:",
+      "alturaConst": "Construction Height:",
+      "decaimiento": "Density Decay",
+      "radar": {
+        "comercial": "Commercial Density",
+        "vial": "Road Capacity",
+        "topografico": "Topographic Access"
+      }
     },
     "metodologia": {
       "title": "Methodology",
