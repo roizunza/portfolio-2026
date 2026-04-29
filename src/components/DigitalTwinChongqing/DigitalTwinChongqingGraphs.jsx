@@ -6,7 +6,6 @@ import {
 
 import { PROJECTS } from '../../config/theme';
 import { useLanguage } from '../../context/LanguageContext.jsx'; 
-// Importación crucial: los datos locales
 import SCATTER_RAW from '../../data/digitaltwin_scatter.json';
 
 const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -14,7 +13,6 @@ const getCssVar = (name) => getComputedStyle(document.documentElement).getProper
 export default function DigitalTwinGraphs({ t: propT }) {
   const { t: contextT } = useLanguage();
   
-  // Priorizamos los textos del contexto, si no, usamos la prop
   const fullT = contextT || propT;
   const t = fullT?.digitaltwin?.graphs;
 
@@ -41,22 +39,7 @@ export default function DigitalTwinGraphs({ t: propT }) {
       </div>
     );
   }
-
-  const CustomTooltipArea = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const pData = payload[0].payload;
-      return (
-        <div style={{ backgroundColor: 'var(--fondo-panel)', border: '1px solid var(--borde-sutil)', padding: '8px', fontFamily: 'var(--fuente-ui)', fontSize: '10px' }}>
-          <p style={{color: 'white', fontWeight: 'bold', marginBottom:'4px', margin: 0}}>{t.parcelaEval}</p>
-          <div style={{ color: 'var(--texto-secundario)' }}>{t.friccionTop} <span style={{color:'#fff'}}>{pData.x} m</span></div>
-          <div style={{ color: 'var(--texto-secundario)' }}>{t.nivelesInf}: <span style={{color:'#fff'}}>{pData.y}</span></div>
-          <div style={{ color: 'var(--texto-secundario)' }}>{t.alturaConst} <span style={{color: MAIN_COLOR, fontWeight: 'bold'}}>{pData.height} m</span></div>
-        </div>
-      );
-    }
-    return null;
-  };
-
+  
   const CustomTooltipRadar = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
@@ -73,6 +56,23 @@ export default function DigitalTwinGraphs({ t: propT }) {
     }
     return null;
   };
+
+  const CustomTooltipArea = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const pData = payload[0].payload;
+      return (
+        <div style={{ backgroundColor: 'var(--fondo-panel)', border: '1px solid var(--borde-sutil)', padding: '8px', fontFamily: 'var(--fuente-ui)', fontSize: '10px' }}>
+          <p style={{color: 'white', fontWeight: 'bold', marginBottom:'4px', margin: 0}}>{t.parcelaEval}</p>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.friccionTop} <span style={{color:'#fff'}}>{pData.x} m</span></div>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.nivelesInf}: <span style={{color:'#fff'}}>{pData.y}</span></div>
+          <div style={{ color: 'var(--texto-secundario)' }}>{t.alturaConst} <span style={{color: MAIN_COLOR, fontWeight: 'bold'}}>{pData.height} m</span></div>
+        </div>
+      );
+    }
+    return null;
+  };
+
+
 
   const styles = {
     mainGrid: { 

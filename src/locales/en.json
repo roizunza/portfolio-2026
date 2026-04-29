@@ -162,17 +162,46 @@
   "digitaltwin": {
     "fileName": "DigitalTwinChongqing",
     "ejecutar": "VIEW MODEL",
-    "cardDescription1": "Development of a spatial inference engine to model the construction scale and density of Chongqing city.",
-    "cardDescription2": "The algorithm integrates topographic spatial friction and multi-criteria evaluation, validating its results with nighttime lights satellite spectrometry.",
     "subtitle": "SPATIAL INFERENCE IN CHONGQING",
     "title": "2.5D DIGITAL TWIN",
     "role": "Urban scale modeling inferred from urban variables",
     "proposito": {
-      "title": "The Purpose",
-      "tag": "CONTEXT",
-      "content1": "This project presents the first approach to developing a geointelligence tool based on Digital Twins. Its goal is to model a city's construction scale by inferring building heights, using strictly the urban variables of its environment.",
-      "content2": "Chongqing city was chosen for its development and testing; its extreme morphological and topographic characteristics work as the ideal environment, as these challenges are absorbed directly through the spatial variables that feed the algorithm. As a result of this simulation, a 2.5D model with more than 16,606 polygons was successfully encoded and extruded."
+      "title": "01. Purpose",
+      "tag": "#SpatialInference",
+      "content": "This project develops a geointelligence engine based on Digital Twins to infer the city's construction scale. The goal is to model the vertical density of 16,606 parcels based on the weight of tangible, normalized, and weighted urban variables, allowing the visualization of a territory's development potential. Chongqing was selected as the test environment due to its extreme mountainous morphology. The main challenge was to make the algorithm account for the location's contextual restrictions through a Multi-Criteria Decision Analysis (MCDA), demonstrating how the city finds space to continue developing despite geographic constraints; a phenomenon validated by confirming that density driven by activity closely matches the satellite light footprint."
     },
+    "metodologia": {
+      "title": "02. Structure & Methodology",
+      "tag": "#AnalyticalPipeline",
+      "intro": "The inference engine executes the following logical flow:",
+      "item1Key": "1. Data Extraction:",
+      "item1Text": "Web scraping of base urban infrastructures (transport nodes, building footprints, road networks, and POIs) using APIs and Python scripts.",
+      "item2Key": "2. Spatial Processing:",
+      "item2Text": "Execution of topological calculations, measuring real distance to main roads and topographic friction towards transit nodes.",
+      "item3Key": "3. Multi-Criteria Analysis (MCDA):",
+      "item3Text": "Assignment of geometric scores and parametric normalization of variables.",
+      "item4Key": "4. Inference Engine:",
+      "item4Text": "Extrusion of architectural volumes dictated by theoretical densification pressure.",
+      "item5Key": "5. Validation:",
+      "item5Text": "Download of VIIRS satellite spectrometry (nighttime lights) from Google Earth Engine as an empirical reference."
+    },
+    "insights": {
+      "title": "03. Insights & Visualization",
+      "tag": "#DataInsights",
+      "intro": "The inference model reveals critical spatial behaviors regarding vertical density:",
+      "item1Key": "The Reality Mirror:",
+      "item1Text": "Both the spatial model and the VIIRS index show an aggressive densification peak at the convergence of the Jialing and Yangtze rivers, matching the real-world Jiangbeizui financial district.",
+      "item2Key": "Distance-Decay:",
+      "item2Text": "Maximum inferred verticality exists exclusively within a 150-200m radius of a transit node. Beyond walkable limits (500m), scale decreases drastically against topographic friction.",
+      "item3Key": "Skyscraper DNA:",
+      "item3Text": "Because the base fabric and skyscrapers require almost the same road capacity, the model justifies tower levels only through a combination of perfect topographic access and a hyper-concentration of commercial points."
+    },
+    "stack": {
+      "title": "Tech Stack",
+      "tag": "#TechSpecs",
+      "content": "Python | GeoPandas | SciPy | Rasterio | NumPy | GEE API | OSMnx | Overture Maps | PostgreSQL | Supabase | React | Mapbox GL JS | Recharts | QGIS | Figma"
+    },
+    "repoBtn": "View analysis in repository",
     "scorecards": {
       "volumen": "MODELED VOLUME",
       "volumen_sub": "Encoded polygons",
@@ -202,37 +231,6 @@
         "topografico": "Topographic Access"
       }
     },
-    "metodologia": {
-      "title": "Methodology",
-      "tag": "ANALYTICAL PIPELINE",
-      "intro": "The inference engine executes the following logical flow:",
-      "item1Key": "1. Data Extraction:",
-      "item1Text": "Web scraping of base urban infrastructures (transport nodes, building footprints, road networks, and POIs).",
-      "item2Key": "2. Spatial Processing:",
-      "item2Text": "Execution of topological calculations, measuring real distance to main roads and topographic friction towards transit.",
-      "item3Key": "3. Multi-Criteria Analysis (MCDA):",
-      "item3Text": "Assignment of geometric scores and parametric normalization of variables.",
-      "item4Key": "4. Inference Engine:",
-      "item4Text": "Extrusion of architectural volumes dictated by theoretical real estate pressure.",
-      "item5Key": "5. Validation:",
-      "item5Text": "Download of VIIRS satellite spectrometry (nighttime lights) from Google Earth Engine as an empirical reference."
-    },
-    "insights": {
-      "title": "Insights",
-      "tag": "FINDINGS",
-      "item1Key": "Effectiveness proven from space:",
-      "item1Text": "Cross-referencing with VIIRS satellite radiance proves the model works. The areas where the tool mathematically predicted the highest vertical density coincide with the city's actual peaks of economic activity and light emissions.",
-      "item2Key": "Calibration to local reality:",
-      "item2Text": "The model was adjusted to the characteristic metrics of Chongqing's relief, a mountain city. Therefore, instead of using flat radii, topography was absorbed to calculate spatial friction using percentiles, contextually inferring vertical density."
-    },
-    "stack": {
-      "title": "Stack",
-      "tag": "TECHNOLOGIES",
-      "catGeospatial": "// GEOSPATIAL & DATABASE",
-      "catBackend": "// BACKEND & DATA",
-      "catFrontend": "// FRONTEND & CLOUD"
-    },
-    "btnRepo": "View analysis on GitHub",
     "map": {
       "simbologia": "SYMBOLOGY",
       "niveles": "Levels",

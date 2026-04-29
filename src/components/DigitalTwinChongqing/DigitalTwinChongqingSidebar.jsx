@@ -21,26 +21,39 @@ const AccordionSection = ({ title, tag, isOpen, onClick, children }) => {
     },
     metaContainer: { display: 'flex', alignItems: 'center', marginTop: '2px' },
     line: { height: '1px', backgroundColor: 'rgba(188, 186, 192, 0.43)', flexGrow: 1, marginRight: '8px' },
-    tagText: { fontFamily: 'var(--fuente-datos)', fontSize: '9px', color: '#7c7889ff', whiteSpace: 'nowrap' },
-    content: { display: isOpen ? 'block' : 'none', marginTop: '10px', animation: 'fadeIn 0.3s ease-in-out' }
+    tag: {
+      fontFamily: 'var(--fuente-datos)', fontSize: '9px', color: '#FFFFFF',
+      letterSpacing: '0.5px', textTransform: 'uppercase'
+    },
+    content: {
+      display: isOpen ? 'block' : 'none', marginTop: '10px', animation: 'fadeIn 0.3s ease-in-out'
+    }
   };
 
   return (
     <div style={s.container}>
       <div onClick={onClick}>
-        <div style={s.header}><h3 style={s.titleText}>{title}</h3><span style={s.arrow}>▼</span></div>
-        <div style={s.metaContainer}><div style={s.line} /><span style={s.tagText}>{tag}</span></div>
+        <div style={s.header}>
+          <h3 style={s.titleText}>{title}</h3>
+          <span style={s.arrow}>▼</span>
+        </div>
+        <div style={s.metaContainer}>
+          <div style={s.line} />
+          <span style={s.tag}>{tag}</span>
+        </div>
       </div>
-      <div style={s.content}>{children}</div>
+      <div style={s.content}>
+        {children}
+      </div>
     </div>
   );
 };
 
-export default function DigitalTwinSidebar() {
-  const [sectionsState, setSectionsState] = useState({ purpose: true, methodology: false, insights: false, stack: false });
+export default function DigitalTwinChongqingSidebar({ t }) {
+  const [sectionsState, setSectionsState] = useState({ proposito: true, metodologia: false, insights: false, stack: false });
 
-  const toggle = (section) => {
-    setSectionsState(prevState => ({ ...prevState, [section]: !prevState[section] }));
+  const toggle = (sec) => {
+    setSectionsState(prev => ({ ...prev, [sec]: !prev[sec] }));
   };
 
   const handleRepoClick = () => {
@@ -56,8 +69,9 @@ export default function DigitalTwinSidebar() {
     authorRole: { fontFamily: 'var(--fuente-ui)', fontSize: '11px', color: 'var(--texto-secundario)', margin: '2px 0 0 0', fontStyle: 'normal' },
     contentBody: { flex: 1, padding: '15px 15px', overflowY: 'auto', paddingRight: '5px', scrollbarWidth: 'thin', scrollbarColor: '#424242 transparent' },
     bodyText: { fontFamily: 'var(--fuente-ui)', fontSize: '12px', fontWeight: '400', lineHeight: '1.4', color: '#E0E0E0', marginBottom: '8px' },
-    listItem: { marginBottom: '8px' },
-    listKey: { color: '#FFFFFF', fontWeight: '500' },
+    ul: { margin: '0', paddingLeft: '15px', color: '#E0E0E0', fontFamily: 'var(--fuente-ui)', fontSize: '12px', lineHeight: '1.6' },
+    li: { marginBottom: '8px' },
+    highlight: { color: '#FFFFFF', fontWeight: '600' },
     repoBtn: {
       display: 'flex',
       alignItems: 'center',
@@ -88,17 +102,10 @@ export default function DigitalTwinSidebar() {
       display: 'inline-block',
       marginRight: '6px',
       marginBottom: '6px'
-    },
-    categoryLabel: {
-      color: '#FFFFFF',
-      fontSize: '10px',
-      fontWeight: '700',
-      fontFamily: 'var(--fuente-datos)',
-      marginBottom: '6px',
-      display: 'block',
-      marginTop: '8px'
     }
   };
+
+  if (!t || !t.proposito) return null;
 
   return (
     <div style={s.container}>
@@ -110,97 +117,70 @@ export default function DigitalTwinSidebar() {
       `}</style>
 
       <div style={s.headerBox}>
-        <h2 style={s.subHeader}>INFERENCIA ESPACIAL EN CHONGQING</h2>
-        <h1 style={s.mainTitle}>GEMELO DIGITAL 2.5D</h1>
+        <h2 style={s.subHeader}>{t.subtitle}</h2>
+        <h1 style={s.mainTitle}>{t.title}</h1>
         <div style={s.authorBox}>
-          <p style={s.authorRole}>Modelación de escala urbana inferida a partir de variables urbanas</p>
+          <p style={s.authorRole}>{t.role}</p>
         </div>
       </div>
 
       <div style={s.contentBody} className="custom-scrollbar">
         
-        <AccordionSection title="El Propósito" tag="CONTEXTO" isOpen={sectionsState.purpose} onClick={() => toggle('purpose')}>
-          <p style={s.bodyText}>
-            El presente proyecto expone el primer acercamiento al desarrollo de una herramienta de geointeligencia basada en Gemelos Digitales (Digital Twins). Su objetivo es modelar la escala constructiva de una ciudad calculando la altura de los edificios por inferencia, utilizando estrictamente las variables urbanas de su entorno.
-          </p>
-          <p style={s.bodyText}>
-            Para su desarrollo y prueba se eligió la ciudad de Chongqing; sus características morfológicas y topográficas extremas funcionan como el entorno ideal, ya que estos desafíos se absorben directamente a través de las variables espaciales que alimentan el algoritmo. Como resultado de esta simulación, se logró codificar y extruir un modelo 2.5D con más de 16,000 polígonos.
-          </p>
+        <AccordionSection 
+          title={t.proposito.title} 
+          tag={t.proposito.tag} 
+          isOpen={sectionsState.proposito} 
+          onClick={() => toggle('proposito')}
+        >
+          <p style={s.bodyText}>{t.proposito.content}</p>
         </AccordionSection>
 
-        <AccordionSection title="Metodología" tag="PIPELINE ANALÍTICO" isOpen={sectionsState.methodology} onClick={() => toggle('methodology')}>
-          <p style={s.bodyText}>El motor de inferencia ejecuta el siguiente flujo lógico:</p>
-          <div style={s.listItem}>
-            <p style={s.bodyText}>
-              <span style={s.listKey}>1. Extracción de Datos:</span> Web scraping de infraestructuras urbanas base (nodos de transporte, huellas de edificación, vialidades y POIs).
-            </p>
-          </div>
-          <div style={s.listItem}>
-            <p style={s.bodyText}>
-              <span style={s.listKey}>2. Procesamiento Espacial:</span> Ejecución de cálculos topológicos, midiendo la distancia real a vías principales y la fricción topográfica hacia el transporte.
-            </p>
-          </div>
-          <div style={s.listItem}>
-            <p style={s.bodyText}>
-              <span style={s.listKey}>3. Análisis Multicriterio (MCDA):</span> Asignación de puntuaciones geométricas y normalización paramétrica de las variables.
-            </p>
-          </div>
-          <div style={s.listItem}>
-            <p style={s.bodyText}>
-              <span style={s.listKey}>4. Motor de Inferencia:</span> Extrusión de los volúmenes arquitectónicos dictados por la presión inmobiliaria teórica.
-            </p>
-          </div>
-          <div style={s.listItem}>
-            <p style={s.bodyText}>
-              <span style={s.listKey}>5. Comprobación:</span> Descarga de espectrometría satelital VIIRS (luces nocturnas) desde Google Earth Engine para tomar como referencia empírica.
-            </p>
-          </div>
+        <AccordionSection 
+          title={t.metodologia.title} 
+          tag={t.metodologia.tag} 
+          isOpen={sectionsState.metodologia} 
+          onClick={() => toggle('metodologia')}
+        >
+          <p style={s.bodyText}>{t.metodologia.intro}</p>
+          <ul style={s.ul}>
+            <li style={s.li}><span style={s.highlight}>{t.metodologia.item1Key}</span> {t.metodologia.item1Text}</li>
+            <li style={s.li}><span style={s.highlight}>{t.metodologia.item2Key}</span> {t.metodologia.item2Text}</li>
+            <li style={s.li}><span style={s.highlight}>{t.metodologia.item3Key}</span> {t.metodologia.item3Text}</li>
+            <li style={s.li}><span style={s.highlight}>{t.metodologia.item4Key}</span> {t.metodologia.item4Text}</li>
+            {/* Solo renderiza el item 5 si existe en el JSON, así no rompe nada */}
+            {t.metodologia.item5Key && <li style={s.li}><span style={s.highlight}>{t.metodologia.item5Key}</span> {t.metodologia.item5Text}</li>}
+          </ul>
         </AccordionSection>
 
-        <AccordionSection title="Insights" tag="HALLAZGOS" isOpen={sectionsState.insights} onClick={() => toggle('insights')}>
-          <div style={{ marginBottom: '12px', borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '8px' }}>
-            <p style={s.bodyText}>
-              <span style={s.listKey}>Efectividad comprobada desde el espacio:</span> El cruce con la radiancia satelital VIIRS demuestra que el modelo funciona. Las zonas donde la herramienta predijo matemáticamente la mayor densidad vertical coinciden con los picos reales de actividad económica y emisiones lumínicas de la ciudad.
-            </p>
-          </div>
-          <div style={{ borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '8px' }}>
-            <p style={s.bodyText}>
-              <span style={s.listKey}>Calibración a la realidad local:</span> El modelo se ajustó a métricas características del relieve de Chongqing, una ciudad montaña. Por lo que, en vez de usar radios llanos, se absorbió la topografía para calcular la fricción espacial mediante percentiles, infiriendo la densidad vertical de forma contextual.
-            </p>
-          </div>
+        <AccordionSection 
+          title={t.insights.title} 
+          tag={t.insights.tag} 
+          isOpen={sectionsState.insights} 
+          onClick={() => toggle('insights')}
+        >
+          <p style={s.bodyText}>{t.insights.intro}</p>
+          <ul style={s.ul}>
+            <li style={s.li}><span style={s.highlight}>{t.insights.item1Key}</span> {t.insights.item1Text}</li>
+            <li style={s.li}><span style={s.highlight}>{t.insights.item2Key}</span> {t.insights.item2Text}</li>
+            <li style={s.li}><span style={s.highlight}>{t.insights.item3Key}</span> {t.insights.item3Text}</li>
+          </ul>
         </AccordionSection>
 
-        <AccordionSection title="Stack" tag="TECNOLOGÍAS" isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
-          <div style={{ marginBottom: '12px' }}>
-            <span style={s.categoryLabel}>// BACKEND & DATA</span>
-            <div>
-              <span style={s.badge}>Python</span>
-              <span style={s.badge}>GeoPandas</span>
-              <span style={s.badge}>OSMnx</span>
-              <span style={s.badge}>Rasterio</span>
-            </div>
-          </div>
-          <div style={{ marginBottom: '12px' }}>
-            <span style={s.categoryLabel}>// GEOSPATIAL</span>
-            <div>
-              <span style={s.badge}>Earth Engine API</span>
-              <span style={s.badge}>QGIS</span>
-              <span style={s.badge}>MCDA</span>
-            </div>
-          </div>
-          <div>
-            <span style={s.categoryLabel}>// FRONTEND & CLOUD</span>
-            <div>
-              <span style={s.badge}>React</span>
-              <span style={s.badge}>Mapbox GL JS</span>
-              <span style={s.badge}>Recharts</span>
-              <span style={s.badge}>Supabase</span>
-            </div>
+        <AccordionSection 
+          title={t.stack.title} 
+          tag={t.stack.tag} 
+          isOpen={sectionsState.stack} 
+          onClick={() => toggle('stack')}
+        >
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+            {t.stack.content.split('|').map((tech, index) => (
+              <span key={index} style={s.badge}>{tech.trim()}</span>
+            ))}
           </div>
         </AccordionSection>
         
         <button className="btn-repo" style={s.repoBtn} onClick={handleRepoClick}>
-          <FaGithub size={16} /> Ver análisis en GitHub
+          <FaGithub size={16} /> {t.repoBtnLabel || t.repoBtn || "Ver análisis en GitHub"}
         </button>
         
       </div>

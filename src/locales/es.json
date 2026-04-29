@@ -158,8 +158,79 @@
       "inversion": "Inversión Inmobiliaria",
       "presion": "Zona del manglar en presión"
     }
-    },
+  },
   "digitaltwin": {
+    "fileName": "DigitalTwinChongqing",
+    "ejecutar": "VER MODELO",
+    "subtitle": "INFERENCIA ESPACIAL EN CHONGQING",
+    "title": "GEMELO DIGITAL 2.5D",
+    "role": "Modelado de escala urbana inferida por variables espaciales",
+    "proposito": {
+      "title": "01. El Propósito",
+      "tag": "#InferenciaEspacial",
+      "content": "Este proyecto desarrolla un motor de geointeligencia basado en Gemelos Digitales para inferir la escala constructiva de la ciudad. El objetivo es modelar la densidad vertical de 16,606 parcelas basándose en el peso de variables urbanas tangibles, normalizadas y ponderadas, permitiendo visualizar el potencial de desarrollo que tiene un territorio. Chongqing fue seleccionada como entorno de prueba debido a su morfología montañosa extrema. El reto principal fue lograr que el algoritmo tomara en cuenta las restricciones contextuales del lugar a través de un Análisis Multicriterio (MCDA), demostrando cómo la ciudad encuentra lugar para desarrollarse aún con restricciones geográficas; un fenómeno validado al confirmar que la densificación por actividad coincide fielmente con la huella lumínica satelital."
+    },
+    "metodologia": {
+      "title": "02. Estructura y Metodología",
+      "tag": "#PipelineAnalítico",
+      "intro": "El motor de inferencia ejecuta el siguiente flujo lógico:",
+      "item1Key": "1. Extracción de Datos:",
+      "item1Text": "Minería de datos de infraestructuras base (nodos de transporte, huellas de edificios, red vial y POIs) mediante APIs y scripts de Python.",
+      "item2Key": "2. Procesamiento Espacial:",
+      "item2Text": "Ejecución de cálculos topológicos, midiendo distancia real a vialidades principales y fricción topográfica hacia el transporte masivo.",
+      "item3Key": "3. Análisis Multicriterio (MCDA):",
+      "item3Text": "Asignación de puntuaciones geométricas y normalización paramétrica de variables urbanas.",
+      "item4Key": "4. Motor de Inferencia:",
+      "item4Text": "Extrusión de volúmenes arquitectónicos dictados por la presión teórica de densificación.",
+      "item5Key": "5. Validación:",
+      "item5Text": "Cruce de datos con espectrometría satelital VIIRS (luces nocturnas) de Google Earth Engine como referente empírico."
+    },
+    "insights": {
+      "title": "03. Insights y Visualización",
+      "tag": "#DataInsights",
+      "intro": "El modelo de inferencia revela comportamientos espaciales críticos sobre la densidad vertical:",
+      "item1Key": "El Espejo de la Realidad:",
+      "item1Text": "Tanto el modelo espacial como el índice VIIRS marcan un pico agresivo de densificación en la convergencia de los ríos Jialing y Yangtsé, coincidiendo en la realidad con el distrito financiero de Jiangbeizui.",
+      "item2Key": "Radios Caminables:",
+      "item2Text": "La verticalidad máxima inferida existe exclusivamente en un radio de 150 a 200m desde un nodo de transporte. Al alejarse de distancias caminables (500m), la escala se aminora drásticamente frente a la fricción topográfica.",
+      "item3Key": "El ADN del Rascacielos:",
+      "item3Text": "Debido a que el tejido base y los rascacielos exigen casi la misma capacidad vial, el modelo justifica la construcción de niveles en las torres solo al combinar accesibilidad topográfica y de transporte con hiperconcentración comercial."
+    },
+    "stack": {
+      "title": "Stack Tecnológico",
+      "tag": "#TechSpecs",
+      "content": "Python | GeoPandas | SciPy | Rasterio | NumPy | GEE API | OSMnx | Overture Maps | PostgreSQL | Supabase | React | Mapbox GL JS | Recharts | QGIS | Figma"
+    },
+    "repoBtn": "Ver análisis de datos en repositorio",
+    "scorecards": {
+      "volumen": "VOLUMEN MODELADO",
+      "volumen_sub": "Polígonos codificados",
+      "moda": "ESCALA PREDOMINANTE",
+      "moda_sub": "Moda de niveles inferidos",
+      "supertalls": "ALTA DENSIDAD",
+      "supertalls_sub": "Edificios con >50 niveles",
+      "viirs": "CORRELACIÓN ESPACIAL",
+      "viirs_sub": "Coincidencia Altura / Luz (VIIRS)"
+    },
+    "graphs": {
+      "scatterTitle": "Fricción Espacial vs. Escala Constructiva",
+      "radarTitle": "El ADN de un Rascacielos",
+      "rascacielosTop": "Rascacielos (Top 5%)",
+      "rascacielos": "Rascacielos",
+      "densidadMedia": "Densidad Media",
+      "tejidoBase": "Tejido Base",
+      "distanciaEq": "Distancia Equivalente",
+      "nivelesInf": "Niveles Inferidos",
+      "parcelaEval": "Parcela Evaluada",
+      "friccionTop": "Fricción Topográfica:",
+      "alturaConst": "Altura Constructiva:",
+      "decaimiento": "Decaimiento de Densidad",
+      "radar": {
+        "comercial": "Densidad Comercial",
+        "vial": "Capacidad Vial",
+        "topografico": "Acceso Topográfico"
+      }
+    },
     "map": {
       "simbologia": "SIMBOLOGÍA",
       "niveles": "Niveles",
@@ -184,37 +255,7 @@
       "actividadAlta": "Actividad Alta",
       "actividadMedia": "Actividad Media",
       "actividadBaja": "Actividad Baja"
-    }, 
-    "scorecards": {
-      "volumen": "VOLUMEN MODELADO",
-      "volumen_sub": "Polígonos codificados",
-      "moda": "ESCALA PREDOMINANTE",
-      "moda_sub": "Moda de niveles inferidos",
-      "supertalls": "ALTA DENSIDAD",
-      "supertalls_sub": "Edificios con >50 niveles",
-      "viirs": "CORRELACIÓN ESPACIAL",
-      "viirs_sub": "Coincidencia Altura / Luz (VIIRS)"
-    },
-   "graphs": {
-      "scatterTitle": "Fricción Espacial vs. Escala Constructiva",
-      "radarTitle": "El ADN de un Rascacielos",
-      "rascacielosTop": "Rascacielos (Top 5%)",
-      "rascacielos": "Rascacielos",
-      "densidadMedia": "Densidad Media",
-      "tejidoBase": "Tejido Base",
-      "distanciaEq": "Distancia Equivalente",
-      "nivelesInf": "Niveles Inferidos",
-      "parcelaEval": "Parcela Evaluada",
-      "friccionTop": "Fricción Topográfica:",
-      "alturaConst": "Altura Constructiva:",
-      "decaimiento": "Decaimiento de Densidad",
-      "radar": {
-        "comercial": "Densidad Comercial",
-        "vial": "Capacidad Vial",
-        "topografico": "Acceso Topográfico"
-      }
     }
-
   },
   "factorEsfuerzo": {
     "fileName": "04_factor_esfuerzo_turistico",
@@ -235,7 +276,7 @@
       "item1Key": "Minería de Datos (POIs):",
       "item1Text": "Desarrollo de scripts en Python (BeautifulSoup) para el web scraping de sitios especializados, normalizando coordenadas y atributos de activos estratégicos en un dataset estructurado.",
       "item2Key": "Extracción de Infraestructura:",
-      "item2Text": "Captura y filtrado automatizado de la red ferroviaria completa de Japón mediante plugins geoespaciales para su integración en el modelo de accesibilidad.",
+      "item2Text": "Captura y filtrado automatizado de la red ferroviaria completa de Japón mediante plugins geoespacial para su integración en el modelo de accesibilidad.",
       "item3Key": "Near Analysis:",
       "item3Text": "Ejecución de un análisis de proximidad en GIS para categorizar el nivel de dificultad de acceso y el aislamiento relativo de los activos periféricos."
     },
@@ -321,4 +362,4 @@
     "layers": "'Infraestructura', 'Data', 'Género', 'Ambiente'",
     "btn": "CONTACTO"
   }
-}   
+}
