@@ -25,8 +25,6 @@ export default function DigitalTwinGraphs({ t: propT }) {
   const fontBody = getCssVar('--fuente-ui') || 'Inter, sans-serif';
   const textSecondary = getCssVar('--texto-secundario') || '#b0b3b8';
 
-  // Eliminamos el estado 'data' y el useEffect de Supabase.
-  // Ahora usamos SCATTER_RAW directamente.
   const radarData = useMemo(() => {
     if (!t) return [];
     return [
@@ -36,10 +34,9 @@ export default function DigitalTwinGraphs({ t: propT }) {
     ];
   }, [t]);
 
-  // Si no hay textos, mostramos el error que ya conoces
   if (!t) {
     return (
-      <div style={{ padding: '20px', color: '#ff5a60', border: '1px dashed #ff5a60', width: '100%', fontFamily: 'var(--fuente-datos)', fontSize: '12px' }}>
+      <div style={{ padding: '20px', color: '#07d98c', border: '1px dashed #ff5a60', width: '100%', fontFamily: 'var(--fuente-datos)', fontSize: '12px' }}>
         &gt; ERROR_DE_DATOS: Verifica la estructura de tus archivos JSON de idioma.
       </div>
     );
@@ -130,8 +127,8 @@ export default function DigitalTwinGraphs({ t: propT }) {
         <div style={styles.header}>
           <div style={styles.title}>{t.radarTitle}</div>
           <div style={styles.legend}>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.mca.nodos)}></span> {t.rascacielos}</div>
-            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.mca.pois)}></span> {t.tejidoBase}</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.height.top)}></span> {t.rascacielos}</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.height.base)}></span> {t.tejidoBase}</div>
           </div>
         </div>
         <div style={{ flex: 1, width: '100%' }}>
@@ -141,8 +138,8 @@ export default function DigitalTwinGraphs({ t: propT }) {
               <PolarAngleAxis dataKey="subject" tick={{ fill: textSecondary, fontSize: 9, fontFamily: fontBody }} />
               <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
               <Tooltip content={<CustomTooltipRadar />} />
-              <Radar name={t.rascacielos} dataKey="Rascacielos" stroke={RAMP.mca.nodos} fill={RAMP.mca.nodos} fillOpacity={0.5} />
-              <Radar name={t.tejidoBase} dataKey="TejidoBase" stroke={RAMP.mca.pois} fill={RAMP.mca.pois} fillOpacity={0.5} />
+              <Radar name={t.rascacielos} dataKey="Rascacielos" stroke={RAMP.height.top} fill={RAMP.height.top} fillOpacity={0.5} />
+              <Radar name={t.tejidoBase} dataKey="TejidoBase" stroke={RAMP.height.base} fill={RAMP.height.base} fillOpacity={0.5} />
             </RadarChart>
           </ResponsiveContainer>
         </div>

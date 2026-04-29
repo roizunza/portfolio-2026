@@ -18,27 +18,27 @@ export const PROJECTS = {
   },
   digitaltwin: {
     title: 'Gemelo Digital 2.5D',
-    color: '#fcff30', 
+    color: '#f27eb4', 
     ramp: {
       height: {
-        base: '#162238',
-        media: '#0d5c80',
-        alta: '#00e1ff',
-        top: '#fcff30'
+        base: '#400224',
+        media: '#a60d61',
+        alta: '#f27eb4',
+        top: '#07d98c'
       },
       viirs: {
         baja: '#160824',
-        media: '#6b127b',
-        alta: '#de0082',
-        maxima: '#d1e429'
+        media: '#7d39eb',
+        alta: '#a7df19',
+        maxima: '#ffffff'
       },
       mca: {
         nodos: '#ff5a60',
-        pois: '#00e1ff',
+        pois: '#eeff00',
         vias: '#ffffff'
       }
-    } // <--- Faltaba cerrar el objeto 'ramp' aquí...
-  },  // <--- ... Y FALTABA CERRAR EL OBJETO 'digitaltwin' AQUÍ CON SU COMA.
+    } 
+  },
   factorEsfuerzo: {
     title: 'Factor Esfuerzo',
     color: '#00e5ff', 

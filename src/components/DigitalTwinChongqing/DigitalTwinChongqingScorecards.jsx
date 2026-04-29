@@ -55,28 +55,28 @@ const DigitalTwinScorecards = ({ t }) => {
             number={kpis.volumen}
             title={t.scorecards.volumen}
             subtitle={t.scorecards.volumen_sub}
-            titleColor={RAMP.height.alta}
+            titleColor={RAMP.mca.pois}
             styles={s}
           />
           <ScorecardItem 
             number={kpis.moda}
             title={t.scorecards.moda}
             subtitle={t.scorecards.moda_sub}
-            titleColor={RAMP.viirs.nodos}
+            titleColor={RAMP.viirs.media}
             styles={s}
           />
           <ScorecardItem 
             number={kpis.supertalls}
             title={t.scorecards.supertalls}
             subtitle={t.scorecards.supertalls_sub}
-            titleColor={RAMP.height.media}
+            titleColor={RAMP.viirs.alta}
             styles={s}
           />
           <ScorecardItem 
             number={kpis.viirs}
             title={t.scorecards.viirs}
             subtitle={t.scorecards.viirs_sub}
-            titleColor={RAMP.viirs.alta}
+            titleColor={RAMP.mca.vias}
             styles={s}
           />
       </React.Fragment>
