@@ -193,7 +193,7 @@
       "item1Text": "Both the spatial model and the VIIRS index show an aggressive densification peak at the convergence of the Jialing and Yangtze rivers, matching the real-world Jiangbeizui financial district.",
       "item2Key": "Distance-Decay:",
       "item2Text": "Maximum inferred verticality exists exclusively within a 150-200m radius of a transit node. Beyond walkable limits (500m), scale decreases drastically against topographic friction.",
-      "item3Key": "Skyscraper DNA:",
+      "item3Key": "Drivers of Vertical Densification:",
       "item3Text": "Because the base fabric and skyscrapers require almost the same road capacity, the model justifies tower levels only through a combination of perfect topographic access and a hyper-concentration of commercial points."
     },
     "stack": {

@@ -193,7 +193,7 @@
       "item1Text": "Tanto el modelo espacial como el índice VIIRS marcan un pico agresivo de densificación en la convergencia de los ríos Jialing y Yangtsé, coincidiendo en la realidad con el distrito financiero de Jiangbeizui.",
       "item2Key": "Radios Caminables:",
       "item2Text": "La verticalidad máxima inferida existe exclusivamente en un radio de 150 a 200m desde un nodo de transporte. Al alejarse de distancias caminables (500m), la escala se aminora drásticamente frente a la fricción topográfica.",
-      "item3Key": "El ADN del Rascacielos:",
+      "item3Key": "Loa Factores de Densificación Vertical:",
       "item3Text": "Debido a que el tejido base y los rascacielos exigen casi la misma capacidad vial, el modelo justifica la construcción de niveles en las torres solo al combinar accesibilidad topográfica y de transporte con hiperconcentración comercial."
     },
     "stack": {
