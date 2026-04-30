@@ -22,7 +22,7 @@ const Indice = ({ onActivarDashboard }) => {
   const proyectos = [
     { id: 1, baseName: t.viajaSegura.fileName, extension: ".kml", extensionColor: PROJECTS.viajaSegura.color, icono: iconKml, idScroll: "seccion-viaja-segura" },
     { id: 2, baseName: t.vigilancia.fileName, extension: ".tiff", extensionColor: PROJECTS.vigilancia.color, icono: iconTiff, idScroll: "seccion-vigilancia" },
-    { id: 3, baseName: t.digitaltwin.fileName, extension: ".json", extensionColor: PROJECTS.digitaltwin.color, icono: iconJson, idScroll: "seccion-digitaltwin" },
+    { id: 3, baseName: t.digitaltwin.fileName, extension: ".geojson", extensionColor: PROJECTS.digitaltwin.color, icono: iconJson, idScroll: "seccion-digitaltwin" },
     { id: 4, baseName: t.factorEsfuerzo.fileName, extension: ".gpkg", extensionColor: PROJECTS.factorEsfuerzo.color, icono: iconGpkg, idScroll: "seccion-esfuerzo" }
   ];
 

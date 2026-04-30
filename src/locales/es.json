@@ -164,6 +164,9 @@
     "ejecutar": "VER MODELO",
     "subtitle": "INFERENCIA ESPACIAL EN CHONGQING",
     "title": "GEMELO DIGITAL 2.5D",
+    "cardComment": "// Web scraping e inferencia espacial mediante modelado 2.5",
+    "cardDescription1": "Implementación de un modelo espacial que infiere la escala de construcción en el distrito de Yuzhong, Chongqing, basado en variables urbanas tangibles extraídas mediante flujos automatizados de datos.",
+    "cardDescription2": "El motor estima la altura constructiva a partir de la calificación asignada a cada huella de edificio mediante un análisis multicriterio (MCDA), validando la precisión del modelo 2.5D con un índice de luminiscencia extraído de imágenes satelitales de radiancia nocturna.",
     "role": "Modelado de escala urbana inferida por variables espaciales",
     "proposito": {
       "title": "01. El Propósito",

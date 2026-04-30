@@ -12,7 +12,7 @@ const DigitalTwinChongqingCard = ({ onEjecutar, onClose }) => {
     <ProjectCard
       title={t.fileName}
       defColor={PROJECTS.digitaltwin.color} 
-      comment={idioma === 'es' ? "// Logística & Machine Learning Espacial" : "// Logistics & Spatial Machine Learning"}
+      comment={idioma === 'es' ? "// Web scraping e inferencia espacial mediante modelado 2.5" : "// Web Scraping & 2.5D Spatial Inference"}
       image={imgDigitalTwin}
       onEjecutar={onEjecutar}
       onClose={onClose}
