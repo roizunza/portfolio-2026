@@ -58,6 +58,7 @@
       "tag": "#TechSpecs",
       "content": "Python (GeoPandas), QGIS, React, Mapbox GL JS, Figma."
     },
+    "repoBtn": "Ver análisis de datos en repositorio",
     "scorecards": {
       "rutas": "RUTAS DE CUIDADO",
       "rutas_sub": "Conectando hogares con escuelas y salud",

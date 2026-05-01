@@ -180,7 +180,7 @@ export default function DigitalTwinChongqingSidebar({ t }) {
         </AccordionSection>
         
         <button className="btn-repo" style={s.repoBtn} onClick={handleRepoClick}>
-          <FaGithub size={16} /> {t.repoBtnLabel || t.repoBtn || "Ver análisis en GitHub"}
+          <FaGithub size={16} /> {t.repoBtnLabel || t.repoBtn}
         </button>
         
       </div>

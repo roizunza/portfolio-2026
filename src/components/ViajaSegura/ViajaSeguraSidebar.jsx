@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PROJECTS } from '../../config/theme';
+import { FaGithub } from 'react-icons/fa';
 
 const THEME = PROJECTS.viajaSegura;
 
@@ -44,6 +45,10 @@ export default function ViajaSeguraSidebar({ t }) {
     setSectionsState(prevState => ({ ...prevState, [section]: !prevState[section] }));
   };
 
+  const handleRepoClick = () => { 
+    window.open('https://github.com/roizunza/urban-data-pipelines/tree/main/01_ViajaSegura', '_blank'); 
+  };
+
   const s = {
     container: { display: 'flex', flexDirection: 'column', height: '100%', color: 'var(--texto-secundario)' },
     headerBox: { backgroundColor: 'var(--fondo-app)', padding: '15px 15px', borderBottom: '1px solid var(--borde-sutil)', flexShrink: 0 },
@@ -54,7 +59,26 @@ export default function ViajaSeguraSidebar({ t }) {
     contentBody: { flex: 1, padding: '15px 15px', overflowY: 'auto', paddingRight: '5px', scrollbarWidth: 'thin', scrollbarColor: '#424242 transparent' },
     bodyText: { fontFamily: 'var(--fuente-ui)', fontSize: '12px', fontWeight: '400', lineHeight: '1.4', color: '#E0E0E0', marginBottom: '8px' },
     listItem: { marginBottom: '8px' },
-    listKey: { color: '#FFFFFF', fontWeight: '500' }
+    listKey: { color: '#FFFFFF', fontWeight: '500' },
+    repoBtn: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px',
+      backgroundColor: 'var(--azul-electrico)',
+      color: '#FFFFFF',
+      fontFamily: 'var(--fuente-datos)',
+      fontSize: '12px',
+      fontWeight: '700',
+      padding: '12px 15px',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      width: '100%',
+      marginTop: '25px',
+      marginBottom: '15px',
+      transition: 'opacity 0.3s'
+    }
   };
 
   return (
@@ -63,6 +87,7 @@ export default function ViajaSeguraSidebar({ t }) {
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         .custom-scrollbar::-webkit-scrollbar { width: 2px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #424242; border-radius: 2px; }
+        .btn-repo:hover { opacity: 0.85; }
       `}</style>
 
       <div style={s.headerBox}>
@@ -107,6 +132,10 @@ export default function ViajaSeguraSidebar({ t }) {
         <AccordionSection title={t.stack.title} tag={t.stack.tag} isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
           <p style={s.bodyText}>{t.stack.content}</p>
         </AccordionSection>
+        
+<button className="btn-repo" style={s.repoBtn} onClick={handleRepoClick}>
+          <FaGithub size={16} /> {t.repoBtnLabel || t.repoBtn }
+        </button>
         
       </div>
     </div>

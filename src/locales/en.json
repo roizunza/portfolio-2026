@@ -58,6 +58,7 @@
       "tag": "#TechSpecs",
       "content": "Python (GeoPandas), QGIS, React, Mapbox GL JS, Figma."
     },
+     "repoBtn": "View analysis in repository",
     "scorecards": {
       "rutas": "CARE ROUTES",
       "rutas_sub": "Connecting homes with schools and health services",
@@ -168,9 +169,6 @@
     "cardDescription1": "Implementation of a spatial model to infer the latent building scale in Chongqing based on tangible urban variables extracted through automated data pipelines.",
     "cardDescription2": "The engine estimates building heights based on the scores assigned to each footprint through a Spatial Multicriteria Evaluation (MCDA), validating the 2.5D model's accuracy with a luminescence index extracted from nighttime light satellite imagery.",
     
-
-
-
     "role": "Urban scale modeling inferred from urban variables",
     "proposito": {
       "title": "01. Purpose",
