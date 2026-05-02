@@ -58,26 +58,25 @@ export default function ViajaSeguraSidebar({ t }) {
     authorRole: { fontFamily: 'var(--fuente-ui)', fontSize: '11px', color: 'var(--texto-secundario)', margin: '2px 0 0 0', fontStyle: 'normal' },
     contentBody: { flex: 1, padding: '15px 15px', overflowY: 'auto', paddingRight: '5px', scrollbarWidth: 'thin', scrollbarColor: '#424242 transparent' },
     bodyText: { fontFamily: 'var(--fuente-ui)', fontSize: '12px', fontWeight: '400', lineHeight: '1.4', color: '#E0E0E0', marginBottom: '8px' },
-    listItem: { marginBottom: '8px' },
-    listKey: { color: '#FFFFFF', fontWeight: '500' },
     repoBtn: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '8px',
-      backgroundColor: 'var(--azul-electrico)',
-      color: '#FFFFFF',
-      fontFamily: 'var(--fuente-datos)',
-      fontSize: '12px',
-      fontWeight: '700',
-      padding: '12px 15px',
-      border: 'none',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+      backgroundColor: 'var(--azul-electrico)', color: '#FFFFFF', fontFamily: 'var(--fuente-datos)',
+      fontSize: '12px', fontWeight: '700', padding: '12px 15px', border: 'none',
+      borderRadius: '4px', cursor: 'pointer', width: '100%', marginTop: '25px',
+      marginBottom: '15px', transition: 'opacity 0.3s'
+    },
+    // --- ESTILO INDIVIDUAL DE ETIQUETA (Inyectado de Digital Twin) ---
+    badge: {
+      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+      border: '1px solid rgba(255, 255, 255, 0.15)',
+      padding: '3px 8px',
       borderRadius: '4px',
-      cursor: 'pointer',
-      width: '100%',
-      marginTop: '25px',
-      marginBottom: '15px',
-      transition: 'opacity 0.3s'
+      fontSize: '10px',
+      fontFamily: 'var(--fuente-datos)',
+      color: '#A8B2C1',
+      display: 'inline-block',
+      marginRight: '6px',
+      marginBottom: '6px'
     }
   };
 
@@ -129,11 +128,16 @@ export default function ViajaSeguraSidebar({ t }) {
           </div>
         </AccordionSection>
 
+        {/* --- ETIQUETAS  STACK--- */}
         <AccordionSection title={t.stack.title} tag={t.stack.tag} isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
-          <p style={s.bodyText}>{t.stack.content}</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2px', marginTop: '5px' }}>
+            {t.stack.content.split(/[|,]/).map((tech, index) => (
+              <span key={index} style={s.badge}>{tech.trim()}</span>
+            ))}
+          </div>
         </AccordionSection>
         
-<button className="btn-repo" style={s.repoBtn} onClick={handleRepoClick}>
+        <button className="btn-repo" style={s.repoBtn} onClick={handleRepoClick}>
           <FaGithub size={16} /> {t.repoBtnLabel || t.repoBtn }
         </button>
         

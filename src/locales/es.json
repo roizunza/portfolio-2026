@@ -56,7 +56,7 @@
     "stack": {
       "title": "Stack Tecnológico",
       "tag": "#TechSpecs",
-      "content": "Python (GeoPandas), QGIS, React, Mapbox GL JS, Figma."
+      "content": "Python (GeoPandas), QGIS, React, Mapbox GL JS, Figma"
     },
     "repoBtn": "Ver análisis de datos en repositorio",
     "scorecards": {
@@ -146,7 +146,7 @@
     "stack": {
       "title": "Stack Tecnológico",
       "tag": "#TechSpecs",
-      "content": "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma."
+      "content": "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma"
     },
     "raster": {
       "ndviTitle": "Índice de vegetación de diferencia normalizada",
@@ -308,7 +308,7 @@
     "stack": {
       "title": "Stack Tecnológico",
       "tag": "#TechSpecs",
-      "content": "Python (BeautifulSoup, Pandas), QGIS (QuickOSM), Figma."
+      "content": "Python (BeautifulSoup, Pandas), QGIS (QuickOSM), Figma"
     },
     "scorecards": {
       "activos": "ACTIVOS MAPEADOS",
