@@ -31,8 +31,8 @@ export default function MapComponent({ t }) {
  map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
-      center: [-99.225, 19.319], 
-      zoom: 12.12
+      center: [-99.225, 19.323], 
+      zoom: 12.7
     });
 
     map.current.on('load', () => {

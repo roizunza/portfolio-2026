@@ -3,14 +3,14 @@
 export const PROJECTS = {
   viajaSegura: {
     title: 'Viaja Segura',
-    color: '#702cdd', 
+    color: '#9992f5', 
     ramp: {
-      isochrone: '#702cdd',
+      isochrone: '#491799',
       descensos: '#46a3da',
       rutas: { 
-        antigua: '#bc67dd', 
-        ocotal: '#8b29b8', 
-        oyamel: '#b892f5',
+        antigua: '#b42cdd', 
+        ocotal: '#9161dd', 
+        oyamel: '#702cdd',
         default: '#ffffff'
       },
       equipamiento: { 

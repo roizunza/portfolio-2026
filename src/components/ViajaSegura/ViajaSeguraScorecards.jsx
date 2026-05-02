@@ -38,7 +38,7 @@ export default function Scorecards({ t }) {
   // Diseno, fuentes y colores intactos (segun especificacion estricta)
   const s = {
     card: { display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', width: '100%', height: '100%', minHeight: '80px', backgroundColor: 'rgba(21, 24, 35, 0.6)', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.05)', padding: '5px', boxSizing: 'border-box' },
-    number: { color: '#702cdd', fontFamily: "'Source Code Pro', monospace", fontSize: '22px', fontWeight: '700', marginBottom: '4px', lineHeight: '1' },
+    number: { color: '#9992f5', fontFamily: "'Source Code Pro', monospace", fontSize: '22px', fontWeight: '700', marginBottom: '4px', lineHeight: '1' },
     title: { fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px', color: '#FFFFFF' },
     subtitle: { color: '#B4A7AF', fontFamily: "'Inter', sans-serif", fontSize: '8px', fontWeight: '500', lineHeight: '1.2', opacity: 0.8 }
   };
