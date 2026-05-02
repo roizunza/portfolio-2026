@@ -79,20 +79,31 @@
       "abasto": "Abasto"
     },
     "map": {
+      "contexto": "Contexto",
+      "viasAcceso": "Vías de Acceso",
+      "metroMaq": "Metro MAQ",
       "simbologia": "SIMBOLOGÍA",
       "recorridos": "Recorridos",
+      "rutaOyamel": "Oyamel",
+      "rutaOcotal": "Ocotal",
+      "rutaAntigua": "Antigua",
       "isocronas": "Isocronas 500m",
       "equip": "Equipamiento",
       "popups": {
+        "intermodal": "CONEXIÓN INTERMODAL",
+        "metro": "Metro",
         "ruta": "RUTA",
         "demanda": "Demanda",
         "longitud": "Longitud",
         "parada": "PARADA",
         "suben": "Suben",
         "bajan": "Bajan",
+        "equipamiento500m": "Equipamiento (500m)",
+        "scoreCarga": "Score de Carga",
         "educativo": "EDUCATIVO",
         "salud": "SALUD",
-        "abasto": "ABASTO"
+        "abasto": "ABASTO",
+        "sinNombre": "S/N"
       }
     }
   },

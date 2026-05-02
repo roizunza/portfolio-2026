@@ -3,12 +3,12 @@
 export const PROJECTS = {
   viajaSegura: {
     title: 'Viaja Segura',
-    color: '#a020f0', 
+    color: '#702cdd', 
     ramp: {
-      isochrone: '#A020F0',
-      descensos: '#03a9f4',
-      rutas: { antigua: '#F976C7', ocotal: '#f232a9', oyamel: '#f1afd1' },
-      equipamiento: { educativo: '#3872e7', salud: '#4164a9', abasto: '#6b8dd3', otros: '#888888' }
+      isochrone: '#f27ee8',
+      descensos: '#46a3da',
+      rutas: { antigua: '#bc67dd', ocotal: '#8b29b8', oyamel: '#bfa6ee' },
+      equipamiento: { educativo: '#46a3da', salud: '#307ace', abasto: '#0099ff', otros: '#888888' }
     }
   },
   vigilancia: {

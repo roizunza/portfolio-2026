@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "cu_polygon",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "element": "node", "id": 2896556041, "bench": "no", "bin": "no", "bus": "yes", "highway": "bus_stop", "lit": "yes", "name": "Ciudad Universitaria", "operator": "Metrobus", "public_transport": "platform", "shelter": "yes", "addr:postcode": null, "place": null, "source": null, "source:name": null, "wikidata": null, "wikimedia_commons": null, "wikipedia": null, "area": null }, "geometry": { "type": "Point", "coordinates": [ -99.1884915, 19.3229299 ] } },
+{ "type": "Feature", "properties": { "element": "node", "id": 5039653773, "bench": null, "bin": null, "bus": null, "highway": null, "lit": null, "name": "Ciudad Universitaria", "operator": null, "public_transport": null, "shelter": null, "addr:postcode": "04360", "place": "village", "source": "INEGI (CNPV 2015)", "source:name": "INEGI (CNPV 2015)", "wikidata": "Q130025", "wikimedia_commons": "Category:Ciudad Universitaria", "wikipedia": "en:Ciudad Universitaria", "area": null }, "geometry": { "type": "Point", "coordinates": [ -99.1849188, 19.3215473 ] } },
+{ "type": "Feature", "properties": { "element": "way", "id": 1148128878, "bench": null, "bin": null, "bus": null, "highway": "platform", "lit": null, "name": "Ciudad Universitaria", "operator": null, "public_transport": null, "shelter": null, "addr:postcode": null, "place": null, "source": null, "source:name": null, "wikidata": null, "wikimedia_commons": null, "wikipedia": null, "area": "yes" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -99.1885493, 19.3232684 ], [ -99.1885285, 19.3232706 ], [ -99.1885076, 19.3232728 ], [ -99.1884282, 19.3225969 ], [ -99.1884698, 19.3225925 ], [ -99.1885493, 19.3232684 ] ] ] } }
+]
+}

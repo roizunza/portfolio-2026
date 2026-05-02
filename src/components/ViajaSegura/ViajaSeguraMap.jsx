@@ -1,12 +1,17 @@
 import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { FONTS, PROJECTS } from '../../config/theme';
+import { PROJECTS } from '../../config/theme';
 
-import rutasData from '../../data/recorridos.json';
-import paradasData from '../../data/paradas_r66.json'; 
-import isocronasData from '../../data/isocronas.json';
-import equipData from '../../data/equipamiento.json';
+import rutasData from '../../data/ViajaSegura/recorridos.json';
+import paradasDemandaData from '../../data/ViajaSegura/01_viajasegura_metricas_demanda.json'; 
+import isocronasData from '../../data/ViajaSegura/isocronas.json';
+import equipData from '../../data/ViajaSegura/equipamiento.json';
+
+// Importamos el nuevo contexto territorial
+import cuData from '../../data/ViajaSegura/cu_polygon.json';
+import periData from '../../data/ViajaSegura/periferico.json';
+import maqData from '../../data/ViajaSegura/metro_maq.json';
 
 export default function MapComponent({ t }) {
   const mapContainer = useRef(null);
@@ -19,14 +24,13 @@ export default function MapComponent({ t }) {
   useEffect(() => {
     if (map.current) return;
 
-    // Conexión segura con la variable de entorno de Vite
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
-      center: [-99.215, 19.323],
-      zoom: 12.0 
+      center: [-99.220, 19.320], 
+      zoom: 12.8 
     });
 
     map.current.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
@@ -34,14 +38,49 @@ export default function MapComponent({ t }) {
     map.current.on('load', () => {
       if (!map.current) return;
 
+      // 1. Fuentes de datos
+      map.current.addSource('cu', { type: 'geojson', data: cuData });
+      map.current.addSource('periferico', { type: 'geojson', data: periData });
       map.current.addSource('isocronas', { type: 'geojson', data: isocronasData });
       map.current.addSource('rutas', { type: 'geojson', data: rutasData });
+      map.current.addSource('paradas', { type: 'geojson', data: paradasDemandaData });
       map.current.addSource('equipamiento', { type: 'geojson', data: equipData });
-      map.current.addSource('paradas', { type: 'geojson', data: paradasData });
+      map.current.addSource('maq', { type: 'geojson', data: maqData });
+
+      // 2. Capas de contexto (Fondo)
+      // Capa para los polígonos de CU (como la estación de Metrobús)
+      map.current.addLayer({
+        'id': 'cu-fill', 'type': 'fill', 'source': 'cu',
+        'filter': ['==', '$type', 'Polygon'], // Solo aplica a polígonos
+        'paint': { 'fill-color': '#7A8B99', 'fill-opacity': 0.1 }
+      });
+      
+      map.current.addLayer({
+        'id': 'cu-line', 'type': 'line', 'source': 'cu',
+        'filter': ['==', '$type', 'Polygon'],
+        'paint': { 'line-color': '#7A8B99', 'line-width': 1, 'line-dasharray': [2, 4] }
+      });
+
+      // Capa para los nodos de CU (marcadores principales)
+      map.current.addLayer({
+        'id': 'cu-points', 'type': 'circle', 'source': 'cu',
+        'filter': ['==', '$type', 'Point'], // Solo aplica a puntos
+        'paint': {
+            'circle-color': '#7A8B99',
+            'circle-radius': 4,
+            'circle-opacity': 0.5
+        }
+      });
+
+      // Periférico 
+      map.current.addLayer({
+        'id': 'peri-line', 'type': 'line', 'source': 'periferico',
+        'paint': { 'line-color': '#ff5a60', 'line-width': 0.05, 'line-opacity': 0.5 }
+      });
 
       map.current.addLayer({
         'id': 'isocronas-fill', 'type': 'fill', 'source': 'isocronas',
-        'paint': { 'fill-color': RAMP.isochrone, 'fill-opacity': 0.05 } 
+        'paint': { 'fill-color': RAMP.isochrone, 'fill-opacity': 0.08 } 
       });
 
       map.current.addLayer({
@@ -60,9 +99,26 @@ export default function MapComponent({ t }) {
       });
 
       map.current.addLayer({
+        'id': 'paradas-circle', 'type': 'circle', 'source': 'paradas',
+        'paint': {
+          'circle-radius': [
+            'interpolate', ['linear'], ['get', 'total'],
+            0, 3, 20, 6, 65, 12   
+          ],
+          'circle-color': [
+            'match', ['get', 'origen_destino'],
+            'Antigua-MAQ', RAMP.rutas.antigua, 
+            'Ocotal-MAQ', RAMP.rutas.ocotal,   
+            'Oyamel-MAQ', RAMP.rutas.oyamel,   
+            '#FFFFFF'
+          ],
+        }
+      });
+
+      map.current.addLayer({
         'id': 'equip-circle', 'type': 'circle', 'source': 'equipamiento',
         'paint': {
-          'circle-radius': 5, 
+          'circle-radius': 4, 
           'circle-color': [
             'match', ['get', 'equipamiento'],
             'EDUCATIVO', RAMP.equipamiento.educativo, 
@@ -74,21 +130,16 @@ export default function MapComponent({ t }) {
         }
       });
 
+      // Metro
       map.current.addLayer({
-        'id': 'paradas-circle', 'type': 'circle', 'source': 'paradas',
+        'id': 'maq-circle', 'type': 'circle', 'source': 'maq',
         'paint': {
-          'circle-radius': 7, 
-          'circle-color': [
-            'match', ['get', 'origen_destino'],
-            'Antigua-MAQ', RAMP.rutas.antigua, 
-            'Ocotal-MAQ', RAMP.rutas.ocotal,   
-            'Oyamel-MAQ', RAMP.rutas.oyamel,   
-            '#FFFFFF'
-          ],
-          'circle-stroke-width': 0
+          'circle-color': '#e0932d', // Naranja Metro
+          'circle-radius': 6,
         }
       });
 
+      // Popups
       const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'dark-popup' });
 
       const showPopup = (e, type) => {
@@ -105,7 +156,11 @@ export default function MapComponent({ t }) {
 
         let html = `<div style="${containerStyle}">`;
         
-        if (type === 'ruta') {
+        if (type === 'maq') {
+          html += `<div style="${titleStyle} color:#e0932d">${currentT.map.popups.intermodal}</div>
+                   <div style="font-weight:bold; font-size:12px;">${currentT.map.popups.metro} ${props.name || 'MAQ'}</div>`;
+        }
+        else if (type === 'ruta') {
           let routeColor = '#FFF';
           if (props.origen_destino === 'Antigua-MAQ') routeColor = RAMP.rutas.antigua;
           if (props.origen_destino === 'Ocotal-MAQ') routeColor = RAMP.rutas.ocotal;
@@ -116,10 +171,16 @@ export default function MapComponent({ t }) {
                    <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.longitud}:</span> <span style="${valStyle}">${longitud} km</span></div>`;
         } 
         else if (type === 'parada') {
+          const score = parseFloat(props.scorecarga || 0).toFixed(2);
+          const totalEq = props.total_equipamientos || 0;
+          
           html += `<div style="${titleStyle} color:${RAMP.descensos}">${currentT.map.popups.parada}</div>
                    <div style="margin-bottom:4px; font-weight:bold;">${props.origen_destino}</div>
                    <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.suben}:</span> <span style="${valStyle}">${props.ascensos}</span></div>
-                   <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.bajan}:</span> <span style="${valStyle}">${props.descensos}</span></div>`;
+                   <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.bajan}:</span> <span style="${valStyle}">${props.descensos}</span></div>
+                   <div style="border-top: 1px dashed rgba(255,255,255,0.2); margin-top: 5px; padding-top: 5px;"></div>
+                   <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.equipamiento500m}:</span> <span style="${valStyle}">${totalEq}</span></div>
+                   <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.scoreCarga}:</span> <span style="${valStyle}">${score}</span></div>`;
         } 
         else if (type === 'equip') {
           let titleColor = RAMP.equipamiento.otros;
@@ -128,7 +189,7 @@ export default function MapComponent({ t }) {
           if (props.equipamiento === 'SALUD') { titleColor = RAMP.equipamiento.salud; labelTrad = currentT.map.popups.salud; }
           if (props.equipamiento === 'ABASTO') { titleColor = RAMP.equipamiento.abasto; labelTrad = currentT.map.popups.abasto; }
           
-          const defaultLabel = currentT.nav.proyectos === 'Proyectos' ? 'S/N' : 'N/A';
+          const defaultLabel = currentT.map.popups.sinNombre;
           html += `<div style="${titleStyle} color:${titleColor}">${labelTrad}</div>
                    <div style="margin-bottom:4px; font-weight:bold; font-size:12px;">${props.nombre_escuela || props.nombre || defaultLabel}</div>`;
         }
@@ -138,10 +199,12 @@ export default function MapComponent({ t }) {
 
       const hidePopup = () => { if (map.current) { map.current.getCanvas().style.cursor = ''; popup.remove(); } };
 
-      ['rutas-line', 'equip-circle', 'paradas-circle'].forEach(layer => {
+      ['rutas-line', 'equip-circle', 'paradas-circle', 'maq-circle'].forEach(layer => {
         let lType = 'equip';
         if (layer.includes('ruta')) lType = 'ruta';
         if (layer.includes('parada')) lType = 'parada';
+        if (layer.includes('maq')) lType = 'maq';
+        
         map.current.on('mouseenter', layer, (e) => showPopup(e, lType));
         map.current.on('mouseleave', layer, hidePopup);
       });
@@ -155,48 +218,46 @@ export default function MapComponent({ t }) {
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
       
       <div style={{
-        position: 'absolute', 
-        top: '10px', 
-        left: '10px', 
-        padding: '8px', 
-        width: '140px',
-        backgroundColor: 'rgba(37, 41, 62, 0.5)', 
-        border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: '6px', 
-        color: '#FFFFFF', 
-        fontFamily: 'var(--fuente-datos)', 
-        fontSize: '9px',
-        zIndex: 10, 
-        backdropFilter: 'blur(8px)'
+        position: 'absolute', top: '10px', left: '10px', padding: '8px', width: '140px',
+        backgroundColor: 'rgba(37, 41, 62, 0.5)', border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: '6px', color: '#FFFFFF', fontFamily: 'var(--fuente-datos)', fontSize: '9px',
+        zIndex: 10, backdropFilter: 'blur(8px)'
       }}>
         <h4 style={{ margin: '0 0 4px 0', fontSize: '11px', fontWeight: 'bold', color: '#B0B3B8', letterSpacing: '0.5px' }}>
           {t.map.simbologia}
         </h4>
         
         <div style={{ margin: '6px 0 2px 0', fontSize: '9px', fontWeight: '500', color: '#B4A7AF' }}>{t.map.recorridos}</div>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
-          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.oyamel}}></span> Oyamel
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
+          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.oyamel}}></span> {t.map.rutaOyamel}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
-          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.ocotal}}></span> Ocotal
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
+          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.ocotal}}></span> {t.map.rutaOcotal}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
-          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.antigua}}></span> Antigua
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
+          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.antigua}}></span> {t.map.rutaAntigua}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginTop:'4px', marginLeft: '0', fontSize: '9px', color: '#FFFFFF' }}>
+        
+        <div style={{ margin: '6px 0 2px 0', fontSize: '9px', fontWeight: '500', color: '#B4A7AF' }}>{t.map.contexto}</div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
+          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: '#ff5a60'}}></span> {t.map.viasAcceso}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
+          <span style={{width: '6px', height: '6px', borderRadius: '50%', border: '1px solid #FFF', marginRight: '5px', display: 'inline-block', background: '#e0932d'}}></span> {t.map.metroMaq}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginTop:'4px' }}>
             <span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.isochrone, opacity: 0.5}}></span> 
-            <span style={{ fontWeight: '500', fontSize: '9px' }}>{t.map.isocronas}</span>
+            <span>{t.map.isocronas}</span>
         </div>
         
         <div style={{ margin: '6px 0 2px 0', fontSize: '9px', fontWeight: '500', color: '#B4A7AF' }}>{t.map.equip}</div>
-        
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
           <span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.equipamiento.educativo}}></span> {t.map.popups.educativo}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
           <span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.equipamiento.salud}}></span> {t.map.popups.salud}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px', fontSize: '9px', color: '#FFFFFF' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
           <span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.equipamiento.abasto}}></span> {t.map.popups.abasto}
         </div>
       </div>

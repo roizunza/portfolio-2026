@@ -79,20 +79,31 @@
       "abasto": "Supplies"
     },
     "map": {
+      "contexto": "Context",
+      "viasAcceso": "Access Roads",
+      "metroMaq": "MAQ Metro",
       "simbologia": "SYMBOLOGY",
       "recorridos": "Routes",
+      "rutaOyamel": "Oyamel",
+      "rutaOcotal": "Ocotal",
+      "rutaAntigua": "Antigua",
       "isocronas": "500m Isochrones",
       "equip": "Equipment",
       "popups": {
+        "intermodal": "INTERMODAL CONNECTION",
+        "metro": "Metro",
         "ruta": "ROUTE",
         "demanda": "Demand",
         "longitud": "Length",
         "parada": "STOP",
         "suben": "Boardings",
         "bajan": "Alightings",
+        "equipamiento500m": "Equipment (500m)",
+        "scoreCarga": "Load Score",
         "educativo": "EDUCATION",
         "salud": "HEALTH",
-        "abasto": "SUPPLIES"
+        "abasto": "SUPPLIES",
+        "sinNombre": "N/A"
       }
     }
   },

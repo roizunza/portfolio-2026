@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { PROJECTS } from '../../config/theme';
-import paradasData from '../../data/paradas_r66.json';
-import equipData from '../../data/equipamiento.json';
+import paradasData from '../../data/ViajaSegura/paradas_r66.json';
+import equipData from '../../data/ViajaSegura/equipamiento.json';
 
 const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
