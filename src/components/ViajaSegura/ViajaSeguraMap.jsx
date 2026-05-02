@@ -8,9 +8,7 @@ import paradasDemandaData from '../../data/ViajaSegura/01_viajasegura_metricas_d
 import isocronasData from '../../data/ViajaSegura/isocronas.json';
 import equipData from '../../data/ViajaSegura/equipamiento.json';
 
-// Importamos el nuevo contexto territorial
 import cuData from '../../data/ViajaSegura/cu_polygon.json';
-import periData from '../../data/ViajaSegura/periferico.json';
 import maqData from '../../data/ViajaSegura/metro_maq.json';
 
 export default function MapComponent({ t }) {
@@ -21,62 +19,53 @@ export default function MapComponent({ t }) {
   const tRef = useRef(t);
   useEffect(() => { tRef.current = t; }, [t]);
 
+  // --- CAMBIO: LÓGICA DE BOTONES EXTRAÍDA DEL DIGITAL TWIN ---
+  const handleZoomIn = () => map.current?.zoomIn({ duration: 400 });
+  const handleZoomOut = () => map.current?.zoomOut({ duration: 400 });
+
   useEffect(() => {
     if (map.current) return;
 
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-    map.current = new mapboxgl.Map({
+ map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
-      center: [-99.220, 19.320], 
-      zoom: 12.8 
+      center: [-99.225, 19.319], 
+      zoom: 12.12
     });
-
-    map.current.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
     map.current.on('load', () => {
       if (!map.current) return;
 
-      // 1. Fuentes de datos
       map.current.addSource('cu', { type: 'geojson', data: cuData });
-      map.current.addSource('periferico', { type: 'geojson', data: periData });
       map.current.addSource('isocronas', { type: 'geojson', data: isocronasData });
       map.current.addSource('rutas', { type: 'geojson', data: rutasData });
       map.current.addSource('paradas', { type: 'geojson', data: paradasDemandaData });
       map.current.addSource('equipamiento', { type: 'geojson', data: equipData });
       map.current.addSource('maq', { type: 'geojson', data: maqData });
 
-      // 2. Capas de contexto (Fondo)
-      // Capa para los polígonos de CU (como la estación de Metrobús)
       map.current.addLayer({
         'id': 'cu-fill', 'type': 'fill', 'source': 'cu',
-        'filter': ['==', '$type', 'Polygon'], // Solo aplica a polígonos
-        'paint': { 'fill-color': '#7A8B99', 'fill-opacity': 0.1 }
+        'filter': ['==', '$type', 'Polygon'],
+        'paint': { 'fill-color': RAMP.contexto.cu, 'fill-opacity': 0.1 }
       });
       
       map.current.addLayer({
         'id': 'cu-line', 'type': 'line', 'source': 'cu',
         'filter': ['==', '$type', 'Polygon'],
-        'paint': { 'line-color': '#7A8B99', 'line-width': 1, 'line-dasharray': [2, 4] }
+        'paint': { 'line-color': RAMP.contexto.cu, 'line-width': 1, 'line-dasharray': [2, 4] }
       });
 
-      // Capa para los nodos de CU (marcadores principales)
       map.current.addLayer({
         'id': 'cu-points', 'type': 'circle', 'source': 'cu',
-        'filter': ['==', '$type', 'Point'], // Solo aplica a puntos
+        'filter': ['==', '$type', 'Point'],
         'paint': {
-            'circle-color': '#7A8B99',
+            'circle-color': RAMP.contexto.cu,
             'circle-radius': 4,
             'circle-opacity': 0.5
         }
-      });
-
-      // Periférico 
-      map.current.addLayer({
-        'id': 'peri-line', 'type': 'line', 'source': 'periferico',
-        'paint': { 'line-color': '#ff5a60', 'line-width': 0.05, 'line-opacity': 0.5 }
-      });
+      })
 
       map.current.addLayer({
         'id': 'isocronas-fill', 'type': 'fill', 'source': 'isocronas',
@@ -92,7 +81,7 @@ export default function MapComponent({ t }) {
             'Antigua-MAQ', RAMP.rutas.antigua, 
             'Ocotal-MAQ', RAMP.rutas.ocotal,   
             'Oyamel-MAQ', RAMP.rutas.oyamel,   
-            '#FFFFFF'
+            RAMP.rutas.default
           ],
           'line-width': 5, 'line-opacity': 0.8
         }
@@ -110,7 +99,7 @@ export default function MapComponent({ t }) {
             'Antigua-MAQ', RAMP.rutas.antigua, 
             'Ocotal-MAQ', RAMP.rutas.ocotal,   
             'Oyamel-MAQ', RAMP.rutas.oyamel,   
-            '#FFFFFF'
+            RAMP.rutas.default
           ],
         }
       });
@@ -130,16 +119,14 @@ export default function MapComponent({ t }) {
         }
       });
 
-      // Metro
       map.current.addLayer({
         'id': 'maq-circle', 'type': 'circle', 'source': 'maq',
         'paint': {
-          'circle-color': '#e0932d', // Naranja Metro
-          'circle-radius': 6,
+          'circle-color': RAMP.contexto.metro,
+          'circle-radius': 3,
         }
       });
 
-      // Popups
       const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'dark-popup' });
 
       const showPopup = (e, type) => {
@@ -157,11 +144,11 @@ export default function MapComponent({ t }) {
         let html = `<div style="${containerStyle}">`;
         
         if (type === 'maq') {
-          html += `<div style="${titleStyle} color:#e0932d">${currentT.map.popups.intermodal}</div>
+          html += `<div style="${titleStyle} color:${RAMP.contexto.metro}">${currentT.map.popups.intermodal}</div>
                    <div style="font-weight:bold; font-size:12px;">${currentT.map.popups.metro} ${props.name || 'MAQ'}</div>`;
         }
         else if (type === 'ruta') {
-          let routeColor = '#FFF';
+          let routeColor = RAMP.rutas.default;
           if (props.origen_destino === 'Antigua-MAQ') routeColor = RAMP.rutas.antigua;
           if (props.origen_destino === 'Ocotal-MAQ') routeColor = RAMP.rutas.ocotal;
           if (props.origen_destino === 'Oyamel-MAQ') routeColor = RAMP.rutas.oyamel;
@@ -217,6 +204,12 @@ export default function MapComponent({ t }) {
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
       
+      {/* --- CAMBIO 2: INCORPORACIÓN DE BOTONES CON ESTILO DE DIGITAL TWIN --- */}
+      <div className="dtc-nav-controls">
+        <button onClick={handleZoomIn} className="dtc-nav-btn">+</button>
+        <button onClick={handleZoomOut} className="dtc-nav-btn">-</button>
+      </div>
+
       <div style={{
         position: 'absolute', top: '10px', left: '10px', padding: '8px', width: '140px',
         backgroundColor: 'rgba(37, 41, 62, 0.5)', border: '1px solid rgba(255,255,255,0.1)',
@@ -237,13 +230,8 @@ export default function MapComponent({ t }) {
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
           <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: RAMP.rutas.antigua}}></span> {t.map.rutaAntigua}
         </div>
-        
-        <div style={{ margin: '6px 0 2px 0', fontSize: '9px', fontWeight: '500', color: '#B4A7AF' }}>{t.map.contexto}</div>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
-          <span style={{width: '10px', height: '2px', marginRight: '5px', display: 'inline-block', background: '#ff5a60'}}></span> {t.map.viasAcceso}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2px' }}>
-          <span style={{width: '6px', height: '6px', borderRadius: '50%', border: '1px solid #FFF', marginRight: '5px', display: 'inline-block', background: '#e0932d'}}></span> {t.map.metroMaq}
+          <span style={{width: '6px', height: '6px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.contexto.metro}}></span> {t.map.metroMaq}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', marginTop:'4px' }}>
             <span style={{width: '5px', height: '5px', borderRadius: '50%', marginRight: '5px', display: 'inline-block', background: RAMP.isochrone, opacity: 0.5}}></span> 

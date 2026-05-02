@@ -5,11 +5,25 @@ export const PROJECTS = {
     title: 'Viaja Segura',
     color: '#702cdd', 
     ramp: {
-      isochrone: '#f27ee8',
+      isochrone: '#702cdd',
       descensos: '#46a3da',
-      rutas: { antigua: '#bc67dd', ocotal: '#8b29b8', oyamel: '#bfa6ee' },
-      equipamiento: { educativo: '#46a3da', salud: '#307ace', abasto: '#0099ff', otros: '#888888' }
-    }
+      rutas: { 
+        antigua: '#bc67dd', 
+        ocotal: '#8b29b8', 
+        oyamel: '#b892f5',
+        default: '#ffffff'
+      },
+      equipamiento: { 
+        educativo: '#46a3da', 
+        salud: '#307ace', 
+        abasto: '#0099ff', 
+        otros: '#888888' 
+      },
+      contexto: {
+        cu: '#7A8B99',
+        metro: '#dd8826'
+      } 
+    } 
   },
   vigilancia: {
     title: 'Vigilancia Espectral',
@@ -57,6 +71,7 @@ export const COLORS = {
     primary: '#FFFFFF',
     secondary: '#B0B3B8',
     muted: '#7C7889'
+    
   },
   background: {
     app: '#0d0f16',
