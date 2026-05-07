@@ -25,8 +25,8 @@ export const PROJECTS = {
       } 
     } 
   },
-  vigilancia: {
-    title: 'Vigilancia Espectral',
+  networkfracture: {
+    title: 'Network Fracture',
     color: '#15be80', 
     ramp: { manglar: '#15BE80', inversion: '#a7a469', presion: '#f30a41', riesgo: '#f4976c' }
   },

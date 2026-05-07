@@ -107,7 +107,7 @@
       }
     }
   },
-  "vigilancia": {
+  "networkfracture": {
     "fileName": "02_spectral_watch",
     "ejecutar": "RUN ANALYSIS",
     "title": "SPECTRAL WATCH",

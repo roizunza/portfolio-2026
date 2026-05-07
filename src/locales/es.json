@@ -107,8 +107,8 @@
       }
     }
   },
-  "vigilancia": {
-    "fileName": "02_vigilancia_espectral",
+  "networkfracture": {
+    "fileName": "02_network_espectral",
     "ejecutar": "EJECUTAR ANÁLISIS",
     "title": "VIGILANCIA ESPECTRAL",
     "subtitle": "Auditoría de Presión Ambiental y Acceso Costero",

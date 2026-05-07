@@ -3,7 +3,7 @@ import './Indice.css';
 import { PROJECTS, STYLES } from '../config/theme.js'; 
 import { useLanguage } from '../context/LanguageContext.jsx'; 
 import ViajaSeguraCard from './ViajaSegura/ViajaSeguraCard.jsx';
-import VigilanciaEspectralCard from './VigilanciaEspectral/VigilanciaEspectralCard.jsx';
+import NetworkFractureCard from './NetworkFracture/NetworkFractureCard.jsx';
 import DigitalTwinChongqingCard from './DigitalTwinChongqing/DigitalTwinChongqingCard.jsx'; 
 import FactorEsfuerzoCard from './FactorEsfuerzo/FactorEsfuerzoCard.jsx';
 
@@ -21,7 +21,7 @@ const Indice = ({ onActivarDashboard }) => {
 
   const proyectos = [
     { id: 1, baseName: t.viajaSegura.fileName, extension: ".kml", extensionColor: PROJECTS.viajaSegura.color, icono: iconKml, idScroll: "seccion-viaja-segura" },
-    { id: 2, baseName: t.vigilancia.fileName, extension: ".tiff", extensionColor: PROJECTS.vigilancia.color, icono: iconTiff, idScroll: "seccion-vigilancia" },
+    { id: 2, baseName: t.networkfracture.fileName, extension: ".tiff", extensionColor: PROJECTS.networkfracture.color, icono: iconTiff, idScroll: "seccion-networkfracture" },
     { id: 3, baseName: t.digitaltwin.fileName, extension: ".geojson", extensionColor: PROJECTS.digitaltwin.color, icono: iconJson, idScroll: "seccion-digitaltwin" },
     { id: 4, baseName: t.factorEsfuerzo.fileName, extension: ".gpkg", extensionColor: PROJECTS.factorEsfuerzo.color, icono: iconGpkg, idScroll: "seccion-esfuerzo" }
   ];
@@ -66,7 +66,7 @@ const Indice = ({ onActivarDashboard }) => {
                   <ViajaSeguraCard idioma={idioma} t={t.viajaSegura} onEjecutar={() => manejarEjecucion(proyectoSeleccionado.idScroll)} onClose={() => setProyectoSeleccionado(null)} />
                 )}
                 {proyectoSeleccionado.id === 2 && (
-                  <VigilanciaEspectralCard idioma={idioma} t={t.vigilancia} onEjecutar={() => manejarEjecucion(proyectoSeleccionado.idScroll)} onClose={() => setProyectoSeleccionado(null)} />
+                  <NetworkFractureCard idioma={idioma} t={t.networkfracture} onEjecutar={() => manejarEjecucion(proyectoSeleccionado.idScroll)} onClose={() => setProyectoSeleccionado(null)} />
                 )}
                 {proyectoSeleccionado.id === 3 && (
                   <DigitalTwinChongqingCard idioma={idioma} t={t.digitaltwin} onEjecutar={() => manejarEjecucion(proyectoSeleccionado.idScroll)} onClose={() => setProyectoSeleccionado(null)} />
