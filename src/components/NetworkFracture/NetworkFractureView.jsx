@@ -3,14 +3,14 @@ import ProjectDashboardLayout from '../Shared/ProjectDashboardLayout.jsx';
 import Sidebar from './NetworkFractureSidebar.jsx';
 import MapComponent from './NetworkFractureMap.jsx';
 import Scorecards from './NetworkFractureScorecards.jsx';
-import RasterVisor from './NetworkFractureRasterVisor.jsx';
+import RasterVisor from './NetworkFractureGraphs.jsx';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 
 const NetworkFractureView = () => {
   const { t: fullT } = useLanguage();
   const t = fullT.networkfracture;
 
-  // ESTADO CENTRAL: Controla el tsunami en todo el dashboard
+  // Global state for water level simulation
   const [waterLevel, setWaterLevel] = useState(0);
 
   if (!t) return null;
@@ -19,7 +19,6 @@ const NetworkFractureView = () => {
     <ProjectDashboardLayout
       sidebarContent={<Sidebar t={t} />}
       
-      // El Mapa recibe el nivel y la capacidad de cambiarlo
       mapContent={
         <MapComponent 
           t={t} 
@@ -28,7 +27,6 @@ const NetworkFractureView = () => {
         />
       }
       
-      // Las Scorecards reciben el nivel para recalcular
       scorecardsContent={
         <Scorecards 
           t={t} 
@@ -36,7 +34,12 @@ const NetworkFractureView = () => {
         />
       }
       
-      chartsContent={<RasterVisor t={t} />}
+      chartsContent={
+        <RasterVisor 
+          t={t} 
+          waterLevel={waterLevel} 
+        />
+      }
     />
   );
 };

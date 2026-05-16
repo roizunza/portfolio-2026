@@ -12,10 +12,11 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
   const mapContainer = useRef(null);
   const map = useRef(null);
 
+  // Paleta con la nueva psicología de resiliencia
   const RAMP = {
-    safe: '#56E07A',     // Verde Neón
-    orphan: '#8b273b',   // Rojo Peligro
-    temple: '#ffffff',   // Morado Santuario
+    safe: '#8C92AC',     // Gris: Normalidad / A salvo por gobierno
+    orphan: '#FF2A55',   // Rojo: Colapso total / Aislado
+    temple: '#56E07A',   // Verde Neón: Esperanza / Rescate por templo
     road: '#4C566A'      // Gris Nord visible para red base
   };
   
@@ -53,10 +54,10 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
 
       map.current.addLayer({
         'id': 'hillshade-layer', 'type': 'hillshade', 'source': 'mapbox-dem',
-        'paint': { 'hillshade-exaggeration': 0.8, 'hillshade-shadow-color': '#05060a', 'hillshade-highlight-color': 'rgba(178, 102, 255, 0.1)' }
+        'paint': { 'hillshade-exaggeration': 0.8, 'hillshade-shadow-color': '#05060a', 'hillshade-highlight-color': 'rgba(255, 255, 255, 0.05)' }
       });
 
-      // 1. CARGA DE CALLES 3D (Local)
+      // 1. CARGA DE CALLES 3D
       map.current.addSource('roads-source', { 
         type: 'geojson', 
         data: roadsUrl 
@@ -69,7 +70,7 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
         'paint': {
           'line-color': RAMP.road,
           'line-width': 1.2,
-          'line-opacity': 0.8 // Visibles por defecto
+          'line-opacity': 0.8 
         }
       });
 
@@ -89,33 +90,31 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
           'circle-stroke-width': 0,
           'circle-color': [
             'case',
-            ['==', ['get', 'orphan_off_0m'], true], RAMP.orphan,
+            // Matriz corregida: Verde para rescates, Rojo para colapso, Gris para base
             ['==', ['get', 'saved_by_temple_0m'], true], RAMP.temple,
+            ['==', ['get', 'orphan_off_0m'], true], RAMP.orphan,
             RAMP.safe
           ],
           'circle-opacity': 1.0
         }
       });
 
-      // --- INICIO CAMBIOS: SIMBOLOGÍA DE TEMPLOS ALZADA ---
-      
-      // Creamos un ícono vectorial flotante con anclaje al piso (en formato SVG directo)
-      // %23 reemplaza al # para el código de color HEX
-      const svgIcon = `<svg width="40" height="64" viewBox="0 0 40 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="20" y1="36" x2="20" y2="64" stroke="%23B266FF" stroke-width="2" stroke-opacity="0.8" />
-        <rect x="4" y="4" width="32" height="32" rx="4" fill="%230d0f16" stroke="%23B266FF" stroke-width="2" />
-        <path d="M10 24L10 26L30 26L30 24L26 24L26 14L30 14L30 12L10 12L10 14L14 14L14 24L10 24Z" fill="%23B266FF" />
+      // 3. CARGA DE TEMPLOS CON SVG VECTORIAL LIMPIO Y BLANCO
+      const svgIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 6C8 4.2 16 4.2 22 6V8C16 7 8 7 2 8V6Z" fill="#FFFFFF"/>
+        <rect x="4" y="10" width="16" height="2" fill="#FFFFFF"/>
+        <path d="M7 10L6 22H8L9 10H7Z" fill="#FFFFFF"/>
+        <path d="M15 10L16 22H18L17 10H15Z" fill="#FFFFFF"/>
       </svg>`;
 
-      const img = new Image(40, 64);
+      const img = new Image();
       img.onload = () => {
-        if (!map.current.hasImage('floating-temple')) {
-          map.current.addImage('floating-temple', img);
+        if (!map.current.hasImage('clean-torii')) {
+          map.current.addImage('clean-torii', img);
         }
       };
-      img.src = 'data:image/svg+xml;charset=utf-8,' + svgIcon;
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgIcon);
 
-      // 3. CARGA DE TEMPLOS (Local)
       map.current.addSource('temples-source', { 
         type: 'geojson', 
         data: templesUrl 
@@ -123,53 +122,50 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
       
       map.current.addLayer({
         'id': 'temples-layer',
-        'type': 'symbol', // Cambiamos de circle a symbol
+        'type': 'symbol',
         'source': 'temples-source',
         'layout': {
-          'icon-image': 'floating-temple',
-          'icon-anchor': 'bottom', // El punto inferior del SVG toca el suelo
-          'icon-pitch-alignment': 'viewport', // Obliga al ícono a verse levantado (efecto "billboard")
+          'icon-image': 'clean-torii',
+          'icon-size': 1.0,
           'icon-allow-overlap': true,
-          'icon-size': 0.5
+          'icon-pitch-alignment': 'viewport', // Mantiene el ícono alzado frente a la cámara
+          'icon-anchor': 'bottom'
         }
       });
-      // --- FIN CAMBIOS ---
 
       setMapLoaded(true);
     });
   }, []);
 
-  // Hook dinamico: Reacciona al slider para aplicar el "Manto Negro"
+  // Hook dinamico: Reacciona al slider aplicando el "Manto Negro" e invirtiendo la jerarquía
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
 
-    // Evaluacion topografica: Si waterLevel es 0, fingimos negativo para que nada se apague
     const currentFloodLevel = waterLevel === 0 ? -999 : waterLevel;
 
-    // APAGAR CALLES SUMERGIDAS (Manto Negro)
+    // APAGAR CALLES SUMERGIDAS
     map.current.setPaintProperty('roads-layer', 'line-opacity', [
       'case',
-      ['<=', ['get', 'min_elevation'], currentFloodLevel], 0.0, // Apagada
-      0.8 // Visible
+      ['<=', ['get', 'min_elevation'], currentFloodLevel], 0.0, 
+      0.8 
     ]);
 
-    // Campos de simulación dinamicos (vienen del Tileset)
     const orphanField = `orphan_off_${waterLevel}m`;
     const templeField = `saved_by_temple_${waterLevel}m`;
 
-    // ACTUALIZAR COLORES DE NODOS
+    // ACTUALIZAR COLORES DE NODOS CON PRIORIDAD AL VERDE DE RESCATE
     map.current.setPaintProperty('nodes-layer', 'circle-color', [
       'case',
-      ['==', ['get', orphanField], true], RAMP.orphan,
       ['==', ['get', templeField], true], RAMP.temple,
+      ['==', ['get', orphanField], true], RAMP.orphan,
       RAMP.safe
     ]);
 
-    // ACTUALIZAR OPACIDAD DE NODOS (Desvanecer sumergidos)
+    // ACTUALIZAR OPACIDAD DE NODOS
     map.current.setPaintProperty('nodes-layer', 'circle-opacity', [
       'case',
-      ['all', ['==', ['get', orphanField], true], ['==', ['get', templeField], false]], 0.1, // Hundido -> Casi invisible
-      1.0 // Seguro/Rescatado -> Brillante
+      ['all', ['==', ['get', orphanField], true], ['==', ['get', templeField], false]], 0.1, 
+      1.0 
     ]);
 
   }, [waterLevel, mapLoaded]);
@@ -197,12 +193,11 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
         </button>
       </div>
 
-      {/* Leyenda y Slider siguen igual */}
       <div className="dtc-legend" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         
         <div className="tsunami-slider-container" style={{ padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           <h3 className="dtc-legend-title" style={{ marginBottom: '10px', fontSize: '14px', color: '#fff' }}>
-            Nivel de Tsunami: <span style={{ color: RAMP.safe }}>{waterLevel}m</span>
+            Nivel de Tsunami: <span style={{ color: RAMP.temple }}>{waterLevel}m</span>
           </h3>
           <input 
             type="range" 
@@ -211,7 +206,7 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
             step="10" 
             value={waterLevel}
             onChange={(e) => setWaterLevel(Number(e.target.value))}
-            style={{ width: '100%', cursor: 'pointer', accentColor: RAMP.safe }}
+            style={{ width: '100%', cursor: 'pointer', accentColor: RAMP.temple }}
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#888', marginTop: '5px' }}>
             <span>0m</span><span>10m</span><span>20m</span><span>30m</span>
@@ -223,15 +218,19 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
           <div className="dtc-section-content" style={{ marginTop: '10px' }}>
             <div className="dtc-legend-item">
               <div className="dtc-swatch" style={{ background: RAMP.safe, boxShadow: `0 0 5px ${RAMP.safe}`, width: '10px', height: '10px', borderRadius: '50%' }}></div> 
-              Acceso a Refugio (Seguro)
+              Normalidad Operativa (Gris)
             </div>
             <div className="dtc-legend-item">
               <div className="dtc-swatch" style={{ background: RAMP.temple, boxShadow: `0 0 5px ${RAMP.temple}`, width: '10px', height: '10px', borderRadius: '50%' }}></div> 
-              Rescate por Templo
+              Rescate por Templo (Verde)
             </div>
             <div className="dtc-legend-item">
               <div className="dtc-swatch" style={{ background: RAMP.orphan, boxShadow: `0 0 5px ${RAMP.orphan}`, width: '10px', height: '10px', borderRadius: '50%' }}></div> 
-              Nodo Aislado (Huérfano)
+              Aislamiento Crítico (Rojo)
+            </div>
+            <div className="dtc-legend-item" style={{display: 'flex', alignItems: 'center', marginTop: '8px', color: '#fff'}}>
+               <span style={{fontSize: '16px', marginRight: '8px'}}>⛩</span>
+              Templo Histórico (Blanco)
             </div>
           </div>
         </div>
