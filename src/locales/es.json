@@ -148,21 +148,28 @@
       "tag": "#TechSpecs",
       "content": "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma"
     },
-    "raster": {
-      "ndviTitle": "Índice de vegetación de diferencia normalizada",
-      "ndviTop": "Alta Vegetación",
-      "ndwiTitle": "Índice de humedad de diferencia normalizada",
-      "ndwiTop": "Alta Humedad"
+    "graphs": {
+      "fracturaTitle": "Evolución de la Fractura Territorial",
+      "absorcionTitle": "Absorción del Impacto de Red",
+      "normalidad": "Nodos normales",
+      "rescate": "Nodos rescatados",
+      "colapso": "Nodos colapsados",
+      "escenario": "Escenario actual:",
+      "inundacion": "Elevación de inundación",
+      "mitigacion": "Mitigación",
+      "totalInfra": "Total Infraestructura",
+      "calles": "calles",
+      "nodos": "nodos"
     },
     "scorecards": {
-      "presion": "ECOSISTEMA PRESIONADO",
-      "presion_sub": "Conflicto directo",
-      "amenaza": "ÍNDICE DE AMENAZA",
-      "amenaza_sub": "% del ecosistema bajo presión",
-      "inversion": "INVERSIÓN INMOBILIARIA",
-      "inversion_sub": "Desarrollos proyectados",
-      "manglar": "SUPERFICIE MANGLAR",
-      "manglar_sub": "Cobertura vegetal base"
+      "impacto": "FRACTURA TERRITORIAL",
+      "impacto_sub": "Total de nodos viales aislados en el escenario actual",
+      "deficit": "RED DESCONECTADA",
+      "deficit_sub": "Porcentaje de la red vial sin acceso a refugios oficiales",
+      "carga": "ANCLAJE DE MITIGACIÓN",
+      "carga_sub": "Nodos con acceso alternativo a la red de templos",
+      "eficiencia": "CAPACIDAD DE ABSORCIÓN",
+      "eficiencia_sub": "Porcentaje de nodos en riesgo rescatados por la red histórica"
     },
     "map": {
       "simbologia": "SIMBOLOGÍA",

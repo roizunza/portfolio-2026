@@ -1,27 +1,28 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
 } from 'recharts';
+import { PROJECTS } from '../../config/theme';
+import { useLanguage } from '../../context/LanguageContext.jsx'; 
 
-export default function RasterVisor({ t, waterLevel }) {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+export default function ChartsContainer({ t: propT, waterLevel }) {
+  const { t: contextT } = useLanguage();
+  
+  const fullT = contextT || propT;
+  const t = fullT?.networkfracture?.graphs;
 
-  // System color palette definition (Sincronizada con el mapa)
-  const COLORS = {
-    safe: '#8C92AC',      // Gris: Normalidad Operativa
-    temple: '#56E07A',    // Verde Neón: Rescate por Templo
-    orphan: '#FF2A55',    // Rojo Peligro: Aislado / Colapso Total
-    background: '#0d0f16' // Fondo oscuro de tus paneles
-  };
+  const RAMP = PROJECTS.networkfracture.ramp;
+  
+  const panelBg = getCssVar('--fondo-panel') || '#12141E';
+  const borderColor = getCssVar('--borde-sutil') || 'rgba(255,255,255,0.1)';
+  const fontBody = getCssVar('--fuente-ui') || 'Inter, sans-serif';
+  const textPrimary = getCssVar('--texto-principal') || '#ffffff';
+  const textSecondary = getCssVar('--texto-secundario') || '#b0b3b8';
 
-  // Static matrix from spatial audit (0m a 30m)
+  /* Matriz espacial de simulacion topografica (0m a 30m) */
   const DATA_MATRIX = [
     { level: 0, safe: 5932, temple: 0, orphan: 0 },
     { level: 10, safe: 4662, temple: 172, orphan: 1098 },
@@ -29,34 +30,53 @@ export default function RasterVisor({ t, waterLevel }) {
     { level: 30, safe: 958, temple: 776, orphan: 4198 }
   ];
 
-  // Dynamic filtering for donut chart logic
+  /* Filtro dinamico vinculado al slider del dashboard */
   const currentData = useMemo(() => {
     const lvl = waterLevel !== undefined ? waterLevel : 0;
     return DATA_MATRIX.find(d => d.level === lvl) || DATA_MATRIX[0];
   }, [waterLevel]);
 
   const pieData = useMemo(() => {
+    if (!t) return [];
     if (currentData.level === 0) {
-      return [{ name: 'Normalidad Operativa', value: currentData.safe, color: COLORS.safe }];
+      return [{ name: t.normalidad, value: currentData.safe, color: RAMP.templeCore }];
     }
     return [
-      { name: 'Aislamiento Critico', value: currentData.orphan, color: COLORS.orphan },
-      { name: 'Rescate por Templo', value: currentData.temple, color: COLORS.temple }
+      { name: t.colapso, value: currentData.orphan, color: RAMP.orphan },
+      { name: t.rescate, value: currentData.temple, color: RAMP.temple }
     ];
-  }, [currentData]);
+  }, [currentData, t, RAMP]);
 
-  // Bar chart tooltip formatter (Look mas tecnico)
+  if (!t) {
+    return (
+      <div style={{ padding: '20px', color: '#00e5ff', border: '1px dashed #ff5a60', width: '100%', fontFamily: 'var(--fuente-datos)', fontSize: '12px' }}>
+        &gt; ERROR_DE_DATOS: Faltan las traducciones de 'graphs' en el JSON.
+      </div>
+    );
+  }
+
   const CustomTooltipBar = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{ backgroundColor: '#12141E', padding: '12px', border: '1px solid #333', borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
-          <p style={{ margin: '0 0 8px 0', color: '#fff', fontSize: '12px', fontWeight: 'bold', fontFamily: 'var(--fuente-ui)' }}>Inundacion: {label}m</p>
+        <div style={{ backgroundColor: panelBg, border: `1px solid ${borderColor}`, padding: '12px', fontFamily: fontBody, zIndex: 1000, boxShadow: '0 4px 12px rgba(0,0,0,0.5)', minWidth: '180px' }}>
+          {/* Titulo en gris */}
+          <p style={{ margin: '0 0 10px 0', color: textSecondary, fontSize: '12px', fontWeight: 'bold' }}>{t.inundacion}: {label}m</p>
+          
           {payload.map((entry, index) => (
-            <p key={index} style={{ margin: '0 0 4px 0', color: entry.color, fontSize: '12px', fontFamily: 'var(--fuente-datos)' }}>
-              {entry.name}: <span style={{color: '#fff', fontWeight: 'bold'}}>{entry.value}</span>
-            </p>
+            <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 0 6px 0', fontSize: '12px', fontFamily: 'var(--fuente-datos)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', color: textSecondary }}>
+                {/* Viñeta de color */}
+                <span style={{ display: 'inline-block', width: '6px', height: '6px', backgroundColor: entry.color, borderRadius: '50%', marginRight: '8px' }}></span>
+                {/* Texto categoria en gris */}
+                {entry.name}
+              </div>
+              {/* Valor numerico en gris */}
+              <span style={{ color: textSecondary, fontWeight: 'bold', marginLeft: '15px' }}>{entry.value}</span>
+            </div>
           ))}
-          <p style={{ margin: '8px 0 0 0', borderTop: '1px solid #333', paddingTop: '8px', color: '#888', fontSize: '11px', fontFamily: 'var(--fuente-datos)' }}>Total Infraestructura: 5932</p>
+          
+          {/* Footer en gris */}
+          <p style={{ margin: '10px 0 0 0', borderTop: `1px solid ${borderColor}`, paddingTop: '8px', color: textSecondary, fontSize: '11px', fontFamily: 'var(--fuente-datos)' }}>{t.totalInfra}: 5932</p>
         </div>
       );
     }
@@ -67,10 +87,14 @@ export default function RasterVisor({ t, waterLevel }) {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div style={{ backgroundColor: '#12141E', padding: '10px', border: '1px solid #333', borderRadius: '4px' }}>
-          <p style={{ margin: 0, color: data.color, fontSize: '12px', fontWeight: 'bold', fontFamily: 'var(--fuente-datos)' }}>
-            {data.name}: {data.value} calles
-          </p>
+        <div style={{ backgroundColor: panelBg, border: `1px solid ${borderColor}`, padding: '10px', fontFamily: fontBody, zIndex: 1000, minWidth: '150px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px', fontFamily: 'var(--fuente-datos)' }}>
+             <div style={{ display: 'flex', alignItems: 'center', color: textSecondary }}>
+                <span style={{ display: 'inline-block', width: '6px', height: '6px', backgroundColor: data.color, borderRadius: '50%', marginRight: '8px' }}></span>
+                {data.name}
+              </div>
+              <span style={{ color: textSecondary, fontWeight: 'bold', marginLeft: '15px' }}>{data.value}</span>
+          </div>
         </div>
       );
     }
@@ -78,78 +102,109 @@ export default function RasterVisor({ t, waterLevel }) {
   };
 
   const totalVulnerable = currentData.orphan + currentData.temple;
-  const rescueEfficiency = totalVulnerable > 0 
-    ? ((currentData.temple / totalVulnerable) * 100).toFixed(1) 
-    : 0;
+  const rescueEfficiency = totalVulnerable > 0 ? ((currentData.temple / totalVulnerable) * 100).toFixed(1) : 0;
+
+  /* Estructura CSS estandarizada del dashboard */
+  const styles = {
+    mainContainer: { 
+      display: 'flex', 
+      flexWrap: 'wrap', 
+      width: '100%', 
+      height: '100%', 
+      padding: '10px 15px', 
+      overflow: 'hidden' 
+    },
+    leftSection: { 
+      flex: '1 1 50%', 
+      display: 'flex', 
+      flexDirection: 'column', 
+      paddingRight: '15px', 
+      minHeight: '0' 
+    },
+    rightSection: { 
+      flex: '1 1 50%', 
+      display: 'flex', 
+      flexDirection: 'column', 
+      paddingLeft: '15px', 
+      minHeight: '0', 
+      borderLeft: `1px solid ${borderColor}` 
+    },
+    header: { 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'flex-start', 
+      borderBottom: `1px solid ${borderColor}`, 
+      marginBottom: '8px', 
+      paddingBottom: '5px', 
+      gap: '4px' 
+    },
+    title: { 
+      fontFamily: fontBody, 
+      fontSize: '14px', 
+      fontWeight: '700', 
+      color: textPrimary, 
+      margin: 0, 
+      letterSpacing: '0.3px', 
+      width:'100%' 
+    },
+    legend: { 
+      display: 'flex', 
+      gap: '10px', 
+      fontSize: '11px', 
+      fontFamily: fontBody, 
+      color: textPrimary, 
+      flexWrap: 'wrap' 
+    },
+    dot: (color) => ({ 
+      width: '6px', 
+      height: '6px', 
+      backgroundColor: color, 
+      borderRadius: '2px', 
+      display: 'inline-block', 
+      marginRight: '4px' 
+    })
+  };
 
   return (
-    <div style={{ 
-        display: 'flex', 
-        flexDirection: isMobile ? 'column' : 'row', 
-        width: '100%', 
-        height: '100%', 
-        gap: '15px', 
-        padding: '10px',
-        overflow: 'hidden' 
-    }}>
+    <div style={styles.mainContainer}>
       
-      {/* NUEVA GRAFICA: BARRAS APILADAS HORIZONTALES (TECNICA Y LIMPIA) */}
-      <div style={{
-          flex: 1, 
-          minHeight: '250px', 
-          backgroundColor: 'var(--fondo-panel, #0d0f16)',
-          borderRadius: '8px', 
-          border: '1px solid #333',
-          display: 'flex', 
-          flexDirection: 'column', 
-          padding: '15px'
-      }}>
-        <h2 style={{ fontSize: '14px', color: '#fff', margin: '0 0 15px 0', letterSpacing: '0.5px', fontFamily: 'var(--fuente-ui)' }}>
-          Evolucion de la Fractura Territorial
-        </h2>
-        <div style={{ flex: 1, width: '100%', height: '100%' }}>
+      {/* SECCION IZQUIERDA: Impacto Macro */}
+      <div style={styles.leftSection}>
+        <div style={styles.header}>
+          <div style={styles.title}>{t.fracturaTitle}</div>
+          <div style={styles.legend}>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.safe)}></span> {t.normalidad}</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.temple)}></span> {t.rescate}</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}><span style={styles.dot(RAMP.orphan)}></span> {t.colapso}</div>
+          </div>
+        </div>
+        <div style={{ flex: 1, minHeight: 0 }}>
           <ResponsiveContainer width="100%" height="100%">
-            {/* BarChart con layout="vertical". Usamos DATA_MATRIX (0m a 30m) para que 0m quede abajo. */}
             <BarChart layout="vertical" data={DATA_MATRIX} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#222" horizontal={false} />
-              
-              {/* Eje X numérico */}
-              <XAxis type="number" stroke="#666" tick={{ fill: '#888', fontSize: 10 }} axisLine={false} />
-              
-              {/* Eje Y categórico (Elevación). Recharts por defecto pone el primer indice abajo. */}
-              <YAxis dataKey="level" type="category" stroke="#666" tick={{ fill: '#888', fontSize: 10 }} tickFormatter={(val) => `${val}m`} axisLine={false} tickLine={false} />
-              
-              {/* Cursor personalizado para resaltar la barra al hacer hover */}
+              <CartesianGrid strokeDasharray="3 3" stroke={borderColor} horizontal={false} />
+              <XAxis type="number" stroke={textSecondary} tick={{ fill: textSecondary, fontSize: 10 }} axisLine={false} />
+              <YAxis dataKey="level" type="category" stroke={textSecondary} tick={{ fill: textSecondary, fontSize: 10 }} tickFormatter={(val) => `${val}m`} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltipBar />} cursor={{ fill: 'rgba(255,255,255,0.05)' }} />
               
-              {/* Barras Apiladas (stackId="a"). Sin animacion para maxima fluidez al mover slider. */}
-              <Bar dataKey="safe" name="Normalidad" stackId="a" fill={COLORS.safe} isAnimationActive={false} barSize={25} />
-              <Bar dataKey="temple" name="Rescate" stackId="a" fill={COLORS.temple} isAnimationActive={false} barSize={25} />
-              {/* La última barra tiene radio en las esquinas derechas para un acabado mas pulido */}
-              <Bar dataKey="orphan" name="Colapso" stackId="a" fill={COLORS.orphan} isAnimationActive={false} barSize={25} radius={[0, 4, 4, 0]} />
+              <Bar dataKey="safe" name={t.normalidad} stackId="a" fill={RAMP.safe} isAnimationActive={false} barSize={25} />
+              <Bar dataKey="temple" name={t.rescate} stackId="a" fill={RAMP.temple} isAnimationActive={false} barSize={25} />
+              <Bar dataKey="orphan" name={t.colapso} stackId="a" fill={RAMP.orphan} isAnimationActive={false} barSize={25} radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* ANILLO DINÁMICO (Se mantiene igual, solo pulimos estilos) */}
-      <div style={{
-          flex: 1, 
-          minHeight: '250px', 
-          backgroundColor: 'var(--fondo-panel, #0d0f16)',
-          borderRadius: '8px', 
-          border: '1px solid #333',
-          display: 'flex', 
-          flexDirection: 'column', 
-          padding: '15px',
-          position: 'relative'
-      }}>
-        <h2 style={{ fontSize: '14px', color: '#fff', margin: '0 0 5px 0', letterSpacing: '0.5px', fontFamily: 'var(--fuente-ui)' }}>
-          Absorcion del Impacto de Red
-        </h2>
-        <p style={{ margin: '0 0 15px 0', fontSize: '11px', color: '#888', fontFamily: 'var(--fuente-datos)' }}>Escenario actual: {waterLevel || 0}m de inundacion</p>
-        
-        <div style={{ flex: 1, width: '100%', height: '100%', position: 'relative' }}>
+      {/* SECCION DERECHA: Eficiencia de Rescate */}
+      <div style={styles.rightSection}>
+        <div style={styles.header}>
+          <div style={styles.title}>{t.absorcionTitle}</div>
+          <div style={styles.legend}>
+            <div style={{ display: 'flex', alignItems: 'center', color: textSecondary }}>
+              {t.escenario} <span style={{color: RAMP.templeCore, marginLeft: '4px', fontWeight: 'bold'}}>{waterLevel || 0}m</span>
+            </div>
+          </div>
+        </div>
+        <div style={{ flex: 1, minHeight: 0, position: 'relative' }}>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -171,21 +226,14 @@ export default function RasterVisor({ t, waterLevel }) {
           </ResponsiveContainer>
 
           {/* KPI central */}
-          <div style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            textAlign: 'center',
-            fontFamily: 'var(--fuente-datos)'
-          }}>
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', fontFamily: 'var(--fuente-datos)' }}>
             {currentData.level === 0 ? (
-              <span style={{ color: COLORS.safe, fontSize: '20px', fontWeight: 'bold' }}>100%</span>
+              <span style={{ color: RAMP.safe, fontSize: '20px', fontWeight: 'bold' }}>100%</span>
             ) : (
               <>
-                <span style={{ color: COLORS.temple, fontSize: '26px', fontWeight: 'bold', textShadow: `0 0 10px ${COLORS.temple}44` }}>{rescueEfficiency}%</span>
+                <span style={{ color: RAMP.templeCore, fontSize: '26px', fontWeight: 'bold', textShadow: `0 0 10px ${RAMP.temple}44` }}>{rescueEfficiency}%</span>
                 <br/>
-                <span style={{ color: '#666', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Mitigacion</span>
+                <span style={{ color: textSecondary, fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t.mitigacion}</span>
               </>
             )}
           </div>

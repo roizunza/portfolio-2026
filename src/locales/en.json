@@ -148,21 +148,28 @@
       "tag": "#TechSpecs",
       "content": "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma"
     },
-    "raster": {
-      "ndviTitle": "Normalized Difference Vegetation Index",
-      "ndviTop": "High Vegetation",
-      "ndwiTitle": "Normalized Difference Water Index",
-      "ndwiTop": "High Moisture"
+    "graphs": {
+      "fracturaTitle": "Territorial Fracture Evolution",
+      "absorcionTitle": "Network Impact Absorption",
+      "normalidad": "Normal nodes",
+      "rescate": "Rescued nodes",
+      "colapso": "Collapsed nodes",
+      "escenario": "Current scenario:",
+      "inundacion": "Flood elevation",
+      "mitigacion": "Mitigation",
+      "totalInfra": "Total Infrastructure",
+      "calles": "streets",
+      "nodos": "nodes"
     },
     "scorecards": {
-      "presion": "PRESSURED ECOSYSTEM",
-      "presion_sub": "Direct conflict",
-      "threat": "THREAT INDEX",
-      "threat_sub": "% of ecosystem under pressure",
-      "inversion": "REAL ESTATE INVESTMENT",
-      "inversion_sub": "Projected developments",
-      "manglar": "MANGROVE SURFACE",
-      "manglar_sub": "Baseline vegetation cover"
+      "impacto": "TERRITORIAL FRACTURE",
+      "impacto_sub": "Total isolated road nodes in the current scenario",
+      "deficit": "DISCONNECTED NETWORK",
+      "deficit_sub": "Percentage of the road network lacking official shelter access",
+      "carga": "MITIGATION ANCHOR",
+      "carga_sub": "Nodes with alternative access to the temple network",
+      "eficiencia": "ABSORPTION CAPACITY",
+      "eficiencia_sub": "Percentage of at-risk nodes rescued by the historical network"
     },
     "map": {
       "simbologia": "SYMBOLOGY",

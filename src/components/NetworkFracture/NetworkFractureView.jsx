@@ -3,7 +3,7 @@ import ProjectDashboardLayout from '../Shared/ProjectDashboardLayout.jsx';
 import Sidebar from './NetworkFractureSidebar.jsx';
 import MapComponent from './NetworkFractureMap.jsx';
 import Scorecards from './NetworkFractureScorecards.jsx';
-import RasterVisor from './NetworkFractureGraphs.jsx';
+import ChartsContainer from './NetworkFractureGraphs.jsx';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 
 const NetworkFractureView = () => {
@@ -35,7 +35,7 @@ const NetworkFractureView = () => {
       }
       
       chartsContent={
-        <RasterVisor 
+        <ChartsContainer
           t={t} 
           waterLevel={waterLevel} 
         />

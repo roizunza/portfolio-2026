@@ -27,7 +27,7 @@ export const PROJECTS = {
   },
   networkfracture: {
     title: 'Network Fracture',
-    color: '#00e5ff', 
+    color: '#8bf2ff', 
     ramp: { 
       safe: '#58635f',      // Normalidad
       temple: '#56E07A',    // Rescate
