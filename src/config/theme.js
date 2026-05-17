@@ -63,7 +63,7 @@ export const PROJECTS = {
   },
   factorEsfuerzo: {
     title: 'Factor Esfuerzo',
-    color: '#00e5ff', 
+    color: '#ecdb85', 
     ramp: { buffer: '#0798a8', vias: '#546E7A', distancia: '#ecdb85', aislamiento: '#fb1b62', activos: '#00E5FF', estaciones: '#546E7A' } 
   }
 };

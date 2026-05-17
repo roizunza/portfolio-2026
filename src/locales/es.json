@@ -107,53 +107,58 @@
       }
     }
   },
-  "networkfracture": {
-    "fileName": "02_network_espectral",
+ "networkfracture": {
+    "fileName": "02_network_fracture",
     "ejecutar": "EJECUTAR ANÁLISIS",
-    "title": "VIGILANCIA ESPECTRAL",
-    "subtitle": "Auditoría de Presión Ambiental y Acceso Costero",
-    "role": "Segmentación mediante Machine Learning e Índice de Presión del Ecosistema",
-    "cardComment": "// Auditoría de Datos Ambientales y ML",
-    "cardDescription1": "Machine Learning: Auditoría ambiental mediante clasificación supervisada de imágenes satelitales para cuantificar la presión antrópica sobre ecosistemas de manglar en Dorado, Puerto Rico.",
-    "cardDescription2": "El análisis utiliza índices multiespectrales (NDVI/NDWI) para validar la integridad de la segmentación y evidencia el confinamiento del litoral mediante modelado geoespacial avanzado.",
+    "title": "SIMULACIÓN DE DESASTRES EN KAMAKURA",
+    "subtitle": "FRACTURA DE REDES",
+    "role": "Modelado de resiliencia y evacuación ante catástrofes naturales",
+    "cardComment": "// Degradación de Grafos y Simulación de Desastres",
+    "cardDescription1": "Desarrollo de un motor de geointeligencia para simular la degradación de la red vial de Kamakura ante inundaciones extremas provocadas por tsunamis.",
+    "cardDescription2": "El algoritmo evalúa la vulnerabilidad sistémica de la ciudad y demuestra matemáticamente cómo la infraestructura de templos ancestrales opera como una red emergente de rescate.",
     "proposito": {
       "title": "01. El Propósito",
-      "tag": "#EnvironmentalAudit",
-      "content": "El proyecto consiste en una auditoría ambiental en Dorado, Puerto Rico, para cuantificar el impacto generado por el desarrollo de resorts sobre el ecosistema de manglar. El objetivo es documentar la pérdida de cobertura vegetal y el estado del ecosistema mediante la construcción de un índice de presión, transformando la observación satelital en evidencia técnica para evaluación."
+      "tag": "#GestiónDeRiesgos",
+      "content": "Este proyecto desarrolla un motor de geointeligencia basado en la simulación de escenarios ante desastres naturales. El objetivo es modelar la degradación de grafos (la red vial de más de 5,900 nodos) ante la desconexión latente provocada por un evento extremo, evaluando la desvinculación temporal de la movilidad con la infraestructura de riesgos categorizada oficialmente por el Estado (Shitei Hinanjo). Kamakura fue seleccionada como entorno de prueba debido a su encapsulamiento orográfico y su tendencia de riesgo ante tsunamis. El reto principal fue lograr que el algoritmo aislara las calles que quedarían cubiertas por la dinámica del agua, y que los nodos sobrevivientes respondieran a la lógica de la topografía y el esfuerzo físico. Mediante cálculos de enrutamiento bajo estrés, el modelo evalúa si los recintos históricos pueden funcionar como una capa de apoyo logístico, contrastando matemáticamente el colapso de la conectividad vial frente a la capacidad de absorción y resguardo que ofrece la infraestructura de templos."
     },
     "metodologia": {
       "title": "02. Estructura y Metodología",
-      "tag": "#ML_Methodology",
-      "intro": "El análisis integra aprendizaje automático y validación multiespectral para garantizar la precisión de los hallazgos:",
-      "item1Key": "Segmentación Supervisada (Machine Learning):",
-      "item1Text": "Implementación de un modelo de clasificación supervisada para segmentar el uso de suelo en cuatro categorías: Urbano, Inversión Inmobiliaria (resorts), Manglares y Mar.",
-      "item2Key": "Validación de Congruencia (NDVI/NDWI):",
-      "item2Text": "Se generan los índices de vegetación (NDVI) y agua (NDWI) para realizar una validación cruzada con los resultados del modelo de Machine Learning.",
-      "item3Key": "Cálculo del Índice de Presión del Ecosistema:",
-      "item3Text": "Desarrollo de una métrica para evaluar el nivel de fragmentación y presión sobre el manglar. Este índice integra la densidad de la infraestructura colindante y la respuesta espectral."
+      "tag": "#PipelineAnalítico",
+      "intro": "El motor de simulación ejecuta el siguiente flujo lógico:",
+      "item1Key": "Extracción de Datos:",
+      "item1Text": "Minería de infraestructura base (red vial, templos históricos y refugios oficiales del Estado) mediante OSMnx.",
+      "item2Key": "Inyección Topográfica:",
+      "item2Text": "Muestreo espacial de un Modelo Digital de Elevación (DEM) local para asignar altitud tridimensional a cada nodo del grafo.",
+      "item3Key": "Fricción Espacial:",
+      "item3Text": "Aplicación de la Función de Excursionismo de Tobler para traducir distancias métricas en esfuerzo físico peatonal según la pendiente del terreno.",
+      "item4Key": "Degradación de Grafos:",
+      "item4Text": "Simulación iterativa de umbrales de inundación (10m, 20m, 30m), eliminando destructivamente las aristas sumergidas.",
+      "item5Key": "Enrutamiento Dijkstra:",
+      "item5Text": "Cálculo masivo de rutas de emergencia para identificar la pérdida de cobertura y aislar los nodos rescatados por la red de templos."
     },
     "insights": {
       "title": "03. Insights y Visualización",
       "tag": "#Insights",
-      "intro": "El estudio revela datos críticos sobre la configuración del territorio y plantea una hipótesis sobre la accesibilidad al litoral:",
-      "item1Key": "Fractura estructural:",
-      "item1Text": "El análisis revela una alta superficie de inversión inmobiliaria que confirma la mercantilización del suelo.",
-      "item2Key": "La Hipótesis del Confinamiento:",
-      "item2Text": "La conjunción de la barrera arquitectónica y natural puede estar anulando el acceso público a las playas garantizado por ley.",
-      "item3Key": "Dashboard de Auditoría:",
-      "item3Text": "Visualización interactiva que permite contrastar el modelo de segmentación con los índices de presión ambiental."
+      "intro": "El modelo geométrico revela el comportamiento progresivo de la resiliencia territorial a través de tres niveles críticos de estrés:",
+      "item1Key": "Escenario 10m (Contención Oficial):",
+      "item1Text": "La topografía de la ciudad logra resistir el impacto inicial. La conectividad se mantiene alta con 4,662 nodos preservando acceso a refugios oficiales, mientras que la red de templos comienza a activarse resguardando 172 calles periféricas.",
+      "item2Key": "Escenario 20m (Punto de Inflexión):",
+      "item2Text": "El volumen de agua fractura severamente las rutas de evacuación primarias, dejando más de 3,000 calles aisladas. Es aquí donde la infraestructura patrimonial demuestra su mayor valor estratégico: los templos cuadruplican su tasa de absorción, rescatando 670 rutas críticas y actuando como la principal barrera de mitigación ante la desconexión masiva.",
+      "item3Key": "Escenario 30m (Aislamiento Extremo):",
+      "item3Text": "La devastación orográfica desconecta al 70% del tejido urbano (4,198 nodos huérfanos). Aunque los recintos históricos alcanzan su pico máximo de rescate (776 nodos) por estar situados en las cotas más altas, la fragmentación topológica es tan aguda que la movilidad a escala de ciudad colapsa casi por completo."
     },
     "stack": {
       "title": "Stack Tecnológico",
       "tag": "#TechSpecs",
-      "content": "Python (Scikit-learn, GeoPandas), Google Earth Engine, SNAP, Mapbox GL JS, Figma"
+      "content": "Python | GeoPandas | SciPy | Rasterio | NumPy | NetworkX | OSMnx | React | Mapbox GL JS | Recharts | QGIS | Figma"
     },
+    "repoBtn": "Ver análisis de datos en repositorio",
     "graphs": {
       "fracturaTitle": "Evolución de la Fractura Territorial",
       "absorcionTitle": "Absorción del Impacto de Red",
-      "normalidad": "Nodos normales",
-      "rescate": "Nodos rescatados",
-      "colapso": "Nodos colapsados",
+      "normalidad": "Nodos operando con normalidad",
+      "rescate": "Nodo resiliente por cercanía a templo",
+      "colapso": "Nodo aislado",
       "escenario": "Escenario actual:",
       "inundacion": "Elevación de inundación",
       "mitigacion": "Mitigación",

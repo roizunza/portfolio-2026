@@ -12,7 +12,7 @@ const NetworkFractureCard = ({ onEjecutar, onClose }) => {
     <ProjectCard
       title={t.fileName}
       defColor={PROJECTS.networkfracture.color} 
-      comment={idioma === 'es' ? "// Auditoría de Datos Ambientales y ML" : "// Environmental Data Auditing & ML"}
+      comment={t.cardComment}
       image={imgNetworkFracture}
       onEjecutar={onEjecutar}
       onClose={onClose}
