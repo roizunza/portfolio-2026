@@ -1,6 +1,6 @@
 import React from 'react';
 import ProjectCard from '../Shared/ProjectCard.jsx';
-import imgDigitalTwin from '../../assets/DigitalTwinChongqing.png'; 
+import imgDigitalTwin from '../../assets/DigitalTwinChongqing.jpg'; 
 import { PROJECTS } from '../../config/theme.js';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 

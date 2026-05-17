@@ -22,12 +22,12 @@
     "horas": "Total Hours"
   },
   "viajaSegura": {
-    "fileName": "01_safe_journey",
+    "fileName": "01_care_mobility",
     "ejecutar": "RUN ANALYSIS",
     "cardDescription1": "Converting analog transit records from Mexico City's southern periphery into structured data for technical service validation.",
     "cardDescription2": "The analysis utilizes ETL workflows and GIS modeling to link mobility patterns with urban care facilities, providing data-driven evidence for strategic planning.",
-    "subtitle": "CARE-BASED MOBILITY",
-    "title": "SAFE JOURNEY",
+    "subtitle": "GEOSPATIAL DATA ENGINEERING",
+    "title": "CARE MOBILITY IN MEXICO CITY",
     "role": "Transit service legitimation through geospatial evidence",
     "proposito": {
       "title": "01. Purpose",
@@ -187,10 +187,10 @@
     }
   },
   "digitaltwin": {
-    "fileName": "DigitalTwinChongqing",
+    "fileName": "03_spatial_inference",
     "ejecutar": "VIEW MODEL",
-    "subtitle": "SPATIAL INFERENCE IN CHONGQING",
-    "title": "2.5D DIGITAL TWIN",
+    "subtitle": "2.5D MULTICRITERIA MODELING",
+    "title": "SPATIAL INFERENCE IN CHONGQING",
     "cardComment": "// Web Scraping & 2.5D Spatial Inference",
     "cardDescription1": "Implementation of a spatial model to infer the latent building scale in Chongqing based on tangible urban variables extracted through automated data pipelines.",
     "cardDescription2": "The engine estimates building heights based on the scores assigned to each footprint through a Spatial Multicriteria Evaluation (MCDA), validating the 2.5D model's accuracy with a luminescence index extracted from nighttime light satellite imagery.",

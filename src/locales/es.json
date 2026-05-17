@@ -22,12 +22,12 @@
     "horas": "Horas totales"
   },
   "viajaSegura": {
-    "fileName": "01_viaja_segura",
+    "fileName": "01_care_mobility",
     "ejecutar": "EJECUTAR ANÁLISIS",
     "cardDescription1": "Transformación de operaciones analógicas en la periferia alta del sur de la CDMX en un modelo de datos estructurado para la validación técnica de servicios de transporte.",
     "cardDescription2": "El análisis implementa flujos ETL y modelado GIS para correlacionar flujos de movilidad con nodos de equipamiento urbano relacionados con el cuidado, generando la evidencia necesaria para la toma de decisiones estratégicas.",
-    "subtitle": "MOVILIDAD DE CUIDADOS",
-    "title": "VIAJA SEGURA",
+    "subtitle": "INGENIERÍA DE DATOS GEOESPACIALES",
+    "title": "MOVILIDAD DE CUIDADOS EN CDMX",
     "role": "Legitimación de servicios de transporte mediante evidencia geoespacial",
     "proposito": {
       "title": "01. El Propósito",
@@ -187,10 +187,10 @@
     }
   },
   "digitaltwin": {
-    "fileName": "DigitalTwinChongqing",
+    "fileName": "03_spatial_inference",
     "ejecutar": "VER MODELO",
     "subtitle": "INFERENCIA ESPACIAL EN CHONGQING",
-    "title": "GEMELO DIGITAL 2.5D",
+    "title": "MODELADO MULTICRITERIO 2.5D",
     "cardComment": "// Web scraping e inferencia espacial mediante modelado 2.5",
     "cardDescription1": "Implementación de un modelo espacial que infiere la escala de construcción en el distrito de Yuzhong, Chongqing, basado en variables urbanas tangibles extraídas mediante flujos automatizados de datos.",
     "cardDescription2": "El motor estima la altura constructiva a partir de la calificación asignada a cada huella de edificio mediante un análisis multicriterio (MCDA), validando la precisión del modelo 2.5D con un índice de luminiscencia extraído de imágenes satelitales de radiancia nocturna.",

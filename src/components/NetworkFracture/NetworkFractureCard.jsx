@@ -1,6 +1,6 @@
 import React from 'react';
 import ProjectCard from '../Shared/ProjectCard.jsx';
-import imgNetworkFracture from '../../assets/NetworkFracture.png';
+import imgNetworkFracture from '../../assets/NetworkFracture.jpg';
 import { PROJECTS } from '../../config/theme.js';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 
