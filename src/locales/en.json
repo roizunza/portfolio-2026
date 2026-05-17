@@ -166,9 +166,12 @@
     },
     "map": {
       "simbologia": "SYMBOLOGY",
-      "manglar": "Mangrove",
-      "inversion": "Real Estate Investment",
-      "presion": "Pressured mangrove zone"
+      "simulacion": "Scenario simulation:",
+      "mapaBase": "Base map:",
+      "volumetria": "Temple volumetry",
+      "normalidad": "Nodes operating normally",
+      "aislado": "Isolated node",
+      "resiliente": "Resilient node due to temple proximity"
     }
   },
   "digitaltwin": {

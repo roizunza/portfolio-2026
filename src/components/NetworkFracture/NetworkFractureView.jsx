@@ -11,7 +11,7 @@ const NetworkFractureView = () => {
   const t = fullT.networkfracture;
 
   // Global state for water level simulation
-  const [waterLevel, setWaterLevel] = useState(0);
+  const [waterLevel, setWaterLevel] = useState(20);
 
   if (!t) return null;
 

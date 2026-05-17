@@ -166,9 +166,12 @@
     },
     "map": {
       "simbologia": "SIMBOLOGÍA",
-      "manglar": "Manglar",
-      "inversion": "Inversión Inmobiliaria",
-      "presion": "Zona del manglar en presión"
+      "simulacion": "Simulación de escenario:",
+      "mapaBase": "Mapa base:",
+      "volumetria": "Volumetría de templo",
+      "normalidad": "Nodos operando con normalidad",
+      "aislado": "Nodo aislado",
+      "resiliente": "Nodo resiliente por cercanía a templo"
     }
   },
   "digitaltwin": {

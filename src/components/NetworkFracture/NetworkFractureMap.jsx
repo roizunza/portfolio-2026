@@ -2,23 +2,32 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useLanguage } from '../../context/LanguageContext.jsx';
+import { PROJECTS } from '../../config/theme.js';
 
 import roadsUrl from '../../data/NetworkFracture/kamakura_edges_3d_wgs84.geojson?url';
 import templesUrl from '../../data/NetworkFracture/kamakura_temples_wgs84.geojson?url';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
+// Función para generar una base geométrica a los templos que solo son puntos
+const createHexagonPolygon = (center, radius) => {
+  const coordinates = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = (i * 60 * Math.PI) / 180;
+    coordinates.push([
+      center[0] + radius * Math.cos(angle) * 1.2, 
+      center[1] + radius * Math.sin(angle)
+    ]);
+  }
+  coordinates.push(coordinates[0]); 
+  return [coordinates];
+};
+
 export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
 
-  // Paleta con la nueva psicología de resiliencia
-  const RAMP = {
-    safe: '#8C92AC',     // Gris: Normalidad / A salvo por gobierno
-    orphan: '#FF2A55',   // Rojo: Colapso total / Aislado
-    temple: '#56E07A',   // Verde Neón: Esperanza / Rescate por templo
-    road: '#4C566A'      // Gris Nord visible para red base
-  };
+  const RAMP = PROJECTS.networkfracture.ramp;
   
   const { t: fullT } = useLanguage();
   const tMap = fullT?.networkfracture?.map || propT?.map; 
@@ -37,7 +46,7 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
     if (map.current) return;
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/dark-v11', // Fondo oscuro
+      style: 'mapbox://styles/mapbox/dark-v11',
       center: CAMERA.center, 
       zoom: CAMERA.zoom, 
       pitch: CAMERA.pitch3D, 
@@ -46,8 +55,7 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
     });
 
     map.current.on('style.load', () => {
-      // Niebla dramática cyberpunk
-      map.current.setFog({ 'range': [0.5, 3], 'color': '#0d0f16', 'high-color': '#12141E', 'horizon-blend': 0.2 });
+      map.current.setFog({ 'range': [0.5, 3], 'color': RAMP.background, 'high-color': '#12141E', 'horizon-blend': 0.2 });
 
       map.current.addSource('mapbox-dem', { 'type': 'raster-dem', 'url': 'mapbox://mapbox.mapbox-terrain-dem-v1', 'tileSize': 512 });
       map.current.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
@@ -57,12 +65,17 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
         'paint': { 'hillshade-exaggeration': 0.8, 'hillshade-shadow-color': '#05060a', 'hillshade-highlight-color': 'rgba(255, 255, 255, 0.05)' }
       });
 
-      // 1. CARGA DE CALLES 3D
+      // CAPA DE AGUA
+      map.current.addLayer({
+        'id': 'water-layer', 'type': 'fill', 'source': 'composite', 'source-layer': 'water',
+        'paint': { 'fill-color': RAMP.water, 'fill-opacity': 0.80 }
+      });
+
+      // 1. CARGA DE CALLES
       map.current.addSource('roads-source', { 
         type: 'geojson', 
         data: roadsUrl 
       });
-      
       map.current.addLayer({
         'id': 'roads-layer',
         'type': 'line',
@@ -74,12 +87,11 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
         }
       });
 
-      // 2. CARGA DE NODOS SIMULADOS (Tileset Mapbox)
+      // 2. CARGA DE NODOS
       map.current.addSource('kamakura-nodes', {
         type: 'vector',
         url: 'mapbox://rocoellar.88lvpgyw' 
       });
-
       map.current.addLayer({
         'id': 'nodes-layer',
         'type': 'circle',
@@ -90,7 +102,6 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
           'circle-stroke-width': 0,
           'circle-color': [
             'case',
-            // Matriz corregida: Verde para rescates, Rojo para colapso, Gris para base
             ['==', ['get', 'saved_by_temple_0m'], true], RAMP.temple,
             ['==', ['get', 'orphan_off_0m'], true], RAMP.orphan,
             RAMP.safe
@@ -99,61 +110,64 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
         }
       });
 
-      // 3. CARGA DE TEMPLOS CON SVG VECTORIAL LIMPIO Y BLANCO
-      const svgIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 6C8 4.2 16 4.2 22 6V8C16 7 8 7 2 8V6Z" fill="#FFFFFF"/>
-        <rect x="4" y="10" width="16" height="2" fill="#FFFFFF"/>
-        <path d="M7 10L6 22H8L9 10H7Z" fill="#FFFFFF"/>
-        <path d="M15 10L16 22H18L17 10H15Z" fill="#FFFFFF"/>
-      </svg>`;
+      // 3. CARGA DE TEMPLOS (Extrusión Volumétrica 3D)
+      fetch(templesUrl)
+        .then(response => response.json())
+        .then(data => {
+          const extrudedFeatures = data.features.map(feature => {
+            if (feature.geometry.type === 'Point') {
+              return {
+                ...feature,
+                geometry: {
+                  type: 'Polygon',
+                  coordinates: createHexagonPolygon(feature.geometry.coordinates, 0.00015) 
+                },
+                properties: { ...feature.properties, height: 18 } 
+              };
+            }
+            return {
+              ...feature,
+              properties: { ...feature.properties, height: 18 }
+            };
+          });
 
-      const img = new Image();
-      img.onload = () => {
-        if (!map.current.hasImage('clean-torii')) {
-          map.current.addImage('clean-torii', img);
-        }
-      };
-      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgIcon);
+          map.current.addSource('temples-extrusion-source', {
+            type: 'geojson',
+            data: { type: 'FeatureCollection', features: extrudedFeatures }
+          });
 
-      map.current.addSource('temples-source', { 
-        type: 'geojson', 
-        data: templesUrl 
-      });
-      
-      map.current.addLayer({
-        'id': 'temples-layer',
-        'type': 'symbol',
-        'source': 'temples-source',
-        'layout': {
-          'icon-image': 'clean-torii',
-          'icon-size': 1.0,
-          'icon-allow-overlap': true,
-          'icon-pitch-alignment': 'viewport', // Mantiene el ícono alzado frente a la cámara
-          'icon-anchor': 'bottom'
-        }
-      });
+          map.current.addLayer({
+            'id': 'temples-extrusion-layer',
+            'type': 'fill-extrusion',
+            'source': 'temples-extrusion-source',
+            'paint': {
+              'fill-extrusion-color': RAMP.templeCore, 
+              'fill-extrusion-height': ['get', 'height'],
+              'fill-extrusion-base': 0,
+              'fill-extrusion-opacity': 0.95
+            }
+          });
 
-      setMapLoaded(true);
+          setMapLoaded(true);
+        });
     });
   }, []);
 
-  // Hook dinamico: Reacciona al slider aplicando el "Manto Negro" e invirtiendo la jerarquía
+  // Hook dinamico: Reacciona al slider
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
 
     const currentFloodLevel = waterLevel === 0 ? -999 : waterLevel;
 
-    // APAGAR CALLES SUMERGIDAS
-    map.current.setPaintProperty('roads-layer', 'line-opacity', [
+    map.current.setPaintProperty('roads-layer', 'line-color', [
       'case',
-      ['<=', ['get', 'min_elevation'], currentFloodLevel], 0.0, 
-      0.8 
+      ['<=', ['get', 'min_elevation'], currentFloodLevel], RAMP.water, 
+      RAMP.road 
     ]);
 
     const orphanField = `orphan_off_${waterLevel}m`;
     const templeField = `saved_by_temple_${waterLevel}m`;
 
-    // ACTUALIZAR COLORES DE NODOS CON PRIORIDAD AL VERDE DE RESCATE
     map.current.setPaintProperty('nodes-layer', 'circle-color', [
       'case',
       ['==', ['get', templeField], true], RAMP.temple,
@@ -161,7 +175,6 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
       RAMP.safe
     ]);
 
-    // ACTUALIZAR OPACIDAD DE NODOS
     map.current.setPaintProperty('nodes-layer', 'circle-opacity', [
       'case',
       ['all', ['==', ['get', orphanField], true], ['==', ['get', templeField], false]], 0.1, 
@@ -181,6 +194,9 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
     setIs3DView(!is3DView);
   };
 
+  // Prevenir crasheo si las traducciones no han cargado
+  if (!tMap) return null;
+
   return (
     <div className="dtc-wrapper">
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
@@ -193,45 +209,65 @@ export default function NetworkFractureMap({ t: propT, waterLevel, setWaterLevel
         </button>
       </div>
 
-      <div className="dtc-legend" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      <div className="dtc-legend">
         
-        <div className="tsunami-slider-container" style={{ padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <h3 className="dtc-legend-title" style={{ marginBottom: '10px', fontSize: '14px', color: '#fff' }}>
-            Nivel de Tsunami: <span style={{ color: RAMP.temple }}>{waterLevel}m</span>
-          </h3>
-          <input 
-            type="range" 
-            min="0" 
-            max="30" 
-            step="10" 
-            value={waterLevel}
-            onChange={(e) => setWaterLevel(Number(e.target.value))}
-            style={{ width: '100%', cursor: 'pointer', accentColor: RAMP.temple }}
-          />
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#888', marginTop: '5px' }}>
-            <span>0m</span><span>10m</span><span>20m</span><span>30m</span>
+        <h3 className="dtc-legend-title">{tMap.simbologia}</h3>
+
+        {/* Sección de Simulación (Slider) */}
+        <div>
+          <div className="dtc-section-header">
+            <h4 className="dtc-section-title">{tMap.simulacion}</h4>
+          </div>
+          <div className="dtc-section-content" style={{ padding: '10px 0' }}>
+            <div style={{ marginBottom: '10px', fontSize: '14px', color: '#fff' }}>
+               <span style={{ color: RAMP.templeCore, fontWeight: 'bold' }}>{waterLevel}m</span>
+            </div>
+            <input 
+              type="range" 
+              min="0" 
+              max="30" 
+              step="10" 
+              value={waterLevel}
+              onChange={(e) => setWaterLevel(Number(e.target.value))}
+              style={{ width: '100%', cursor: 'pointer', accentColor: RAMP.templeCore }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#888', marginTop: '5px' }}>
+              <span>0m</span><span>10m</span><span>20m</span><span>30m</span>
+            </div>
           </div>
         </div>
 
-        <div>
-          <h3 className="dtc-legend-title">Fractura de Red</h3>
-          <div className="dtc-section-content" style={{ marginTop: '10px' }}>
+        {/* Sección de Mapa Base */}
+        <div style={{ marginTop: '15px' }}>
+          <div className="dtc-section-header">
+            <h4 className="dtc-section-title">{tMap.mapaBase}</h4>
+          </div>
+          <div className="dtc-section-content">
+            
+            {/* 1. Volumetría de Templo */}
+            <div className="dtc-legend-item">
+              <div style={{ width: '12px', height: '12px', backgroundColor: RAMP.templeCore, border: '1px solid #666', transform: 'rotateX(45deg) rotateZ(45deg)', marginRight: '10px', boxShadow: '2px 2px 0px rgba(0,0,0,0.5)' }}></div>
+              {tMap.volumetria}
+            </div>
+            
+            {/* 2. Normalidad */}
             <div className="dtc-legend-item">
               <div className="dtc-swatch" style={{ background: RAMP.safe, boxShadow: `0 0 5px ${RAMP.safe}`, width: '10px', height: '10px', borderRadius: '50%' }}></div> 
-              Normalidad Operativa (Gris)
+              {tMap.normalidad}
             </div>
-            <div className="dtc-legend-item">
-              <div className="dtc-swatch" style={{ background: RAMP.temple, boxShadow: `0 0 5px ${RAMP.temple}`, width: '10px', height: '10px', borderRadius: '50%' }}></div> 
-              Rescate por Templo (Verde)
-            </div>
+            
+            {/* 3. Aislamiento Crítico */}
             <div className="dtc-legend-item">
               <div className="dtc-swatch" style={{ background: RAMP.orphan, boxShadow: `0 0 5px ${RAMP.orphan}`, width: '10px', height: '10px', borderRadius: '50%' }}></div> 
-              Aislamiento Crítico (Rojo)
+              {tMap.aislado}
             </div>
-            <div className="dtc-legend-item" style={{display: 'flex', alignItems: 'center', marginTop: '8px', color: '#fff'}}>
-               <span style={{fontSize: '16px', marginRight: '8px'}}>⛩</span>
-              Templo Histórico (Blanco)
+
+            {/* 4. Rescate por Templo */}
+            <div className="dtc-legend-item">
+              <div className="dtc-swatch" style={{ background: RAMP.temple, boxShadow: `0 0 5px ${RAMP.temple}`, width: '10px', height: '10px', borderRadius: '50%' }}></div> 
+              {tMap.resiliente}
             </div>
+
           </div>
         </div>
 

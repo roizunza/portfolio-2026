@@ -27,8 +27,16 @@ export const PROJECTS = {
   },
   networkfracture: {
     title: 'Network Fracture',
-    color: '#15be80', 
-    ramp: { manglar: '#15BE80', inversion: '#a7a469', presion: '#f30a41', riesgo: '#f4976c' }
+    color: '#00e5ff', 
+    ramp: { 
+      safe: '#58635f',      // Normalidad
+      temple: '#56E07A',    // Rescate
+      templeCore: '#00e5ff',// Centro del templo
+      orphan: '#090e17',    // Colapso
+      road: '#32443d',      // Red base
+      water: '#090e17',     // Agua base de Chongqing
+      background: '#0d0f16' // Fondo de paneles
+    }
   },
   digitaltwin: {
     title: 'Gemelo Digital 2.5D',
