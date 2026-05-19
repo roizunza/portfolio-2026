@@ -19,7 +19,6 @@ export default function MapComponent({ t }) {
   const tRef = useRef(t);
   useEffect(() => { tRef.current = t; }, [t]);
 
-  // --- CAMBIO: LÓGICA DE BOTONES EXTRAÍDA DEL DIGITAL TWIN ---
   const handleZoomIn = () => map.current?.zoomIn({ duration: 400 });
   const handleZoomOut = () => map.current?.zoomOut({ duration: 400 });
 
@@ -28,15 +27,40 @@ export default function MapComponent({ t }) {
 
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
- map.current = new mapboxgl.Map({
+    map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
       center: [-99.225, 19.323], 
-      zoom: 12.7
+      zoom: 12.7,
+      pitch: 0,    
+      bearing: 0  
     });
 
     map.current.on('load', () => {
       if (!map.current) return;
+
+      // --- 1. AÑADIR ELEVACIÓN 3D AL TERRENO ---
+      map.current.addSource('mapbox-dem', {
+        'type': 'raster-dem',
+        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        'tileSize': 512,
+        'maxzoom': 14
+      });
+  
+      map.current.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+
+
+      map.current.addLayer({
+        'id': 'hillshade-layer',
+        'type': 'hillshade',
+        'source': 'mapbox-dem',
+        'paint': {
+          'hillshade-exaggeration': 1.0,
+          'hillshade-shadow-color': '#05060a',
+          'hillshade-highlight-color': 'rgba(255, 255, 255, 0.05)'
+        }
+      });
+      // -----------------------------------------
 
       map.current.addSource('cu', { type: 'geojson', data: cuData });
       map.current.addSource('isocronas', { type: 'geojson', data: isocronasData });
@@ -204,7 +228,6 @@ export default function MapComponent({ t }) {
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
       
-      {/* --- CAMBIO 2: INCORPORACIÓN DE BOTONES CON ESTILO DE DIGITAL TWIN --- */}
       <div className="dtc-nav-controls">
         <button onClick={handleZoomIn} className="dtc-nav-btn">+</button>
         <button onClick={handleZoomOut} className="dtc-nav-btn">-</button>
