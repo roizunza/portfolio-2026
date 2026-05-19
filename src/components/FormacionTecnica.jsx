@@ -4,9 +4,9 @@ import certificacionesES from '../data/certificaciones.json';
 import certificacionesEN from '../data/certificaciones_en.json';
 import './FormacionTecnica.css';
 
-const FormacionCard = ({ esp, t, isOpen, toggleTab, openPdf }) => {
+const FormacionCard = ({ esp, customColor, t, isOpen, toggleTab, openPdf }) => {
   return (
-    <div className={`especialidad-card ${isOpen ? 'open' : ''}`} style={{ '--accent-color': esp.color }}>
+    <div className={`especialidad-card ${isOpen ? 'open' : ''}`} style={{ '--accent-color': customColor }}>
       <div className="especialidad-header" onClick={() => toggleTab(esp.id)}>
         <div className="especialidad-info">
           <h3>{esp.titulo}</h3>
@@ -74,6 +74,14 @@ const FormacionTecnica = () => {
     window.open(`/assets/certificados/${file}`, '_blank', 'noopener,noreferrer');
   };
 
+  // Arreglo con los 4 colores exactos de tus temas
+  const PROJECT_COLORS = [
+    '#9992f5', // 1. Viaja Segura (Morado)
+    '#8bf2ff', // 2. Network Fracture (Cyan)
+    '#f27eb4', // 3. Digital Twin (Rosa)
+    '#56E07A'  // 4. Network Fracture (Verde rescate)
+  ];
+
   return (
     <section id="formacion-tecnica-seccion" className="formacion-section">
       <div className="formacion-header">
@@ -101,10 +109,11 @@ const FormacionTecnica = () => {
         </aside>
 
         <main className="formacion-list">
-          {data.map((esp) => (
+          {data.map((esp, index) => (
             <FormacionCard 
               key={esp.id} 
               esp={esp} 
+              customColor={PROJECT_COLORS[index]} //
               t={t} 
               isOpen={!!openTabs[esp.id]} 
               toggleTab={toggleTab} 

@@ -12,6 +12,28 @@
 .formacion-list { display: flex; flex-direction: column; gap: 15px; }
 
 .especialidad-card { background: var(--fondo-panel); border-left: 4px solid var(--accent-color); overflow: hidden; transition: all 0.3s ease; min-height: 95px; }
+
+/* ASIGNACIÓN DE COLORES POR PROYECTO */
+/* 1. Color de Viaja Segura */
+.formacion-list .especialidad-card:nth-child(1) {
+  --accent-color: #9992f5; 
+}
+
+/* 2. Color de Network Fracture */
+.formacion-list .especialidad-card:nth-child(2) {
+  --accent-color: #8bf2ff;
+}
+
+/* 3. Color de Gemelo Digital */
+.formacion-list .especialidad-card:nth-child(3) {
+  --accent-color: #f27eb4;
+}
+
+/* 4. Color de Factor Esfuerzo (Por si agregas una cuarta categoría después) */
+.formacion-list .especialidad-card:nth-child(4) {
+  --accent-color: #ecdb85;
+}
+
 .especialidad-header { padding: 0 25px; height: 95px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 .especialidad-info h3 { margin: 0; font-family: var(--fuente-datos); font-size: 1.25rem; color: var(--texto-principal); }
 .especialidad-meta { font-size: 0.9rem; color: var(--texto-muteado); margin-top: 4px; font-family: var(--fuente-datos); }
@@ -24,8 +46,8 @@
 .formacion-item h4 { color: var(--accent-color); font-family: var(--fuente-datos); font-size: 1rem; margin-bottom: 15px; display: inline-block; }
 .curso-line { color: var(--texto-secundario); font-size: 0.95rem; font-family: var(--fuente-datos); margin-bottom: 8px; }
 
-.link-cert { cursor: pointer; }
-.link-cert:hover { opacity: 0.7; text-decoration: underline; color: var(--accent-color); }
+.link-cert { cursor: pointer; color: var(--texto-principal); transition: all 0.3s; }
+.link-cert:hover { opacity: 0.8; text-decoration: underline; color: var(--accent-color); }
 .curso-line span { font-size: 0.8rem; opacity: 0.4; margin-left: 8px; }
 
 @media (max-width: 1024px) {
