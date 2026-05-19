@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
@@ -13,6 +13,15 @@ export default function ChartsContainer({ t: propT, waterLevel }) {
   
   const fullT = contextT || propT;
   const t = fullT?.networkfracture?.graphs;
+
+  // Detector de pantalla móvil
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const RAMP = PROJECTS.networkfracture.ramp;
   
@@ -59,23 +68,18 @@ export default function ChartsContainer({ t: propT, waterLevel }) {
     if (active && payload && payload.length) {
       return (
         <div style={{ backgroundColor: panelBg, border: `1px solid ${borderColor}`, padding: '12px', fontFamily: fontBody, zIndex: 1000, boxShadow: '0 4px 12px rgba(0,0,0,0.5)', minWidth: '180px' }}>
-          {/* Titulo en gris */}
           <p style={{ margin: '0 0 10px 0', color: textSecondary, fontSize: '12px', fontWeight: 'bold' }}>{t.inundacion}: {label}m</p>
           
           {payload.map((entry, index) => (
             <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 0 6px 0', fontSize: '12px', fontFamily: 'var(--fuente-datos)' }}>
               <div style={{ display: 'flex', alignItems: 'center', color: textSecondary }}>
-                {/* Viñeta de color */}
                 <span style={{ display: 'inline-block', width: '6px', height: '6px', backgroundColor: entry.color, borderRadius: '50%', marginRight: '8px' }}></span>
-                {/* Texto categoria en gris */}
                 {entry.name}
               </div>
-              {/* Valor numerico en gris */}
               <span style={{ color: textSecondary, fontWeight: 'bold', marginLeft: '15px' }}>{entry.value}</span>
             </div>
           ))}
           
-          {/* Footer en gris */}
           <p style={{ margin: '10px 0 0 0', borderTop: `1px solid ${borderColor}`, paddingTop: '8px', color: textSecondary, fontSize: '11px', fontFamily: 'var(--fuente-datos)' }}>{t.totalInfra}: 5932</p>
         </div>
       );
@@ -104,30 +108,34 @@ export default function ChartsContainer({ t: propT, waterLevel }) {
   const totalVulnerable = currentData.orphan + currentData.temple;
   const rescueEfficiency = totalVulnerable > 0 ? ((currentData.temple / totalVulnerable) * 100).toFixed(1) : 0;
 
-  /* Estructura CSS estandarizada del dashboard */
+  /* Estructura CSS estandarizada y responsiva */
   const styles = {
     mainContainer: { 
       display: 'flex', 
-      flexWrap: 'wrap', 
+      flexDirection: isMobile ? 'column' : 'row',
       width: '100%', 
       height: '100%', 
       padding: '10px 15px', 
-      overflow: 'hidden' 
+      overflowY: isMobile ? 'auto' : 'hidden',
+      overflowX: 'hidden'
     },
     leftSection: { 
-      flex: '1 1 50%', 
+      flex: isMobile ? 'none' : '1 1 50%', 
       display: 'flex', 
       flexDirection: 'column', 
-      paddingRight: '15px', 
-      minHeight: '0' 
+      paddingRight: isMobile ? '0' : '15px', 
+      paddingBottom: isMobile ? '15px' : '0',
+      borderBottom: isMobile ? `1px solid ${borderColor}` : 'none',
+      minHeight: isMobile ? '240px' : '0' 
     },
     rightSection: { 
-      flex: '1 1 50%', 
+      flex: isMobile ? 'none' : '1 1 50%', 
       display: 'flex', 
       flexDirection: 'column', 
-      paddingLeft: '15px', 
-      minHeight: '0', 
-      borderLeft: `1px solid ${borderColor}` 
+      paddingLeft: isMobile ? '0' : '15px', 
+      paddingTop: isMobile ? '15px' : '0', 
+      borderLeft: isMobile ? 'none' : `1px solid ${borderColor}`,
+      minHeight: isMobile ? '240px' : '0' 
     },
     header: { 
       display: 'flex', 
@@ -166,7 +174,7 @@ export default function ChartsContainer({ t: propT, waterLevel }) {
   };
 
   return (
-    <div style={styles.mainContainer}>
+    <div style={styles.mainContainer} className="custom-scrollbar">
       
       {/* SECCION IZQUIERDA: Impacto Macro */}
       <div style={styles.leftSection}>
