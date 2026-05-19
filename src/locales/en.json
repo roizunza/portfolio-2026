@@ -30,12 +30,12 @@
     "title": "CARE MOBILITY IN MEXICO CITY",
     "role": "Transit service legitimation through geospatial evidence",
     "proposito": {
-      "title": "01. Purpose",
+      "title": "Purpose",
       "tag": "#DataDrivenLegitimacy",
       "content": "The project evaluates the operation of 'Route 66', an exclusive service for women and children in CDMX's southern periphery. The challenge involved translating analog social operations into a structured data model to support its relevance before SEMOVI. The goal was to build the operational groundwork required to legitimize the model and project its expansion via technical evidence."
     },
     "metodologia": {
-      "title": "02. Structure & Methodology",
+      "title": "Structure & Methodology",
       "tag": "#DataEngineering_GIS",
       "etlKey": "Data Engineering (ETL):",
       "etlText": "Design of digital capture instruments to normalize boarding records. Python (GeoPandas) is used for data cleaning and structuring the primary database, resolving georeferencing inconsistencies.",
@@ -43,7 +43,7 @@
       "spatialText": "In GIS, accessibility models were generated using 500m walking isochrones. The analysis automates the overlap of transit supply with care infrastructure, correlating high-flow nodes with facility locations."
     },
     "insights": {
-      "title": "03. Insights & Visualization",
+      "title": "Insights & Visualization",
       "tag": "#TheProduct",
       "intro": "The result is a tool that transforms coordinates and raw data into strategic decisions:",
       "ejeKey": "Integration Axis:",
@@ -56,7 +56,7 @@
     "stack": {
       "title": "Tech Stack",
       "tag": "#TechSpecs",
-      "content": "Python (GeoPandas), QGIS, React, Mapbox GL JS, Figma"
+      "content": "Python (GeoPandas) | QGIS | React | HERE API | Mapbox GL JS | Figma"
     },
      "repoBtn": "View analysis in repository",
     "scorecards": {
@@ -117,12 +117,12 @@
     "cardDescription1": "Development of a geointelligence engine to simulate the degradation of Kamakura's road network during extreme tsunami floods.",
     "cardDescription2": "The algorithm evaluates the city's systemic vulnerability and mathematically demonstrates how ancestral temple infrastructure operates as an emergent rescue network.",
     "proposito": {
-      "title": "01. Purpose",
+      "title": "Purpose",
       "tag": "#RiskManagement",
       "content": "This project develops a geointelligence engine based on disaster scenario simulations. The objective is to model graph degradation (the road network of over 5,900 nodes) in the face of latent disconnection caused by an extreme event, evaluating the temporary decoupling of mobility with risk infrastructure officially categorized by the State (Shitei Hinanjo). Kamakura was selected as a test environment due to its orographic encapsulation and its tsunami risk tendency. The main challenge was ensuring the algorithm isolated the streets that would be covered by the tsunami dynamics, and making the surviving nodes respond to the logic of topography and physical effort. Through routing calculations under stress, the model evaluates whether historical sites can function as a logistical support layer, mathematically contrasting the collapse of road connectivity against the absorption and shelter capacity offered by temple infrastructure."
     },
     "metodologia": {
-      "title": "02. Structure & Methodology",
+      "title": "Structure & Methodology",
       "tag": "#AnalyticalPipeline",
       "intro": "The simulation engine executes the following logical flow:",
       "item1Key": "Data Extraction:",
@@ -137,7 +137,7 @@
       "item5Text": "Massive calculation of emergency routes to identify coverage loss and isolate nodes rescued by the temple network."
     },
     "insights": {
-      "title": "03. Insights & Visualization",
+      "title": "Insights & Visualization",
       "tag": "#Insights",
       "intro": "The geometric model reveals the progressive behavior of territorial resilience through three critical stress levels:",
       "item1Key": "10m Scenario (Official Containment):",
@@ -150,7 +150,7 @@
     "stack": {
       "title": "Tech Stack",
       "tag": "#TechSpecs",
-      "content": "Python | GeoPandas | SciPy | Rasterio | NumPy | NetworkX | OSMnx | React | Mapbox GL JS | Recharts | QGIS | Figma"
+      "content": "Python | GeoPandas | SciPy | Rasterio | NumPy | NetworkX | OSMnx | GEE API | React | Mapbox GL JS | Recharts | QGIS | Figma"
     },
     "repoBtn": "View analysis in repository",
     "graphs": {
@@ -197,12 +197,12 @@
     
     "role": "Urban scale modeling inferred from urban variables",
     "proposito": {
-      "title": "01. Purpose",
+      "title": "Purpose",
       "tag": "#SpatialInference",
       "content": "This project develops a geointelligence engine based on Digital Twins to infer the city's construction scale. The goal is to model the vertical density of 16,606 parcels based on the weight of tangible, normalized, and weighted urban variables, allowing the visualization of a territory's development potential. Chongqing was selected as the test environment due to its extreme mountainous morphology. The main challenge was to make the algorithm account for the location's contextual restrictions through a Multi-Criteria Decision Analysis (MCDA), demonstrating how the city finds space to continue developing despite geographic constraints; a phenomenon validated by confirming that density driven by activity closely matches the satellite light footprint."
     },
     "metodologia": {
-      "title": "02. Structure & Methodology",
+      "title": "Structure & Methodology",
       "tag": "#AnalyticalPipeline",
       "intro": "The inference engine executes the following logical flow:",
       "item1Key": "1. Data Extraction:",
@@ -217,7 +217,7 @@
       "item5Text": "Download of VIIRS satellite spectrometry (nighttime lights) from Google Earth Engine as an empirical reference."
     },
     "insights": {
-      "title": "03. Insights & Visualization",
+      "title": "Insights & Visualization",
       "tag": "#Insights",
       "intro": "The inference model reveals critical spatial behaviors regarding vertical density:",
       "item1Key": "The Reality Mirror:",
@@ -297,12 +297,12 @@
     "cardDescription1": "Data Analysis: Proximity and territorial fragmentation modeling within the Japanese rail network to quantify the 'Hidden Cost' of Shinkansen efficiency.",
     "cardDescription2": "This project delivers a spatial data mining model to identify accessibility gaps in historical heritage sites disconnected from primary railway hubs.",
     "proposito": {
-      "title": "01. Purpose",
+      "title": "Purpose",
       "tag": "#GeospatialAnalysis",
       "content": "The project evaluates the spatial relationship between the Japanese railway network and regional cultural assets. The goal is to quantify the access inequality experienced by points of interest (POIs) not integrated into main nodes, determining the Effort Factor: the physical distance a user must invest from the nearest station to the cultural destination."
     },
     "metodologia": {
-      "title": "02. Structure & Methodology",
+      "title": "Structure & Methodology",
       "tag": "#DataMining",
       "item1Key": "Data Mining (POIs):",
       "item1Text": "Development of Python scripts (BeautifulSoup) for web scraping specialized sites, normalizing coordinates and attributes of strategic assets into a structured dataset.",
@@ -312,7 +312,7 @@
       "item3Text": "Execution of a proximity analysis in GIS to categorize the difficulty level of access and the relative isolation of peripheral assets."
     },
     "insights": {
-      "title": "03. Insights & Visualization",
+      "title": "Insights & Visualization",
       "tag": "#IsolationMetrics",
       "item1Key": "Centralization:",
       "item1Text": "It is identified that the infrastructure prioritizes dense commercial nodes, critically increasing the effort to access historical heritage.",

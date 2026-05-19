@@ -58,6 +58,7 @@ export default function ViajaSeguraSidebar({ t }) {
     authorRole: { fontFamily: 'var(--fuente-ui)', fontSize: '11px', color: 'var(--texto-secundario)', margin: '2px 0 0 0', fontStyle: 'normal' },
     contentBody: { flex: 1, padding: '15px 15px', overflowY: 'auto', paddingRight: '5px', scrollbarWidth: 'thin', scrollbarColor: '#424242 transparent' },
     bodyText: { fontFamily: 'var(--fuente-ui)', fontSize: '12px', fontWeight: '400', lineHeight: '1.4', color: '#E0E0E0', marginBottom: '8px' },
+    listKey: { color: 'var(--texto-principal)', fontWeight: '600', marginRight: '4px' }, // Añadido estilo listKey
     repoBtn: {
       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
       backgroundColor: 'var(--azul-electrico)', color: '#FFFFFF', fontFamily: 'var(--fuente-datos)',
@@ -65,7 +66,6 @@ export default function ViajaSeguraSidebar({ t }) {
       borderRadius: '4px', cursor: 'pointer', width: '100%', marginTop: '25px',
       marginBottom: '15px', transition: 'opacity 0.3s'
     },
-    // --- ESTILO INDIVIDUAL DE ETIQUETA (Inyectado de Digital Twin) ---
     badge: {
       backgroundColor: 'rgba(255, 255, 255, 0.05)',
       border: '1px solid rgba(255, 255, 255, 0.15)',
@@ -87,6 +87,8 @@ export default function ViajaSeguraSidebar({ t }) {
         .custom-scrollbar::-webkit-scrollbar { width: 2px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #424242; border-radius: 2px; }
         .btn-repo:hover { opacity: 0.85; }
+        ul.custom-list { padding-left: 20px; margin: 0; }
+        ul.custom-list li { margin-bottom: 8px; }
       `}</style>
 
       <div style={s.headerBox}>
@@ -103,32 +105,34 @@ export default function ViajaSeguraSidebar({ t }) {
           <p style={s.bodyText}>{t.proposito.content}</p>
         </AccordionSection>
 
+        {/* --- METODOLOGIA */}
         <AccordionSection title={t.metodologia.title} tag={t.metodologia.tag} isOpen={sectionsState.methodology} onClick={() => toggle('methodology')}>
-          <div style={s.listItem}>
-            <p style={s.bodyText}>
+          <ul className="custom-list" style={s.bodyText}>
+            <li>
               <span style={s.listKey}>{t.metodologia.etlKey}</span> {t.metodologia.etlText}
-            </p>
-          </div>
-          <div style={s.listItem}>
-            <p style={s.bodyText}>
+            </li>
+            <li>
               <span style={s.listKey}>{t.metodologia.spatialKey}</span> {t.metodologia.spatialText}
-            </p>
-          </div>
+            </li>
+          </ul>
         </AccordionSection>
 
+        {/* --- INSIGHTS */}
         <AccordionSection title={t.insights.title} tag={t.insights.tag} isOpen={sectionsState.insights} onClick={() => toggle('insights')}>
-          <div style={{ marginBottom: '8px', borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>{t.insights.ejeKey}</span> {t.insights.ejeText}</p>
-          </div>
-          <div style={{ marginBottom: '8px', borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>{t.insights.valKey}</span> {t.insights.valText}</p>
-          </div>
-          <div style={{ borderLeft: '2px solid rgba(255,255,255,0.3)', paddingLeft: '6px' }}>
-            <p style={s.bodyText}><span style={s.listKey}>{t.insights.visKey}</span> {t.insights.visText}</p>
-          </div>
+           <ul className="custom-list" style={s.bodyText}>
+            <li>
+              <span style={s.listKey}>{t.insights.ejeKey}</span> {t.insights.ejeText}
+            </li>
+            <li>
+              <span style={s.listKey}>{t.insights.valKey}</span> {t.insights.valText}
+            </li>
+            <li>
+              <span style={s.listKey}>{t.insights.visKey}</span> {t.insights.visText}
+            </li>
+          </ul>
         </AccordionSection>
 
-        {/* --- ETIQUETAS  STACK--- */}
+        {/* --- ETIQUETAS STACK --- */}
         <AccordionSection title={t.stack.title} tag={t.stack.tag} isOpen={sectionsState.stack} onClick={() => toggle('stack')}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2px', marginTop: '5px' }}>
             {t.stack.content.split(/[|,]/).map((tech, index) => (
