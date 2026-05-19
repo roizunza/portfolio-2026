@@ -6,7 +6,7 @@ import {
 
 import { PROJECTS } from '../../config/theme';
 import { useLanguage } from '../../context/LanguageContext.jsx'; 
-import SCATTER_RAW from '../../data/digitaltwin_scatter.json';
+import SCATTER_RAW from '../../data/DigitalTwin_Chongqing/digitaltwin_scatter.json';
 
 const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 

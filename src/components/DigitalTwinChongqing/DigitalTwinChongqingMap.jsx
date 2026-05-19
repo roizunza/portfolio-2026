@@ -4,9 +4,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 import { PROJECTS } from '../../config/theme';
 
-import roadsUrl from '../../data/roads.geojson?url';
-import poisUrl from '../../data/pois.geojson?url';
-import transitUrl from '../../data/transit.geojson?url';
+import roadsUrl from '../../data/DigitalTwin_Chongqing/roads.geojson?url';
+import poisUrl from '../../data/DigitalTwin_Chongqing/pois.geojson?url';
+import transitUrl from '../../data/DigitalTwin_Chongqing/transit.geojson?url';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 

@@ -5,7 +5,7 @@ import { useLanguage } from '../context/LanguageContext.jsx';
 import ViajaSeguraCard from './ViajaSegura/ViajaSeguraCard.jsx';
 import NetworkFractureCard from './NetworkFracture/NetworkFractureCard.jsx';
 import DigitalTwinChongqingCard from './DigitalTwinChongqing/DigitalTwinChongqingCard.jsx'; 
-import FactorEsfuerzoCard from './FactorEsfuerzo/FactorEsfuerzoCard.jsx';
+//import FactorEsfuerzoCard from './FactorEsfuerzo/FactorEsfuerzoCard.jsx';
 
 import iconKml from '../assets/kml.PNG';   
 import iconTiff from '../assets/tiff.PNG'; 
@@ -23,7 +23,7 @@ const Indice = ({ onActivarDashboard }) => {
     { id: 1, baseName: t.viajaSegura.fileName, extension: ".kml", extensionColor: PROJECTS.viajaSegura.color, icono: iconKml, idScroll: "seccion-viaja-segura" },
     { id: 2, baseName: t.networkfracture.fileName, extension: ".tiff", extensionColor: PROJECTS.networkfracture.color, icono: iconTiff, idScroll: "seccion-networkfracture" },
     { id: 3, baseName: t.digitaltwin.fileName, extension: ".geojson", extensionColor: PROJECTS.digitaltwin.color, icono: iconJson, idScroll: "seccion-digitaltwin" },
-    { id: 4, baseName: t.factorEsfuerzo.fileName, extension: ".gpkg", extensionColor: PROJECTS.factorEsfuerzo.color, icono: iconGpkg, idScroll: "seccion-esfuerzo" }
+   // { id: 4, baseName: t.factorEsfuerzo.fileName, extension: ".gpkg", extensionColor: PROJECTS.factorEsfuerzo.color, icono: iconGpkg, idScroll: "seccion-esfuerzo" }
   ];
 
   const manejarEjecucion = (idScroll) => {
@@ -41,7 +41,11 @@ const Indice = ({ onActivarDashboard }) => {
           </h2>
         </div>
 
-        <div className="projects-grid">
+        {/* Le aumentamos el 'gap' a 80px para que respiren entre sí, manteniéndose en el centro */}
+        <div 
+          className="projects-grid" 
+          style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '80px' }}
+        >
           {proyectos.map((proyecto) => (
             <div 
               key={proyecto.id} 
@@ -71,9 +75,9 @@ const Indice = ({ onActivarDashboard }) => {
                 {proyectoSeleccionado.id === 3 && (
                   <DigitalTwinChongqingCard idioma={idioma} t={t.digitaltwin} onEjecutar={() => manejarEjecucion(proyectoSeleccionado.idScroll)} onClose={() => setProyectoSeleccionado(null)} />
                 )}
-                {proyectoSeleccionado.id === 4 && (
+                {/*proyectoSeleccionado.id === 4 && (
                   <FactorEsfuerzoCard idioma={idioma} t={t.factorEsfuerzo} onEjecutar={() => manejarEjecucion(proyectoSeleccionado.idScroll)} onClose={() => setProyectoSeleccionado(null)} />
-                )}
+                )*/}
             </div>
           </div>
         )}

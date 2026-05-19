@@ -17,7 +17,7 @@ import { useLanguage } from './context/LanguageContext.jsx';
 import ViajaSeguraView from './components/ViajaSegura/ViajaSeguraView.jsx';
 import NetworkFractureView from './components/NetworkFracture/NetworkFractureView.jsx';
 import DigitalTwinChongqingView from './components/DigitalTwinChongqing/DigitalTwinChongqingView.jsx'; 
-import FactorEsfuerzoView from './components/FactorEsfuerzo/FactorEsfuerzoView.jsx';
+// import FactorEsfuerzoView from './components/FactorEsfuerzo/FactorEsfuerzoView.jsx';
 
 function App() {
   const { idioma, setIdioma, t } = useLanguage();
@@ -37,7 +37,7 @@ function App() {
     if(idScroll.includes('viaja')) targetId = 'seccion-viaja-segura';
     else if(idScroll.includes('networkfracture')) targetId = 'seccion-networkfracture';
     else if(idScroll.includes('digitaltwin')) targetId = 'seccion-digitaltwin';
-    else if(idScroll.includes('esfuerzo')) targetId = 'seccion-esfuerzo'; 
+    // else if(idScroll.includes('esfuerzo')) targetId = 'seccion-esfuerzo'; 
     else if(idScroll.includes('formacion')) targetId = 'formacion-tecnica-seccion';
     
     if (targetId) smoothScrollTo(targetId, 1500); 
@@ -69,9 +69,10 @@ function App() {
             <DigitalTwinChongqingView t={t.digitaltwin} idioma={idioma} />
         </section>
         
-        <section id="seccion-esfuerzo" style={{ paddingBottom: '40px' }}>
+        {/* <section id="seccion-esfuerzo" style={{ paddingBottom: '40px' }}>
             <FactorEsfuerzoView t={t.factorEsfuerzo} idioma={idioma} />
         </section> 
+        */}
 
         <FormacionTecnica t={t.formacion} data={dataActual} />
         
