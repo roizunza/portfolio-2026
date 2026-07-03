@@ -26,32 +26,32 @@
     "ejecutar": "RUN ANALYSIS",
     "cardDescription1": "Converting analog transit records from Mexico City's southern periphery into structured data for technical service validation.",
     "cardDescription2": "The analysis utilizes ETL workflows and GIS modeling to link mobility patterns with urban care facilities, providing data-driven evidence for strategic planning.",
-    "subtitle": "GEOSPATIAL DATA ENGINEERING",
+    "subtitle": "GEOSPATIAL TRANSPORT ENGINEERING",
     "title": "CARE MOBILITY IN MEXICO CITY",
     "role": "Transit service legitimation through geospatial evidence",
     "proposito": {
       "title": "Purpose",
       "tag": "#DataDrivenLegitimacy",
-      "content": "The project evaluates the operation of 'Route 66', an exclusive service for women and children in CDMX's southern periphery. The challenge involved translating analog social operations into a structured data model to support its relevance before SEMOVI. The goal was to build the operational groundwork required to legitimize the model and project its expansion via technical evidence."
+      "content":"The project evaluates an exclusive public transit model for women and children operated by \"ruta 66,\" constrained by the rugged peripheral topography of southern Mexico City during peak hours. The technical challenge lay in transforming social dynamics into spatial data models through transport engineering. By mapping the correlation between transit routes and care-related infrastructure, the analysis generates the technical evidence required by SEMOVI to justify its scalability to other routes; visualizing and quantifying, through data and code, the territorial weight of care-related trips within daily urban dynamics."
     },
     "metodologia": {
       "title": "Structure & Methodology",
       "tag": "#DataEngineering_GIS",
       "etlKey": "Data Engineering (ETL):",
-      "etlText": "Design of digital capture instruments to normalize boarding records. Python (GeoPandas) is used for data cleaning and structuring the primary database, resolving georeferencing inconsistencies.",
+      "etlText": "Design of digital capture instruments to normalize records. Python (GeoPandas) is utilized for data cleaning, debugging, and structuring the database, validating georeferencing through quality routines.",
       "spatialKey": "Advanced Spatial Modeling:",
-      "spatialText": "In GIS, accessibility models were generated using 500m walking isochrones. The analysis automates the overlap of transit supply with care infrastructure, correlating high-flow nodes with facility locations."
+      "spatialText": "In GIS, accessibility models were generated using 500m walking isochrones. The analysis relates transit route dynamics to care infrastructure, correlating boardings and alightings with the location of such facilities."
     },
     "insights": {
       "title": "Insights & Visualization",
       "tag": "#TheProduct",
       "intro": "The result is a tool that transforms coordinates and raw data into strategic decisions:",
-      "ejeKey": "Integration Axis:",
-      "ejeText": "Connects high-altitude peripheries (Oyamel, Ocotal, Antigua) with regional hubs like Ciudad Universitaria.",
-      "valKey": "Demand Validation:",
-      "valText": "Legitimation of the route as a vital link in the care mobility network.",
-      "visKey": "Impact Visualization:",
-      "visText": "Interactive dashboard highlighting the care economy for political advocacy."
+      "ejeKey": "Feeder Route Function:",
+      "ejeText": "The concentration of 80% of boardings at the initial stops demonstrates that the route is the fundamental link connecting the rugged periphery to the city's mass transit network.",
+      "valKey": "Prioritization of Care Infrastructure:",
+      "valText": "The spatial analysis reveals that the health sector exhibits the highest density of interconnected nodes, followed by education, and finally, supply services.",
+      "visKey": "Operational Load Analysis:",
+      "visText": "By correlating the load score with facility locations, it is identified that high-traffic nodes respond to a population that utilizes care infrastructure as a catalyst for their daily commutes."
     },
     "stack": {
       "title": "Tech Stack",

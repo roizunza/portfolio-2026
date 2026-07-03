@@ -153,59 +153,60 @@ export default function MapComponent({ t }) {
 
       const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'dark-popup' });
 
-      const showPopup = (e, type) => {
-        map.current.getCanvas().style.cursor = 'pointer';
-        const props = e.features[0].properties;
-        const coordinates = e.lngLat;
-        const currentT = tRef.current; 
+     const showPopup = (e, type) => {
+  map.current.getCanvas().style.cursor = 'pointer';
+  const props = e.features[0].properties;
+  const coordinates = e.lngLat;
+  const currentT = tRef.current; 
 
-        const containerStyle = `font-family: var(--fuente-ui); font-size:11px; color:#e0e0e0; min-width:160px;`;
-        const titleStyle = `font-weight:bold; text-transform:uppercase; font-size:12px; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:3px; letter-spacing:0.5px;`;
-        const rowStyle = `display:flex; justify-content:space-between; margin-bottom:3px;`;
-        const labelStyle = `color:#aaa; margin-right:8px;`;
-        const valStyle = `color:#fff; font-weight:500; text-align:right;`;
+  let html = `<div class="dtc-tooltip">`;
+  
+  const rowHtml = (label, value) => `
+    <div class="dtc-tooltip-row">
+      <span class="dtc-tooltip-label">${label}:</span>
+      <span class="dtc-tooltip-value">${value}</span>
+    </div>`;
 
-        let html = `<div style="${containerStyle}">`;
-        
-        if (type === 'maq') {
-          html += `<div style="${titleStyle} color:${RAMP.contexto.metro}">${currentT.map.popups.intermodal}</div>
-                   <div style="font-weight:bold; font-size:12px;">${currentT.map.popups.metro} ${props.name || 'MAQ'}</div>`;
-        }
-        else if (type === 'ruta') {
-          let routeColor = RAMP.rutas.default;
-          if (props.origen_destino === 'Antigua-MAQ') routeColor = RAMP.rutas.antigua;
-          if (props.origen_destino === 'Ocotal-MAQ') routeColor = RAMP.rutas.ocotal;
-          if (props.origen_destino === 'Oyamel-MAQ') routeColor = RAMP.rutas.oyamel;
-          const longitud = parseFloat(props.Longitud_km || 0).toFixed(2);
-          html += `<div style="${titleStyle} color:${routeColor}">${currentT.map.popups.ruta} ${props.origen_destino}</div>
-                   <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.demanda}:</span> <span style="${valStyle}">${props.Demanda_Diaria}</span></div>
-                   <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.longitud}:</span> <span style="${valStyle}">${longitud} km</span></div>`;
-        } 
-        else if (type === 'parada') {
-          const score = parseFloat(props.scorecarga || 0).toFixed(2);
-          const totalEq = props.total_equipamientos || 0;
-          
-          html += `<div style="${titleStyle} color:${RAMP.descensos}">${currentT.map.popups.parada}</div>
-                   <div style="margin-bottom:4px; font-weight:bold;">${props.origen_destino}</div>
-                   <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.suben}:</span> <span style="${valStyle}">${props.ascensos}</span></div>
-                   <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.bajan}:</span> <span style="${valStyle}">${props.descensos}</span></div>
-                   <div style="border-top: 1px dashed rgba(255,255,255,0.2); margin-top: 5px; padding-top: 5px;"></div>
-                   <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.equipamiento500m}:</span> <span style="${valStyle}">${totalEq}</span></div>
-                   <div style="${rowStyle}"><span style="${labelStyle}">${currentT.map.popups.scoreCarga}:</span> <span style="${valStyle}">${score}</span></div>`;
-        } 
-        else if (type === 'equip') {
-          let titleColor = RAMP.equipamiento.otros;
-          let labelTrad = props.equipamiento;
-          if (props.equipamiento === 'EDUCATIVO') { titleColor = RAMP.equipamiento.educativo; labelTrad = currentT.map.popups.educativo; }
-          if (props.equipamiento === 'SALUD') { titleColor = RAMP.equipamiento.salud; labelTrad = currentT.map.popups.salud; }
-          if (props.equipamiento === 'ABASTO') { titleColor = RAMP.equipamiento.abasto; labelTrad = currentT.map.popups.abasto; }
-          
-          const defaultLabel = currentT.map.popups.sinNombre;
-          html += `<div style="${titleStyle} color:${titleColor}">${labelTrad}</div>
-                   <div style="margin-bottom:4px; font-weight:bold; font-size:12px;">${props.nombre_escuela || props.nombre || defaultLabel}</div>`;
-        }
-        html += `</div>`;
-        popup.setLngLat(coordinates).setHTML(html).addTo(map.current);
+  if (type === 'maq') {
+    html += `<div class="dtc-tooltip-header" style="color:${RAMP.contexto.metro}">${currentT.map.popups.intermodal}</div>
+             <div style="font-weight:bold; font-size:12px; margin-bottom:5px;">${currentT.map.popups.metro} ${props.name || 'MAQ'}</div>`;
+  }
+  else if (type === 'ruta') {
+    let routeColor = RAMP.rutas.default;
+    if (props.origen_destino === 'Antigua-MAQ') routeColor = RAMP.rutas.antigua;
+    if (props.origen_destino === 'Ocotal-MAQ') routeColor = RAMP.rutas.ocotal;
+    if (props.origen_destino === 'Oyamel-MAQ') routeColor = RAMP.rutas.oyamel;
+    const longitud = parseFloat(props.Longitud_km || 0).toFixed(2);
+    
+    html += `<div class="dtc-tooltip-header" style="color:${routeColor}">${currentT.map.popups.ruta} ${props.origen_destino}</div>` +
+            rowHtml(currentT.map.popups.demanda, props.Demanda_Diaria) +
+            rowHtml(currentT.map.popups.longitud, `${longitud} km`);
+  } 
+  else if (type === 'parada') {
+    const score = parseFloat(props.scorecarga || 0).toFixed(2);
+    const totalEq = props.total_equipamientos || 0;
+    
+    html += `<div class="dtc-tooltip-header" style="color:${RAMP.descensos}">${currentT.map.popups.parada}</div>
+             <div style="margin-bottom:6px; font-weight:bold;">${props.origen_destino}</div>` +
+             rowHtml(currentT.map.popups.suben, props.ascensos) +
+             rowHtml(currentT.map.popups.bajan, props.descensos) +
+             `<div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 6px 0;"></div>` +
+             rowHtml(currentT.map.popups.equipamiento500m, totalEq) +
+             rowHtml(currentT.map.popups.scoreCarga, score);
+  } 
+  else if (type === 'equip') {
+    let titleColor = RAMP.equipamiento.otros;
+    let labelTrad = props.equipamiento;
+    if (props.equipamiento === 'EDUCATIVO') { titleColor = RAMP.equipamiento.educativo; labelTrad = currentT.map.popups.educativo; }
+    if (props.equipamiento === 'SALUD') { titleColor = RAMP.equipamiento.salud; labelTrad = currentT.map.popups.salud; }
+    if (props.equipamiento === 'ABASTO') { titleColor = RAMP.equipamiento.abasto; labelTrad = currentT.map.popups.abasto; }
+    
+    html += `<div class="dtc-tooltip-header" style="color:${titleColor}">${labelTrad}</div>
+             <div style="font-weight:bold; font-size:12px;">${props.nombre_escuela || props.nombre || currentT.map.popups.sinNombre}</div>`;
+  }
+  
+  html += `</div>`;
+  popup.setLngLat(coordinates).setHTML(html).addTo(map.current)
       };
 
       const hidePopup = () => { if (map.current) { map.current.getCanvas().style.cursor = ''; popup.remove(); } };
