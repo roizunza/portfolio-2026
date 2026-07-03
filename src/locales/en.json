@@ -119,7 +119,7 @@
     "proposito": {
       "title": "Purpose",
       "tag": "#RiskManagement",
-      "content": "This project develops a geointelligence engine based on disaster scenario simulations. The objective is to model graph degradation (the road network of over 5,900 nodes) in the face of latent disconnection caused by an extreme event, evaluating the temporary decoupling of mobility with risk infrastructure officially categorized by the State (Shitei Hinanjo). Kamakura was selected as a test environment due to its orographic encapsulation and its tsunami risk tendency. The main challenge was ensuring the algorithm isolated the streets that would be covered by the tsunami dynamics, and making the surviving nodes respond to the logic of topography and physical effort. Through routing calculations under stress, the model evaluates whether historical sites can function as a logistical support layer, mathematically contrasting the collapse of road connectivity against the absorption and shelter capacity offered by temple infrastructure."
+      "content": "This project develops a geointelligence engine designed to simulate disaster scenarios along the coast of Kamakura, Japan. Given its complex orographic encapsulation and high exposure to tsunamis, the city presents a critical challenge for mass evacuation. The engine models the disabling of the road network during extreme flooding, identifying how this fracture disconnects the population from state-designated official shelters. The algorithmic challenge involved isolating the streets submerged by the flood, forcing surviving nodes to recalculate escape routes under physical and topographical stress. Through automated routing, the model contrasts the collapse of official mobility against the absorption capacity of historical infrastructure, assessing whether the ancestral network of temples can serve as strategic emergency equipment during a crisis."
     },
     "metodologia": {
       "title": "Structure & Methodology",
@@ -143,7 +143,7 @@
       "item1Key": "10m Scenario (Official Containment):",
       "item1Text": "The city's topography manages to withstand the initial impact. Connectivity remains high, with 4,662 nodes preserving access to official shelters, while the temple network begins to activate, sheltering 172 peripheral streets.",
       "item2Key": "20m Scenario (Inflexion Point):",
-      "item2Text": "The water volume severely fractures primary evacuation routes, leaving over 3,000 streets isolated. It is here that heritage infrastructure proves its highest strategic value: temples quadruple their absorption rate, rescuing 670 critical routes and acting as the primary mitigation barrier against massive disconnection.",
+      "item2Text": "The water volume severely fractures primary evacuation routes, leaving over 3,000 streets isolated. Heritage infrastructure proves its highest strategic value: temples quadruple their absorption rate, rescuing 670 critical routes and acting as the primary mitigation barrier against massive disconnection.",
       "item3Key": "30m Scenario (Extreme Isolation):",
       "item3Text": "Orographic devastation disconnects 70% of the urban fabric (4,198 orphan nodes). Although historical sites reach their maximum rescue peak (776 nodes) due to their high-altitude placement, the topological fragmentation is so acute that city-wide mobility completely collapses."
     },
@@ -189,8 +189,8 @@
   "digitaltwin": {
     "fileName": "03_spatial_inference",
     "ejecutar": "VIEW MODEL",
-    "subtitle": "2.5D MULTICRITERIA MODELING",
-    "title": "SPATIAL INFERENCE IN CHONGQING",
+    "subtitle": "2.5D MULTICRITERIA MODELINGIN CHONGQING",
+    "title": "SPATIAL INFERENCE",
     "cardComment": "// Web Scraping & 2.5D Spatial Inference",
     "cardDescription1": "Implementation of a spatial model to infer the latent building scale in Chongqing based on tangible urban variables extracted through automated data pipelines.",
     "cardDescription2": "The engine estimates building heights based on the scores assigned to each footprint through a Spatial Multicriteria Evaluation (MCDA), validating the 2.5D model's accuracy with a luminescence index extracted from nighttime light satellite imagery.",
@@ -199,7 +199,7 @@
     "proposito": {
       "title": "Purpose",
       "tag": "#SpatialInference",
-      "content": "This project develops a geointelligence engine based on Digital Twins to infer the city's construction scale. The goal is to model the vertical density of 16,606 parcels based on the weight of tangible, normalized, and weighted urban variables, allowing the visualization of a territory's development potential. Chongqing was selected as the test environment due to its extreme mountainous morphology. The main challenge was to make the algorithm account for the location's contextual restrictions through a Multi-Criteria Decision Analysis (MCDA), demonstrating how the city finds space to continue developing despite geographic constraints; a phenomenon validated by confirming that density driven by activity closely matches the satellite light footprint."
+      "content": "This project develops a geointelligence engine designed to infer the construction scale and vertical density of Chongqing, China. Faced with extreme mountainous morphology and geographic encapsulation —defined by the confluence of the Jialing and Yangtze rivers—, the city has been forced into accelerated vertical densification due to a lack of space for lateral expansion. The algorithmic challenge involved processing over 16,000 plots through a Multicriteria Decision Analysis (MCDA), integrating tangible urban variables such as building footprints, road connectivity, and commercial concentration, among others. The model infers the number of levels per building resulting from this analysis and validates its precision by contrasting the projected heights against VIIRS satellite nighttime light imagery. By utilizing the latter as a proxy variable for economic activity, this cross-referencing of data allows for an objective evaluation of the accuracy of the inferred construction scale against the reality of actual urban activity hubs."
     },
     "metodologia": {
       "title": "Structure & Methodology",
@@ -208,7 +208,7 @@
       "item1Key": "1. Data Extraction:",
       "item1Text": "Web scraping of base urban infrastructures (transport nodes, building footprints, road networks, and POIs) using APIs and Python scripts.",
       "item2Key": "2. Spatial Processing:",
-      "item2Text": "Execution of topological calculations, measuring real distance to main roads and topographic friction towards transit nodes.",
+      "item2Text": "Execution of complex topological calculations that integrate topographical friction, weighted proximity to mass transit nodes, commercial density through POI kernel density analysis, and road network hierarchy based on traffic capacity.",
       "item3Key": "3. Multi-Criteria Analysis (MCDA):",
       "item3Text": "Assignment of geometric scores and parametric normalization of variables.",
       "item4Key": "4. Inference Engine:",

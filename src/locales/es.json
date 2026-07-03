@@ -119,7 +119,7 @@
     "proposito": {
       "title": "Propósito",
       "tag": "#GestiónDeRiesgos",
-      "content": "Este proyecto desarrolla un motor de geointeligencia basado en la simulación de escenarios ante desastres naturales. El objetivo es modelar la degradación de grafos (la red vial de más de 5,900 nodos) ante la desconexión latente provocada por un evento extremo, evaluando la desvinculación temporal de la movilidad con la infraestructura de riesgos categorizada oficialmente por el Estado (Shitei Hinanjo). Kamakura fue seleccionada como entorno de prueba debido a su encapsulamiento orográfico y su tendencia de riesgo ante tsunamis. El reto principal fue lograr que el algoritmo aislara las calles que quedarían cubiertas por la dinámica del agua, y que los nodos sobrevivientes respondieran a la lógica de la topografía y el esfuerzo físico. Mediante cálculos de enrutamiento bajo estrés, el modelo evalúa si los recintos históricos pueden funcionar como una capa de apoyo logístico, contrastando matemáticamente el colapso de la conectividad vial frente a la capacidad de absorción y resguardo que ofrece la infraestructura de templos."
+      "content": "El proyecto desarrolla un motor de geointeligencia diseñado para simular escenarios de desastre en la costa de Kamakura, Japón. Dada su compleja encapsulación orográfica y su alta exposición a tsunamis, la ciudad presenta un desafío crítico para la evacuación masiva. El motor modela la inhabilitación de la red vial ante una inundación extrema, identificando cómo esta fractura desconecta a la población de los refugios oficiales designados por el Estado. El reto algorítmico consistió en aislar las calles que quedarían bajo el agua, obligando a los nodos sobrevivientes a recalcular rutas de escape bajo condiciones de estrés físico y topográfico. Mediante enrutamiento automatizado, el modelo contrasta el colapso de la movilidad oficial frente a la capacidad de absorción de la infraestructura histórica, evaluando si la red de templos ancestrales puede fungir como equipamiento estratégico de resguardo ante la emergencia."
     },
     "metodologia": {
       "title": "Estructura y Metodología",
@@ -143,7 +143,7 @@
       "item1Key": "Escenario 10m (Contención Oficial):",
       "item1Text": "La topografía de la ciudad logra resistir el impacto inicial. La conectividad se mantiene alta con 4,662 nodos preservando acceso a refugios oficiales, mientras que la red de templos comienza a activarse resguardando 172 calles periféricas.",
       "item2Key": "Escenario 20m (Punto de Inflexión):",
-      "item2Text": "El volumen de agua fractura severamente las rutas de evacuación primarias, dejando más de 3,000 calles aisladas. Es aquí donde la infraestructura patrimonial demuestra su mayor valor estratégico: los templos cuadruplican su tasa de absorción, rescatando 670 rutas críticas y actuando como la principal barrera de mitigación ante la desconexión masiva.",
+      "item2Text": "El volumen de agua fractura severamente las rutas de evacuación primarias, dejando más de 3,000 calles aisladas. La infraestructura patrimonial demuestra su mayor valor estratégico: los templos cuadruplican su tasa de absorción, rescatando 670 rutas críticas y actuando como la principal barrera de mitigación ante la desconexión masiva.",
       "item3Key": "Escenario 30m (Aislamiento Extremo):",
       "item3Text": "La devastación orográfica desconecta al 70% del tejido urbano (4,198 nodos huérfanos). Aunque los recintos históricos alcanzan su pico máximo de rescate (776 nodos) por estar situados en las cotas más altas, la fragmentación topológica es tan aguda que la movilidad a escala de ciudad colapsa casi por completo."
     },
@@ -189,8 +189,8 @@
   "digitaltwin": {
     "fileName": "03_spatial_inference",
     "ejecutar": "VER MODELO",
-    "subtitle": "INFERENCIA ESPACIAL EN CHONGQING",
-    "title": "MODELADO MULTICRITERIO 2.5D",
+    "subtitle": "INFERENCIA ESPACIAL",
+    "title": "MODELADO MULTICRITERIO 2.5D EN CHONGQING",
     "cardComment": "// Web scraping e inferencia espacial mediante modelado 2.5",
     "cardDescription1": "Implementación de un modelo espacial que infiere la escala de construcción en el distrito de Yuzhong, Chongqing, basado en variables urbanas tangibles extraídas mediante flujos automatizados de datos.",
     "cardDescription2": "El motor estima la altura constructiva a partir de la calificación asignada a cada huella de edificio mediante un análisis multicriterio (MCDA), validando la precisión del modelo 2.5D con un índice de luminiscencia extraído de imágenes satelitales de radiancia nocturna.",
@@ -198,7 +198,7 @@
     "proposito": {
       "title": "Propósito",
       "tag": "#InferenciaEspacial",
-      "content": "Este proyecto desarrolla un motor de geointeligencia basado en Gemelos Digitales para inferir la escala constructiva de la ciudad. El objetivo es modelar la densidad vertical de 16,606 parcelas basándose en el peso de variables urbanas tangibles, normalizadas y ponderadas, permitiendo visualizar el potencial de desarrollo que tiene un territorio. Chongqing fue seleccionada como entorno de prueba debido a su morfología montañosa extrema. El reto principal fue lograr que el algoritmo tomara en cuenta las restricciones contextuales del lugar a través de un Análisis Multicriterio (MCDA), demostrando cómo la ciudad encuentra lugar para desarrollarse aún con restricciones geográficas; un fenómeno validado al confirmar que la densificación por actividad coincide fielmente con la huella lumínica satelital."
+      "content": "El proyecto desarrolla un motor de geointeligencia diseñado para inferir la escala constructiva y la densidad vertical de Chongqing, China. Ante su morfología montañosa extrema y su encapsulamiento geográfico —definido por la confluencia de los ríos Jialing y Yangtsé—, la ciudad ha sido forzada a una densificación vertical acelerada al carecer de espacio para la expansión lateral. El desafío algorítmico consistió en procesar más de 16,000 parcelas mediante un Análisis Multicriterio (MCDA), integrando variables urbanas tangibles como la huella predial, la conectividad vial, la concentración comercial, entre otras. El modelo infiere el número de niveles por edificación resultante de este análisis y valida su precisión al contrastar las alturas proyectadas contra la huella lumínica satelital VIIRS. Al emplear esta última como variable proxy de la actividad económica, el cruce de datos permite evaluar objetivamente la veracidad de la escala constructiva inferida frente a la realidad de los centros de actividad urbana."
     },
     "metodologia": {
       "title": "Estructura y Metodología",
@@ -207,7 +207,7 @@
       "item1Key": "1. Extracción de Datos:",
       "item1Text": "Minería de datos de infraestructuras base (nodos de transporte, huellas de edificios, red vial y POIs) mediante APIs y scripts de Python.",
       "item2Key": "2. Procesamiento Espacial:",
-      "item2Text": "Ejecución de cálculos topológicos, midiendo distancia real a vialidades principales y fricción topográfica hacia el transporte masivo.",
+      "item2Text": "Ejecución de cálculos topológicos que integran la fricción topográfica, la proximidad a nodos de transporte masivo, la densidad comercial mediante kernel density de POIs y la jerarquización de la red vial según su capacidad de carga.",
       "item3Key": "3. Análisis Multicriterio (MCDA):",
       "item3Text": "Asignación de puntuaciones geométricas y normalización paramétrica de variables urbanas.",
       "item4Key": "4. Motor de Inferencia:",
@@ -223,7 +223,7 @@
       "item1Text": "Tanto el modelo espacial como el índice VIIRS marcan un pico agresivo de densificación en la convergencia de los ríos Jialing y Yangtsé, coincidiendo en la realidad con el distrito financiero de Jiangbeizui.",
       "item2Key": "Radios Caminables:",
       "item2Text": "La verticalidad máxima inferida existe exclusivamente en un radio de 150 a 200m desde un nodo de transporte. Al alejarse de distancias caminables (500m), la escala se aminora drásticamente frente a la fricción topográfica.",
-      "item3Key": "Loa Factores de Densificación Vertical:",
+      "item3Key": "Los Factores de Densificación Vertical:",
       "item3Text": "Debido a que el tejido base y los rascacielos exigen casi la misma capacidad vial, el modelo justifica la construcción de niveles en las torres solo al combinar accesibilidad topográfica y de transporte con hiperconcentración comercial."
     },
     "stack": {
